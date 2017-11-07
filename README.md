@@ -1,0 +1,2 @@
+# OCVX
+Convex optimisation @Epita
