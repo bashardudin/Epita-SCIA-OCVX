@@ -99,3 +99,7 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# TeX temp files
+*_minted*
+*auto*

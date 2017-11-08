@@ -1,0 +1,1097 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[french]{babel}
+\usepackage{fancyhdr}
+\usepackage[margin=.8in]{geometry}
+
+\usepackage{Style/TeXingStyle}
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{1.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyhead[L]{Epita - SCIA}
+\fancyhead[R]{2017}
+\fancyfoot[C]{\thepage} 
+\fancyfoot[R]{\textsc{B.~Dudin}}
+
+\pretitle{\vspace{-\baselineskip} \begin{center}}
+\title{%
+  { \huge Questions Quadratiques }%
+}
+\posttitle{
+\end{center}
+  \begin{flushleft}
+    \vspace{3\baselineskip}
+    \textit{
+      Ce devoir est à rendre pour le \emph{12 juin 2017}\\
+      Vous êtes autorisés à le faire à $2$ ou $3$ ; dans le premier cas
+      celui-ci sera noté sur $16$, dans le second sur $12$. Toute autre
+      configuration résultera en un DM non noté.  }
+  \end{flushleft}
+  \vspace{.5\baselineskip}
+  \rule{\textwidth}{1.5pt}
+  \vspace{-5\baselineskip}
+}
+\author{}
+\date{}
+
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Questions Quadratiques)
+   /Subject (Optimisation Convexe)
+}
+
+\begin{document}
+
+\maketitle\thispagestyle{fancy}
+
+Au cours de votre scolarité, vous avez eu affaire à des problèmes
+d'optimisation linéaires. On sait toujours \emph{résoudre} de tels
+problèmes ; j'entends par là qu'on peut déterminer si des solutions
+existent et qu'on sait en exhiber dans ce cas. L'un des algorithmes
+les plus répandus pour trouver des solutions d'un programme linéaire
+est celui du simplexe. Il part du principe qu'une solution est
+nécessairement réalisée au bord du polyèdre admissible déterminé par
+les contraintes linéaires du programme. Il reste donc à se
+\textit{balader} le long des arêtes du polyèdre tout en assurant la
+croissance de la valeur objectif à chaque étape de la balade.
+
+Une autre famille de problèmes d'optimisation dont la résolution est
+garantie, que cela soit analytiquement (avec une expression exacte des
+solutions) ou par approximation numérique efficace, est celle des
+problèmes quadratiques. On sera amené bientôt à résoudre de tels
+problèmes. Pour l'instant on se contente d'étudier l'apparition du
+caractère quadratique dans les questions auxquelles on fera face. Dans
+l'ordre:
+\begin{itemize}
+\item[\textbullet] on étudie la notion de forme quadratique : la définition à avoir
+  en tête, comment on s'en donne une, les sous-classes de formes
+  quadratiques intéressantes, et la structure des ensembles formés par
+  ces sous-classes ;
+\item[\textbullet] on identifie quelques problèmes d'optimisation
+  comme des problèmes qui se ramènent à la minimisation d'une fonction
+  quadratique ;
+\item[\textbullet] on termine cette étude en abordant la différentielle seconde
+  d'une application deux fois différentiable en un point: c'est une
+  approximation quadratique d'une telle fonction au voisinage de ce
+  point. Elle donne un critère simple pour tester la convexité. 
+\end{itemize}
+
+Les questions de chacune des $3$ parties précédentes sont
+indépendantes, il en reste qu'il est difficile de répondre aux
+questions des parties $2$ et $3$ quand on n'a pas pu comprendre la
+notion de forme quadratique. Vous êtes invité à vous documenter dans
+les ouvrages de référence quand une question vous semble
+difficile. Vous pouvez également revenir vers moi pour de telles
+références ou pour toute autre question.
+
+\begin{nota}
+  Dans la suite, $n$ et $m$ désignent des entiers naturels non nuls.
+\end{nota}
+\section{Les formes quadratiques}
+\label{sec:FQ}
+
+\begin{defn}
+  Soit $E$ un espace vectoriel sur $\R$. On dit que $Q : E \to \R$ est une
+  forme quadratique sur $E$ s'il existe une forme bilinéaire
+  symétrique $\Phi: E\times E \to \R$ telle que pour tout $x \in E$,
+  $Q(x) = \Phi(x, x)$.
+\end{defn}
+\noindent Cette définition permet déjà de voir qu'étant donné un
+produit scalaire $\langle \cdot\, ,\cdot\rangle$ sur $E$, l'application
+$x \mapsto \langle x, x \rangle$ est une forme quadratique ; c'est la
+norme au carré (la norme associée au produit scalaire). 
+
+Dans la pratique, et quand on travaille sur $\R^n$, une forme
+bilinéaire symétrique est donnée par une matrice symétrique $P$ de
+taille $(n, n)$. L'application bilinéaire $\Phi$ associée s'écrit
+\[
+\forall x, y \in \R^n, \quad \Phi(x, y) = x^TPy.
+\]
+Une forme quadratique $Q$ sur $\R^n$ est donc la donnée d'une matrice
+symétrique $P$ telle que 
+\[
+\forall x \in \R^n, \quad Q(x) = x^TPx.
+\]
+\begin{exmp}
+  La matrice carrée $P = \begin{pmatrix} 1 & 2 \\ 2 & 0 \end{pmatrix}$
+  donne lieu à la forme quadratique $Q$ l'expression
+  pour $(x, y) \in \R^2$ est
+  \[
+  Q\big((x, y)\big) = x^2 + 4xy.
+  \]
+\end{exmp}
+\noindent On remarque que l'expression obtenue est un polynôme de degré
+total\footnote{C'est le degré du polynôme obtenu en rempla\c{c}ant
+  toutes les variables par une unique variable $t$.} $2$. Ce fait est
+général : étant donné une forme quadratique non nulle $Q$ sur $\R^n$,
+l'expression $Q(x)$ est un polynôme de degré total $2$ en les
+coordonnées du vecteur $x \in \R^n$. 
+\begin{defn}
+  Une forme quadratique $Q$ sur un espace vectoriel $E$ est dite
+  \begin{itemize}
+  \item[\textbullet] positive (resp. négative) si pour tout
+    $x \in E$, $Q(x) \geq 0$ (resp. $Q(x) \leq 0$);
+  \item[\textbullet] définie si $Q(x) = 0 \Rightarrow x = 0$;
+  \item[\textbullet] définie positive\footnote{Certains ouvrages,
+      notamment anglo-saxons, utilisent le terme strictement positive
+      ou strictement négative.} (resp. définie négative) si pour tout
+    $x \in E$ \emph{non nul}, $Q(x) > 0$ (resp. $Q(x) < 0$).
+  \end{itemize}
+\end{defn}
+\noindent Par abus, dans le cas de $\R^n$, ces adjectifs sont accolés
+à la matrice symétrique $P$ telle que $Q(x) = x^TPx$. On note $S_n$
+l'ensemble des matrices symétriques de $M_n(\R)$. L'ensemble des matrices
+symétriques positives (resp. définies positives) est noté $S_n^+$
+(resp. $S_n^{++}$). Les notations dans le cas négatif sont $S_n^{-}$
+et $S_n^{--}$.
+
+\begin{question}
+  Donner, si possible, un exemple de forme quadratique sur $\R^2$ qui
+  soit\footnote{Justifiez vos réponses!}:
+  \begin{itemize}
+  \item[\textbullet]
+    positive, non définie ;
+  \item[\textbullet]
+    définie positive; 
+  \item[\textbullet]
+    définie non positive ni négative.
+  \end{itemize}
+  Dessiner un croquis illustrant le graphe de la fonction quadratique
+  donnée dans chacun des cas\footnote{Vous êtes autorisés
+    (encouragés?) à joindre une figure que vous aurez tracée par
+    ordinateur.}.
+\end{question}
+\begin{solution}
+  Voici quelques exemples de formes quadratiques répondant à la
+  question précédente : 
+  \begin{itemize}
+  \item[\textbullet] On cherche une forme quadratique positive, non
+    définie, par exemple la forme quadratique $Q$ sur $\R^2$ donnée
+    par $Q\big((x,y)\big) = x^2$. Elle est évidemment positive, pour
+    voir qu'elle est non définie il suffit de remarquer que
+    $Q\big((0,1)\big) = 0$. Il existe donc un vecteur non nul dont
+    l'image par $Q$ est nulle, l'implication
+    $Q(X) = 0 \Rightarrow X = \underline{0}$ n'est pas satisfaite.
+  \item[\textbullet] Pour une forme quadratique positive définie tout
+    simplement la forme quadratique associée au produit scalaire
+    usuel.
+  \item[\textbullet] Cette question est piège, il n'existe pas de forme
+    quadratique définie non positive et non négative. En effet, si une
+    telle forme quadratique $Q$ existe sur $\R^n$ alors il existe deux
+    vecteurs de $\R^n$, $X_0$ et $Y_0$ tels que $Q(X_0) < 0$ (définie
+    non positive) et $Q(Y_0) > 0$ (définie non négative). Voici deux
+    arguments qui montre l'impossibilité d'une telle
+    situation\footnote{Vous pouvez en trouver d'autres, certainement.}
+    :
+    \begin{itemize}
+    \item $Q$ est une application continue car polynomiale en les
+      coordonnées usuelles de $\R^n$. Le segment de la droite affine
+      $[X_0, Y_0]$ ne passe pas par l'origine\footnote{Y réfléchir
+        deux secondes ; l'image d'une droite vectorielle par une forme
+        quadratique ne change pas de signe.} son image est un connexe
+      par arcs de $\R$ car il en est de même de $[X_0, Y_0]$. C'est
+      donc un intervalle $I$ de $\R$. Cet intervalle contient une
+      valeur strictement négative et une autre strictement positive,
+      il contient donc $0$ et il existe donc un vecteur \emph{non nul}
+      envoyé par $Q$ sur $0$.
+    \item On note $\Phi$ la forme bilinéaire symétrique associée à
+      $Q$. Soit $\lambda$, $\mu$ deux scalaires dans $R$. On considère
+      l'expression en $\lambda$, $\mu$
+      \[
+      Q(\lambda X_0 + \mu Y_0) = \lambda^2Q(X_0) +
+      2\lambda\mu\Phi(X_0, Y_0) + \mu^22Q(Y_0).
+      \]
+      Pour chaque $\mu \in \R$ c'est une expression quadratique en
+      $\lambda$, le coefficient de $\lambda^2$ n'étant pas nul par
+      hypothèse. L'équation 
+      \begin{equation}
+        \label{eq:quadra}
+        Q(\lambda X_0 + \mu Y_0) = 0
+      \end{equation}
+      est donné par
+      \[
+      \Delta = 4\mu^2\Phi(X_0, Y_0)^2 - 4\mu^2Q(X_0)Q(Y_0) \geq 0
+      \]
+      car le premier terme est positif et le second négatif. Pour
+      $\nu \neq 0$ on a donc nécessairement une solution non nulle car
+      le terme constant de l'équation \eqref{eq:quadra} en $\lambda$
+      ne l'est pas.
+    \end{itemize}
+  \end{itemize}
+\end{solution}
+On admet par la suite le résultat important suivant:
+\begin{thm}
+  \label{thm:reducsym}
+  Toute matrice symétrique $P \in M_n(\R)$ est diagonalisable sur
+  $\R$ dans une base orthonormée.
+\end{thm}
+\noindent Ce résultat, important, est valable sous des conditions beaucoup plus
+larges sur le corps de base ; on le  montre en partie à l'aide d'un
+algorithme dit de Gauss. 
+\begin{question}
+  \label{qu:critereposdefn}
+  À l'aide du déterminant d'une matrice carrée, donner une condition
+  sur une forme quadratique $Q$ sur $\R^n$ afin que celle-ci soit:
+  \begin{itemize}
+  \item[\textbullet]
+    définie ;
+  \item[\textbullet]
+    non positive et non négative.
+  \end{itemize}
+  Pouvez-vous en dire plus dans le cas des formes quadratiques sur
+  $\R^2$? Sait-on, dans ce cas, quand une forme quadratique est
+  positive? Comment différencier le cas positif du cas négatif?
+  Formaliser le cas des formes quadratiques sur $\R^2$.
+\end{question}
+\begin{solution}
+  D'après le théorème \eqref{thm:reducsym} toute forme quadratique
+  dans une base orthonormée bien choisie de vecteurs propres
+  $(v_1, \ldots, v_n)$ prend la forme
+  \[
+  Q\Big(\sum_{i=1}^n x_i v_i\Big) = \sum_{i=1}^n \lambda_i x_i^2
+  \]
+  où $\lambda_i$ désigne la valeur propre associée à $v_i$. La matrice
+  de la forme bilinéaire associée à $Q$ dans cette base prend la forme
+  \[
+  \begin{pmatrix}
+    \lambda_1 & 0 & \hdots & 0 \\
+    0 & \lambda_2 & \ddots & \vdots \\
+    \vdots & \ddots & \ddots & 0 \\
+    0 & \hdots & 0 & \lambda_n. 
+  \end{pmatrix}
+  \]
+  Il est clair désormais, qu'il faut et il suffit que la matrice
+  associée à $Q$ ait toutes ses valeurs propres de même signe et non
+  nulles pour que $Q$ soit définie\footnote{Si tel n'était pas le cas
+    on se retrouverait dans le cas de l'exercice précédent.}. Pour que
+  $Q$ ne soit ni positive, ni négative il faut et il suffit que cette
+  même matrice ait au moins deux valeurs propres de signes opposés.
+
+  Dans le cas des formes quadratiques sur $\R^2$ on n'a que deux
+  valeurs propres. Pour s'assurer de la définition il suffit d'avoir
+  un déterminant strictement positif. Dans ce cas les deux valeurs
+  propres ne sont pas nulles et, de plus, de même signe. Pour vérifier
+  la positivité sous une telle condition il suffit de regarder le
+  signe de la trace de la matrice associée. \\
+  Si le déterminant est strictement négatif les deux valeurs propres
+  sont de signes distincts et on tombe dans le cas d'une forme
+  quadratique ni positive, ni négative.
+\end{solution}
+
+\begin{question}
+  Suffit-il qu'une matrice symétrique ait des coefficients positifs
+  pour que la forme quadratique associée le soit? 
+\end{question}
+
+\begin{solution}
+  Non. On considère la forme quadratique $Q$ donnée par 
+  \[
+  Q\big((x,y)\big) = x^2 + xy + y^2.
+  \]
+  En complétant le carré\footnote{Cette démarche est la première étape
+    de l'algorithme de Gauss.} ne $x$ on obtient
+  \[
+  Q\big((x, y)\big) = \left(x + \frac{y}{2}\right)^2 - \frac{y^2}{4}
+  \]
+  En prenant $x = 1$ et $y = -2$ on obtient 
+  \[
+  Q\big((1, -2)\big) = -1. 
+  \]
+\end{solution}
+
+\begin{question}
+  \label{qu:convexiteP}
+  Donner des conditions suffisantes sur la positivité de la matrice
+  associée à une forme quadratique pour que celle-ci soit
+  \begin{itemize}
+  \item[\textbullet] convexe ou concave ;
+  \item[\textbullet] ni l'un ni l'autre.
+  \end{itemize}
+  Ces conditions sont-elles nécessaires?
+\end{question}
+
+\begin{solution}
+  La convexité de la fonction $Q$ donnée par $Q(x) = x^TPx$ correspond
+  à la négativité, pour tout $\theta \in [0,1]$ et tout
+  $x, y \in \R^n$, de l'expression
+  \[
+  E(x,y, \theta) = Q\big((1-\theta)x + \theta y\big) -
+  \big((1-\theta)Q(x) + \theta Q(y)\big).
+  \]
+  On va faire en sorte de tirer de cette expression une condition
+  utilisable.
+  \begin{align}
+    E(x, y, \theta) & = \big((1-\theta)x + \theta y\big)^TP\big((1-\theta)x + \theta y\big)   
+                      - \big((1-\theta)x^TPx + \theta y^TPy\big) \\
+    \intertext{en développant le premier terme à gauche}
+    E(x, y, \theta) & = \big((1-\theta)x\big)^TP\big((1-\theta)x + \theta y\big) + 
+      \big(\theta y)^TP\big((1-\theta)x + \theta y\big) \notag \\ 
+    & \phantom{=}\quad  - \big((1-\theta)x^TPx + \theta y^TPy\big)\\
+    \intertext{en regroupant intelligemment les termes\footnote{Yes, you can!}\footnote{Bug!}}
+    E(x, y, \theta) & = \big((1-\theta)x\big)^TP\big((1-\theta)x + \theta y\big) - (1-\theta)x^TPx \notag \\
+    & \phantom{=}\quad + \big(\theta y)^TP\big((1-\theta)x + \theta y\big) - \theta y^TPy\\
+\intertext{la suite est automatique}
+    E(x, y, \theta) & = \big((1-\theta)x\big)^TP\big((-\theta)x + \theta y\big) +
+      \big(\theta y)^TP\big((1-\theta)x + (\theta-1)y\big) \\
+    & = (1-\theta)\theta\left[x^TP(y-x) - y^TP(y-x)\right] \\
+    & = -(1-\theta)\theta(y-x)^TP(y-x)\\
+    & = -(1-\theta)\theta Q(y-x).
+  \end{align}
+  Ainsi $E(x, y, \theta)$ est négative si et seulement si $Q(y-x)$ est
+  positive. Donc $Q$ est convexe si et seulement si pour tout $x$, $y$,
+  $Q(y-x) \geq 0$. Il n'est pas difficile de voir que cette condition
+  correspond au fait que $Q$ soit positive.
+
+  J'ai voulu ici vous montrer qu'il est possible d'aller au bout de
+  calculs qui peuvent vous sembler un peu horrible. La dernière
+  condition qu'on obtient peut être obtenue autrement à l'aide de la
+  condition d'ordre $1$ sur la convexité. Le calcul dans ce cas là est
+  plus rapide.
+\end{solution}
+
+\begin{question}
+  On s'intéresse à la structure de $S_n$. 
+  \begin{enumerate}
+  \item Montrer que $S_n$ est un sous-espace vectoriel de
+    $M_n(\R)$. Peut-on en dire plus? Calculer la dimension de $S_n$.
+  \item Montrer que $S_n^{+}$ est une partie convexe de
+    $S_n$. Peut-on en dire autant de $S_n^{++}$? 
+  \item Est-ce que le résultat précédent est valable dans le cas de
+    $S_n^{-}$?
+  \end{enumerate}
+\end{question}
+
+\begin{solution}
+  \begin{enumerate}
+  \item On montrer que $S_n$ est un sous-espace vectoriel de
+    $M_n(\R)$. On rappelle que $M_n(\R)$ vient avec une base canonique
+    qu'on note $\{E_{ij}\mid 1 \leq i, j \leq n\}$ où $E_{ij}$ est la
+    matrice contenant que des coefficients nuls sauf en position
+    $(i,j)$ où on trouve $1$. Une matrice $A = (a_{i, j})$ se
+    décompose le long de la base précédente comme suit
+    \[
+    A = \sum_{i, j} a_{ij}E_{ij}.
+    \]
+    La matrice $A$ est symétrique si $A = A^T$. En utilisant le fait
+    $E_{ij}^T = E_{ji}$, on obtient de la décomposition précédente le
+    fait que $A$ est symétrique si et seulement si
+    \[
+    A = \sum_{j \geq i} a_{ij}\left(E_{ij} + E_{ji}\right).
+    \]
+    Ainsi $\{E_{ij}\mid 1 \leq i, j \leq n, j \geq i\}$ est une
+    famille génératrice de $S_n$. Il n'est pas difficile de voir
+    qu'elle est également libre, car toutes combinaisons linéaire
+    nulle de cette famille est une combinaison linéaire nulle de la
+    base de $M_n(\R)$ donnée par les $E_{ij}$. On a donc exhibé une
+    base de $S_n$, elle contient $n(n+1)/2$ éléments. 
+
+    Vous pouvez, si le coeur vous en dit, montrer que $M_n(\R)$ est la
+    somme directe de $S_n$ et du sous-espace vectoriel des matrices
+    antisymétriques.
+  \item Soit $\theta \in [0, 1]$ et $A, B \in S_n^+$. On veut montrer
+    que $(1-\theta)A + \theta B \in S_n^+$, c'est-à-dire que pour tout
+    $x \in \R^n$
+    \[
+    x^T\big((1-\theta)A + \theta B\big)x \geq 0.
+    \]
+    Or le terme de gauche est donné par
+    \[
+    (1-\theta)\underbrace{x^TAx}_{\geq 0} + \theta\underbrace{x^TBx}_{\geq 0}
+    \]
+    d'où le résultat. Le cas de $S_n^{++}$ suit le même procédé.  
+  \item Oui, il suffit d'adapter le raisonnement précédent. 
+  \end{enumerate}
+\end{solution}
+
+\section{Problèmes d'optimisation quadratiques}
+
+Un problème d'optimisation quadratique (\emph{QP}) est un problème qui
+prend la forme
+\[
+\begin{PbOptim}{
+    minimiser 
+}{
+  $(1/2)x^TPx+q^Tx + r$ 
+}{ 
+$\begin{array}{rll} Gx & \leq & h \\  Mx & = & b\end{array}$ 
+}
+\end{PbOptim}
+\]
+où $P$ est une matrice symétrique positive de taille $(n, n)$. Une telle
+définition fait des programmes linéaires un sous-cas de celui des
+problèmes quadratiques; la situation où $P = 0$. Une légère
+généralisation des problèmes quadratiques est la suivante
+\[
+\begin{PbOptim}{
+    minimiser 
+}{
+  $(1/2)x^TPx+q^Tx + r$ 
+}{ 
+$\begin{array}{rll} (1/2)x^TP_ix + q_i^Tx + r_i & \leq & 0 \\  Mx & = & b\end{array}$ 
+}
+\end{PbOptim}
+\]
+pour $i$ qui varie dans un ensemble fixe d'indices $\{1, \ldots, p\}$.
+Ces programmes sont dits quadratiques sous contraintes quadratiques,
+leur acronyme en anglais est (\emph{QCQP})\footnote{Pour
+  \textit{Quadratic Constrained Quadratic Program}.}. Dans la suite,
+on se contente d'identifier deux problèmes d'optimisation quadratiques
+fréquents.
+\begin{question}
+  \label{qu:quadraConvexe}
+  Montrer que la fonction objectif d'un programme quadratique est
+  convexe. Quelle condition garantit ce résultat?
+\end{question}
+
+\begin{solution}
+  On note $Q(x) = (1/2)x^TPx+q^Tx + r$. C'est le signe de 
+  \[
+  Q\big((1-\theta)x + \theta y\big) -
+  \big((1-\theta)Q(x) + \theta Q(y)\big)
+  \]
+  qui gouverne la convexité de $Q$. En écrivant explicitement cette
+  expression on tombe sur la condition de convexité de $(1/2)P$ et
+  cela nous ramène à la question \eqref{qu:convexiteP}. La convexité
+  de $Q$ vient donc du fait qu'on suppose que $P$ est positive. 
+\end{solution}
+
+\subsection{Moindres carrés}
+
+On commence par un petit travail de lecture. Le problème quadratique
+suivant est l'un de ceux que vous utilisez le plus, peut-être sans le
+savoir.
+\begin{question}
+  \begin{enumerate}
+  \item Qu'est ce que le problème des \textit{moindres carrés}\footnote{Oui,
+    c'est une recherche bibliographique!}? 
+  \item En quoi est-ce un problème quadratique?
+  \item Quel est le lien avec la régression linéaire?
+  \end{enumerate}
+\end{question}
+
+\begin{solution}
+  Le problème des moindres carrés s'énonce dans sa forme la plus
+  générale comme un problème d'optimisation qui prend la forme
+  suivante
+  \[
+  \textrm{minimser}\quad \|Ax - b\|_2^2
+  \]
+  où $x$ varie dans $\R^n$, $A$ est une matrice dans $M_{p, n}(\R)$ et
+  $b \in \R^p$. Pour voir que ceci définit bien un problème
+  quadratique il suffit de développer le produit scalaire implicite
+  ci-dessus :
+  \begin{align}
+    \|Ax - b\|_2^2 & = x^TA^TAx - \big(x^TA^Tb + b^TAx) + b^Tb \\
+                   & = \frac{1}{2}(x^TPx) +  q^Tx + r
+  \end{align}
+  avec $P = 2A^TA$, $r = b^Tb$ et $q$ le vecteur qui représente
+  l'unique forme linéaire qui correspond à $- \big(x^TA^Tb + b^TAx)$.
+
+  Voici comment comprendre le lien avec la régression linéaire. On
+  considère une variable explicative $a$ à valeurs dans $\R^n$ et une
+  variable réelle à expliquer $b$. On suppose qu'on a $p$ couples
+  d'observations $(a_i, b_i)$ pour $i \in \{1, \ldots,
+  p\}$. Chaque $a_i$ est un vecteur de $\R^n$ qu'on écrit 
+  \[
+  a_i = \begin{pmatrix} a_{1, i} \\ \vdots \\ a_{n, i} \end{pmatrix}.
+  \]
+  On souhaite trouver une application affine $f$ de $\R^n$ dans $\R$
+  telle que
+  \[
+  f(a_i) \sim b_i.
+  \]
+  Cette phrase manque bien sûr de précisions, on peut lui donner sens
+  de différentes fa\c{c}on. De manière standard on chercher à trouver
+  $f$ qui minimise
+  \[
+  \sum_{i=1}^p \|f(a_i) - b_i\|.
+  \]
+  où $\|\cdot \|$ est une norme de $\R^n$. Dans le cas de la
+  régression linéaire standard on prend la norme $2$ qu'on élève au
+  carré. En général, le choix d'une norme n'est pas anodin et dépend
+  des problèmes secondaires qu'on est prêt à traîner. On revient
+  désormais à notre régression. Une fonction affine $f : \R^n \to \R$
+  s'écrit sous la forme
+  \[
+  f(x) = \begin{pmatrix} t_0 \\ t_1 \\ \vdots \\ t_{n} \end{pmatrix}^T 
+  \begin{pmatrix} 1 \\ x_1 \\ \vdots \\ x_n \end{pmatrix}.
+  \]
+  Expression qu'on peut encore écrire (car $f(x) \in \R$) sous la forme 
+  \[
+  f(x) = \begin{pmatrix} 1 \\ x_1 \\ \vdots \\ x_n \end{pmatrix}^T
+  \begin{pmatrix} t_0 \\ t_1 \\ \vdots \\ t_{n} \end{pmatrix}.
+  \]
+  En notant $t$ le vecteur des $t_j$ pour $j \in \{0, n\}$, le
+  problème de régression linéaire s'écrit donc comme le problème de
+  minimisation
+  \[
+  \textrm{minimiser} \sum_{i=1}^n \|(1, a_i^T)t - b_i \|_2^2
+  \]
+  qui, en désignant par $A$ la matrice dont la ligne $i$ est
+  $(1, a_i^T)$ et par $b$ le vecteur des $b_i$, donne le problème de
+  minimisation
+  \[
+  \textrm{minimiser} \|At - b \|_2^2
+  \]
+  sur $t \in \R^n$. On vient donc de décrire un problème de régression
+  linéaire comme un problème d'optimisation convexe. Les algorithmes
+  d'optimisation convexe apportent des solutions efficaces à de tels
+  problèmes.
+\end{solution}
+
+\subsection{Reconnaissance faciale}
+
+On représente deux images par le vecteur de leurs pixels. Une première
+approche pour chercher à savoir si ces deux images sont proches est
+d'étudier la matrice de corrélation de ces deux vecteurs\footnote{Le
+  problème de reconnaître si deux visages sont proches dans une images
+  va bien au-delà de \c{c}a. Il faudrait déjà extraire les visages,
+  les recentrer, mettre à l'échelle ... etc}. C'est une matrice
+symétrique positive, donc diagonalisable avec des valeurs propres
+positives. Une approche standard pour quantifier la proximité entre
+les deux images et de tester si la plus grande valeur propre de notre
+matrice de corrélation est plus petite qu'un seuil d'acceptation. On
+va décortiquer dans la suite cette approche et vérifier qu'une telle
+question se ramène à un problème d'optimisation quadratique.
+
+Voici comment on définit une norme d'une matrice $A \in M_n(\R)$,
+quand on a déjà une norme sur $\R^n$ d'arrivée et de départ. On va
+supposer ici (pour simplifier) qu'on travaille avec la norme
+$\|\cdot \|_2$. Sans s'attarder sur les détails, l'image de la boule
+unité de $\R^n$ par une matrice $A$ est un ellipsoïde (éventuellement
+dans une dimension plus petite que $n$, en particulier réduit au
+singleton $\{0\}$). Mesurer si une matrice $A$ est <<\, grosse \,>> se fait
+donc à l'aide du plus grand rayon de cet ellipsoïde. Voici comment
+attraper ce rayon.
+\begin{defn}
+  Soit $A$ une matrice dans $M_n(\R)$. La norme triple de $A$, notée
+  $|||A|||_2$, est définie par
+  \[
+  |||A|||_2 = \sup_{\|x\|_2 \leq 1} \|Ax\|_2 = \sup_{\|x\|_2 \neq 0} \frac{\|Ax\|_2}{\|x\|_2}.
+  \]
+\end{defn}
+\noindent On admet dans la suite le fait que la norme de $A$ est réalisée sur le
+bord de la boule unité (fermée). C'est-à-dire
+\begin{equation}
+  \label{eq:triple}
+  |||A|||_2 = \sup_{\|x\|_2 = 1} \|Ax\|_2.
+\end{equation}
+\textbf{On suppose désormais $A$ \emph{symétrique} à \emph{valeurs propres
+  positives}.}
+\begin{question}
+  \label{qu:lambdatriple}
+  En décomposant un vecteur $x$ le long d'une base orthonormée de
+  vecteurs propres de $A$, montrer que\footnote{L'expression
+    \eqref{eq:triple} peut aider.}\footnote{Je vous invite à prouver l'égalité
+    pour les carrés des membres de gauche et de droite.}
+  \[
+  |||A|||_2 = \lambda_{max}(A)
+  \]
+  où $\lambda_{max}$ est la plus grande valeur propre de $A$. 
+\end{question}
+
+\begin{solution}
+  \begin{enumerate}
+  \item Soit $(v_1, \ldots, v_n)$ une base orthonormée de vecteurs
+    propres de $A$. La valeur propre de $v_i$ est notée
+    $\lambda_i$. On désigne par $\text{max}$ l'indice de la plus
+    grande valeur propre de $A$. Soit $x \in \R^n$, on donc une
+    décomposition
+    \[ 
+    x = \sum_{i=1}^n \alpha_iv_i.
+    \]
+    Donc 
+    \[
+    Ax = \sum_{i=1}^n \alpha_i\lambda_iv_i.
+    \]
+    D'où
+    \begin{equation}
+      \label{eq:normeA}
+      \|Ax\|_2^2 = \sum_{i=1}^n \alpha_i^2\lambda_i^2
+    \end{equation}
+    On cherche à minimiser la quantité précédente sous la contrainte
+    $\|x\|_2 = 1$. Autrement dit, sous la contrainte
+    \[
+    \sum_{i=1}^n\alpha_i^2 = 1.
+    \]
+    En écrivant 
+    \[
+    \lambda_{\text{max}}^2 = 1 - \sum_{i\neq \text{max}}\alpha_i^2 
+    \]
+    et en rempla\c{c}ant dans l'expression \eqref{eq:normeA} on
+    obtient
+    \[
+    \|Ax\|_2^2 = 
+    \lambda_{\text{max}}^2 + 
+    \sum_{i \neq \text{max}} (\lambda_i^2 - \lambda_{\text{max}}^2)\alpha_i^2.
+    \]
+    Donc, pour tout $x \in \R^n$ tel que $\|x\|_2 = 1$ on a 
+    \[
+    \|Ax\|_2^2 \leq \lambda_{\text{max}}^2.
+    \]
+    Comme la valeur de droite est atteinte pour $v_{\text{max}}$ on en
+    déduit l'égalité 
+    \[
+    \sup_{\|x\|_2 = 1}\|Ax\|_2^2 = \lambda_{\text{max}}^2
+    \]
+    Les valeurs propres de $A$ étant supposée positives on obtient le
+    résultat recherché. La norme de $A$ subordonnée à la norme $2$ est
+    donc la longueur du plus grand axe image de la sphère de $\R^n$
+    par $A$.
+  \end{enumerate}
+\end{solution}
+
+\begin{question}
+  Par une démarche similaire à la question \eqref{qu:lambdatriple},
+  montrer que\footnote{On admet qu'on peut remplacer l'inégalité
+    $\|x\|_2 \leq 1$ par $\|x\|_2 = 1$ si nécessaire.}
+  \[
+  \lambda_{max}(A) = \sup_{\|x\|_2 \leq 1}x^TAx
+  \]
+  Peut-on réecrire notre problème de départ comme un (\emph{QCQP})?
+  Est-ce que la recherche de la plus petite valeur propre de $A$, et
+  non la plus grande, donnerait à l'arrivée un (\emph{QCQP})?
+\end{question}
+On saura bientôt résoudre ce problème, que cela soit par de l'algèbre
+linéaire ou par des méthodes d'approximation successives.
+\begin{solution}
+  On procède de la même manière qu'à la question précédente. Avec les
+  mêmes notations
+  \begin{align}
+    x^TAx 
+    & = 
+    \left(\sum_{i=1}^n\alpha_iv_i\right)^TA\left(\sum_{i=1}^n\alpha_iv_i\right)\\ 
+    & = \sum_{1 \leq i, j\leq n} \alpha_i\alpha_jv_i^TAv_j \\
+    & = \sum_{1 \leq i, j\leq n} \alpha_i\alpha_j\lambda_jv_i^Tv_j\\
+    \intertext{comme les $v_i$ forment une base orthonormée}
+    x^TAx & = \sum_{i=1}^n \lambda_i\alpha_i^2. 
+  \end{align}
+  En utilisant le fait que $\sum_{i=1}^n \alpha_i^2 = 1$ et la
+  positivité des valeurs propres on a
+  \begin{align}
+  x^TAx & = \lambda_{\text{max}} + \sum_{i=1}^n (\lambda_i - \lambda_{\text{max}})\alpha_i^2 \\
+    & \leq \lambda_{\text{max}}
+  \end{align}
+  Cette valeur étant atteinte pour $v_{\text{max}}$ on obtient le
+  résultat recherché. 
+
+  Le problème précédent, sous cette forme, n'est pas un
+  (\emph{QCQP}). Les contraintes sont bien quadratiques de même que la
+  fonction objectif, mais c'est un problème de maximisation et non un
+  problème de minimisation. 
+  \[
+  \begin{PbOptim}{
+      maximiser 
+    }{
+      $x^TAx$ 
+    }{ 
+      $\|x\|_2 = 1$ 
+    }
+  \end{PbOptim}
+  \]  
+  Dans le cas de $\lambda_{\text{min}}$ on
+  peut effectivement écrire la recherche comme un (\emph{QCQP}). La
+  discussion sur la norme de $A$ ne tient plus, mais la relation
+  suivante
+  \[
+  \lambda_{\text{min}}(A) = \inf_{\|x\|_2^2 = 1} x^TAx
+  \]
+  est valable est se montre par une approche similaire à ce qu'on
+  vient de faire. Fort de cette remarque, on peut, dans le cas où $A$
+  est inversible (toutes les valeurs propres sont strictement
+  positives) on peut travailler avec le problème d'optimisation
+  équivalent
+  \[
+  \begin{PbOptim}{
+      minimiser 
+    }{
+      $x^TA^{-1}x$ 
+    }{ 
+      $\|x\|_2 = 1$ 
+    }
+  \end{PbOptim}
+  \]  
+  Ce problème est un (\emph{QCQP}), il n'est pas difficile de montrer
+  que $A^{-1}$ est symétrique positive. La valeur optimale de ce
+  problème est $\lambda_{\text{max}}^{-1}$.\footnote{Smart, isn't it?
+    Réfléchissez-y quand même à deux reprises avant de vous lancer
+    dans une implémentation.}
+\end{solution}
+
+
+\section{La différentielle seconde}
+\label{sec:diff2}
+
+Quand elle existe, la différentielle seconde d'une application
+$f : U \to \R^m$ définie sur un ouvert $U \subset \R^n$, en un point
+$a \in U$, donne une approximation de second ordre de $f$ au voisinage
+de $a$. La différentielle seconde est la partie quadratique de cette
+approximation, elle permet une étude plus fine des points critiques de
+la fonction $f$ ainsi qu'une caractérisation pratique des conditions
+de convexité de celle-ci.
+
+\subsection{Différentielle seconde et hessienne}
+
+\begin{defn}
+  On dit qu'une fonction $f : U \to \R^m$ sur un ouvert
+  $U \subset \R^n$ est $2$ fois différentiable en $a \in U$ si
+  \begin{itemize}
+  \item[\textbullet] $f$ est différentiable au voisinage de $a$ ;
+  \item[\textbullet] la fonction $x \mapsto \Di{f}(x)$,définie sur un
+    voisinage ouvert $V$ de $a$, est une fonction différentiable de $V$ dans
+    $\mc{L}(\R^n, \R^m)$\footnote{Qu'on identifie à $\R^{n\times m}$.}.
+  \end{itemize}
+  Quand elle existe, la différentielle seconde de $f$ en $a$,
+  c'est-à-dire la différentielle de $\Di{f}$ en a, est notée
+  $\Di{^2f}(a)$.
+\end{defn}
+Il est important de comprendre quel type d'objet est la différentielle
+seconde. Avec les notations précédentes et en supposant $f$ $2$ fois
+différentiable en $a$, la différentielle seconde de $f$ en $a$ est un
+élément de $\mc{L}\big(\R^n, \mc{L}(\R^n, \R^m)\big)$. Essayons de
+comprendre les objets de cet ensemble. Soit
+$\phi \in \mc{L}\big(\R^n, \mc{L}(\R^n, \R^m)\big)$. On est donc face
+à une application
+\[
+\begin{array}{rrl}
+  \phi : & \R^n \longrightarrow & \mc{L}(\R^n, \R^m) \\
+  & h_1 \longmapsto & \phi(h_1) : h_2 \mapsto \phi(h_1)(h_2) 
+\end{array}
+\] 
+Par définition l'application $\phi$ est linéaire <<\, à la fois en
+$h_1$ et en $h_2$ \,>>. Faison l'identification consistant à écrire,
+par abus, $\phi(h_1, h_2)$ au lieu de $\phi(h_1)(h_2)$. Sous cette
+identification, $\phi$ devient donc une application bilinéaire de
+$\R^n\times \R^n$ dans $\R^m$. Donc $\Di{^2f}(a)$ est une application
+bilinéaire de $\R^n \times \R^n$ dans $\R^m$. En réalité on a plus,
+mais la preuve de ce résultat dépasse nos objectifs pour ce cours.
+\begin{thm}
+  Soit $f : U \to \R^m$ une fonction $2$ fois différentiable en un
+  point $a$ de l'ouvert $U \subset \R^n$. Alors $\Di{^2f}(a)$ est une
+  application bilinéaire symétrique sur $\R^n$.
+\end{thm}
+Dans la pratique on s'intéresse essentiellement aux valeurs de la
+différentielle seconde le long de la diagonale, c'est-à-dire pour les
+couples de la forme $(h, h)$ avec $h \in \R^n$. La raison en est la
+suivante:
+\begin{prop}
+  Soit $f : U \to \R^m$ une application $2$ fois différentiable en un
+  point $a$ de l'ouvert $U$. La différentielle seconde de $f$ en $a$
+  est l'unique application bilinéaire pour laquelle
+  \begin{equation}
+    \label{eq:DL2}
+    f(a+h) = f(a) + \Di{f}(a)h + \dfrac{1}{2} \Di{^2f}(a)(h, h) + o(\|h\|^2)
+  \end{equation}
+  pour $h$ dans un voisinage de $0$. 
+\end{prop}
+\noindent L'expression \eqref{eq:DL2} est le développement limité à
+l'ordre $2$ de $f$ au voisinage de $a$. Elle permet déjà de calculer
+un certain nombre de différentielles secondes rapidement.
+
+Dans le cas $m = 1$, c'est-à-dire dans le cas où $f$ prend ses valeurs
+dans $\R$, on note $\nabla^2f$ la différentielle seconde, par cohérence
+avec la notation du gradient de $f$. On remarque que dans ce cas
+$\nabla^2f(a)$ est une forme quadratique au sens qu'on a introduit en
+partie \ref{sec:FQ}. 
+\begin{question}
+  Calculer le DL à l'ordre $2$ d'une forme quadratique
+  $Q : x \mapsto x^TPx$ en un point $a \in \R^n$. Quelle est la
+  différentielle seconde de $Q$?
+\end{question}
+\begin{solution}
+  La fonction quadratique $Q$ est différentiable, sa différentielle en
+  un point $x$ est l'application $\Di{Q} : x \mapsto 2x^TP$ de $\R^n$
+  dans l'espace $\mc{L}(\R^n, \R)$. L'application linéaire $\Di{Q}(x)$
+  est donné pour tout $h \in \R^n$ par $2x^TPh$, elle a donc été
+  identifié au vecteur ligne $2x^TP$ ; son gradient en
+  $x$. L'application $\Di{Q}$ est à son tour différentiable, pour
+  calculer sa différentielle en suivant la définition, on écrit
+  \[
+    \Di{Q}(x + h_2) = 2(x+h_2)^TP = 2x^TP + 2h_2^TP. 
+  \]
+  Cette égalité est une égalité fonctionnelle, en effet les deux
+  membres de l'égalité sont des éléments dans $\mc{L}(\R^n, \R)$ et
+  l'égalité doit être lue comme : pour tout $h_1 \in \R^n$
+  \[
+    \Di{Q}(x + h_2)(h_1) = 2x^TPh_1 + 2h_2^TPh_1.
+  \]
+  La partie linéaire en $h_2$ (variable significative dans le calcul
+  de la différentielle en $x$ de $\Di{Q}$) est le second terme. Ainsi,
+  en prenant en compte les identifications décrite en début de
+  section, la différentielle seconde de $Q$ en un point $x\in \R^n$ est donnée
+  par
+  \[
+    \Di^2{f}(x)(h_1, h_2) = 2h_2^TPh_1,
+  \]
+  pour tout $h_1$, $h_2 \in \R^n$. On identifie cette différentielle
+  seconde en $x$ à la matrice $2P$. Cela correspond à la héssienne de
+  $Q$ au point $x$.
+
+  Comme on sait que $Q$ est deux fois différentiable en tout point, on
+  peut retrouver la forme quadratique associée à sa différentielle
+  seconde en $x \in \R^n$ dans son développement limité au point
+  $x$. En écrivant
+  \[
+    Q(x+h) = x^TPx  + 2x^TPh + \frac{1}{2}(2h^TPh)
+  \]
+  on constate que le dernier terme de ce développement est bien la
+  forme quadratique associée à $\Di{Q}(x)$.
+
+  Attention au fait que l'existence d'un DL à l'ordre $2$ en un point
+  ne suffit pas à montrer le fait que la fonction est $2$ fois
+  différentiable en ce point. Un exemple classique de ce phénomène est
+  donné par la fonction $f$, donnée par
+  \[
+  f(x) = \left\{ \begin{array}{cl}
+    x^3\sin\left(\frac{1}{x}\right) & \textrm{si $x \neq 0$} \\
+    0 & \textrm{sinon.}
+  \end{array}\right.
+  \]
+  C'est une fonction qui admet un développement limité d'ordre $2$ en
+  $0$, mais elle n'est pas $2$-fois dérivable en $0$.
+\end{solution}
+
+\begin{question}
+  Soient $f : \R \to \R$ une fonction $2$-fois dérivable et
+  $P \in S_n$.  Quelle est la différentielle seconde, en tout point,
+  de l'application $f_P$ définie sur $\R^n$ par $x \mapsto f(x^TPx)$ ?
+\end{question}
+\begin{solution}
+  On fixe un point $x \in \R^n$. Pour tout $h \in \R^n$ on a
+  \[
+    f_p(x + h) = f(x^TPx + 2x^TPh + h^TPh)
+  \]
+  On sait que $f_p$ est $2$-fois différentiable. On va chercher à
+  déterminer le DL à l'ordre $2$ de $f_p$ en $x$. On a deux situations
+  à prendre en compte:
+  \begin{itemize}
+  \item[\textbullet] La première situation est quand $x^TP \neq
+    0$. Dans ce cas le développement limité de $f$ en $x^TPx$ donne
+    \begin{align*}
+      f_p(x+h) & = f(x^TPx) + f'(x^TPx)(2x^TPh + h^TPh)\\ 
+               & \phantom{=} \quad + \frac{f''(x^TPx)}{2}(2x^TPh + h^TPh)^2 + o(\|h\|^2)\\
+               & = f_p(x) + f'(x^TPx)2x^TPh + f'(x^TPx)h^TPh \\
+               & \phantom{=} \quad + 2f''(x^TPx)(x^TPh)^2 + o(\|h\|^2) \\
+               & = f_p(x) + f_p'(x)h + f'(x^TPx)h^TPh  +  2f''(x^TPx)h^T(Px)(x^TP)h + o(\|h\|^2)
+    \end{align*}
+    Ce qui nous permet de retrouver la différentielle seconde de $f$ en $x$. 
+    \[
+      \Di^2{f_p}(x) = f'(x^TPx)P + 2f''(x^TPx)Pxx^TP
+    \]
+    qu'on peut réécrire plus agréablement si on le souhaite. 
+  \item[\textbullet] Dans le cas où $x^TP = 0$, en reprenant les
+    calculs précédent on trouve
+    \[
+    f_p(x + h) = f(0) + f'(0)(h^TPh) + \frac{f''(0)}{2}(h^TPh)^2 + o(\|h\|^2),
+    \]
+    or cet avant dernier terme est déjà un $o(\|h\|^2)$. On vérifie
+    dans ce cas
+    \[
+      \Di^2{f_p}(x) = f'(0)P.
+    \]
+    Avec les identification d'usage.
+  \end{itemize}
+\end{solution}
+Quand une fonction $f : U \to \R$ pour $U \subset \R^n$ est donnée par
+une expression explicite, on calcule souvent de manière explicite une
+écriture <<\, en coordonnées \,>> de la différentielle seconde: la
+hessienne. Pour en inférer la définition on procède comme dans le cas
+de la jacobienne.
+
+Soit $f : U \to \R$ une fonction $2$ fois différentiable en un point
+$a$ de l'ouvert $U \subset \R^n$. On note $h = \sum_{i=1}^n h_ie_i$ un
+vecteur dans $\R^n$. On a
+\begin{align*}
+  \Di{^2f}(a)(h, h) & = \sum_{i, j = 1}^n h_ih_j\Di{^2f}(a)(e_i, e_j) \\
+  \intertext{par définition $\Di{^2 f}(a)(e_i, e_j) = \pa_{e_j}\big(t \mapsto \Di{f}(t)(e_i)\big)(a)$, d'où} 
+  \sum_{i, j = 1}^n h_ih_j\Di{^2f}(a)(e_i, e_j)  & = \sum_{i, j = 1}^n h_ih_j \pa_{e_j}\big(t \mapsto \Di{f}(t)(e_i)\big)(a) \\
+                    & = \sum_{i, j = 1}^n h_ih_j \pa_{e_j}\left( t \mapsto \frac{\pa{f}}{\pa{x_i}}(t)\right)(a) \\
+  \intertext{en notant $\pa_{e_j}\left( t \mapsto \frac{\pa{f}}{\pa{x_i}}(t)\right)(a)$ 
+             par $\frac{\pa^2{f}}{\pa{x_j}\pa{x_i}}(a)$, on obtient l'expression}  
+  \Di{^2f}(a)(h, h) & = \sum_{i, j = 1}^n h_ih_j \frac{\pa^2{f}}{\pa{x_j}\pa{x_i}}(a).
+\end{align*}
+Ce qu'on peut encore représenter matriciellement comme
+\[
+\Di{^2f}(a)(h, h) = h^T
+\begin{pmatrix}
+\frac{\pa^2{f}}{\pa{x_1^2}}(a) & \cdots & \frac{\pa^2{f}}{\pa{x_1}\pa{x_n}}(a) \\
+\vdots & \ddots & \vdots  \\
+\frac{\pa^2{f}}{\pa{x_n}\pa{x_1}}(a) & \cdots & \frac{\pa^2{f}}{\pa{x_n}^2}(a)  
+\end{pmatrix}
+h
+\]
+où $\pa^2{f}/\pa{x_i^2}$ est une écriture simplifiée pour
+$(\pa^2{f}/\pa{x_i}\pa{x_i})$. La matrice dans le membre de droite de
+l'égalité est la \emph{hessienne} de $f$ au point $a$.
+
+\begin{question}
+  \label{eq:hessienne}
+  Calculer les hessiennes en tout point des fonctions à valeurs
+  réelles suivantes:
+  \begin{enumerate}
+  \item $f(x, y) = x^2 + xy + y^2 + \displaystyle{\frac{x^3}{4}}$;
+  \item $f(x, y) = x^3 + y^3$;
+  \item $f(x, y) = x^2y - \displaystyle{\frac{x^2}{2}} - y^2$;
+  \item $f(x, y, z) = x^2 + 3y^2 - z^2 + 2xy - 5yz$;
+  \item $f(x, y, z) = \ln\big(e^x + e^y +e^z\big)$.
+  \end{enumerate}
+\end{question}
+\begin{solution}
+  On se contente ici de donner les dérivée partielles secondes de
+  chacune des fonctions en jeux, la hessienne est dès lors facile à
+  donner. Toutes les fonctions en jeux ont des dérivées partielles
+  secondes continues, elles satisfont toutes les relations de Schwarz.
+  \begin{enumerate}
+  \item $\dfrac{\pa^2f}{\pa x^2}(x, y) = 2 + \dfrac{3x}{2}$,
+    $\dfrac{\pa^2f}{\pa x\pa y}(x, y) = 1$,
+    $\dfrac{\pa^2f}{\pa y^2}(x, y) = 2$.
+  \item $\dfrac{\pa^2f}{\pa x^2}(x, y) = 6x$,
+    $\dfrac{\pa^2f}{\pa x\pa y}(x, y) = 0$,
+    $\dfrac{\pa^2f}{\pa y^2}(x, y) = 6y$.
+  \item $\dfrac{\pa^2f}{\pa x^2}(x, y) = 2y - 1$,
+    $\dfrac{\pa^2f}{\pa x\pa y}(x, y) = 2x$,
+    $\dfrac{\pa^2f}{\pa y^2}(x, y) = -2$.
+  \item $\dfrac{\pa^2f}{\pa x^2}(x, y, z) = 2$,
+    $\dfrac{\pa^2f}{\pa y^2}(x, y, z) = 6$,
+    $\dfrac{\pa^2f}{\pa z^2}(x, y, z) = -2$, \\
+    $\dfrac{\pa^2f}{\pa x\pa y}(x, y, z) = 2$,
+    $\dfrac{\pa^2f}{\pa x\pa z}(x, y, z) = 0$,
+    $\dfrac{\pa^2f}{\pa y \pa z}(x, y, z) = -5$.
+  \item $\dfrac{\pa^2f}{\pa x^2}(x, y, z) = \dfrac{e^x(e^y + e^z)}{(e^x + e^y + e^z)^2}$,\\ 
+    $\dfrac{\pa^2f}{\pa y^2}(x, y, z) = \dfrac{e^y(e^x + e^z)}{(e^x + e^y + e^z)^2}$, \\
+    $\dfrac{\pa^2f}{\pa z^2}(x, y, z) = \dfrac{e^z(e^x + e^y)}{(e^x + e^y + e^z)^2}$, \\ 
+    $\dfrac{\pa^2f}{\pa x\pa y}(x, y, z) = -\dfrac{e^xe^y}{(e^x + e^y + e^z)^2}$, \\
+    $\dfrac{\pa^2f}{\pa x\pa z}(x, y, z) = -\dfrac{e^ye^z}{(e^x + e^y + e^z)^2}$, \\
+    $\dfrac{\pa^2f}{\pa y \pa z}(x, y, z) = -\dfrac{e^xe^z}{(e^x + e^y + e^z)^2}$. 
+  \end{enumerate}
+\end{solution}
+\subsection{Convexité}
+
+Soit $f : U \to \R$ une fonction définie et différentiable sur un ouvert convexe
+$U \subset \R^n$. Alors $f$ est convexe si et seulement si
+\begin{equation}
+  \label{eq:convexeOrdUn}
+  \forall x, y \in U, \quad f(x) - f(y) \geq \nabla{f}(x)(x-y).
+\end{equation}
+On rappelle que ce critère \eqref{eq:convexeOrdUn} a une
+interprétation géométrique simple: l'hyperplan tangent au graphe de
+$f$ en un point $(x, f(x))$ est un hyperplan d'appui. En effet, cette
+dernière condition se traduit en un point $x \in U$ par
+\[
+(\nabla{f}(x), -1)  \begin{pmatrix}  y - x \\ f(y) - f(x) \end{pmatrix} \leq 0
+\]
+qui donne, une fois la multiplication matricielle explicitée, la
+relation \eqref{eq:convexeOrdUn}. On rappelle que le vecteur
+$(\nabla{f}(x), -1)$ est un vecteur normal définissant l'hyperplan
+tangent au graphe de $f$ au point $(x, f(x))$. Notez au passage le fait
+que $\nabla{f}(x)$, $x$ et $y$ sont des vecteurs dans $\R^n$ ;
+l'écriture ci-dessus est donc une écriture par blocs.
+
+Ce critère d'ordre $1$ est pratique mais pas toujours facile à
+manier. Quand $f$ est une fonction $2$ fois différentiable, tout comme
+dans le cas d'une fonction de $\R$ dans $\R$, la positivité de la
+différentielle seconde nous apporte une information sur la convexité
+de $f$. Plus précisément:
+\begin{prop}
+  Soit $f : U \to \R$ une fonction $2$ fois différentiable définie sur
+  un ouvert convexe $U \subset \R^n$. Alors $f$ est convexe si et
+  seulement si
+  \begin{equation}
+    \label{eq:convexeOrdDeux}
+    \forall x \in U, \quad \nabla^2{f}(x) \geq 0.
+  \end{equation}
+\end{prop}
+Pour une preuve de cette proposition élémentaire, on peut se référer à
+\cite[Exercice 108]{rouviere2009petit}. 
+
+\begin{question}
+  Retrouver le résultat de la question \eqref{qu:quadraConvexe}.
+\end{question}
+\begin{solution}
+  Le gradient d'une fonction de la forme
+  $x \mapsto (1/2)x^TPx + q^Tx + r$ en tout point $x$ est donné par
+  $P$, ce qui nous ramène au résultat de \eqref{qu:quadraConvexe}.
+\end{solution}
+
+\begin{question}
+  Les fonction de la question \eqref{eq:hessienne} sont-elles convexes ?
+  Justifier.
+\end{question}
+\begin{solution}
+  En calculant les déterminants des hessiennes en tout point $(x, y)$
+  des trois premiers cas, on remarque que celui-ci n'est pas toujours
+  positif ni toujours négatif. D'après \eqref{qu:critereposdefn} cela
+  suffit pour savoir que la hessienne ne sera pas positive en tout
+  point du domaine de définition de chacune de ses fonctions, en
+  l'occurence $\R^2$.
+
+  Dans le quatrième cas, un calcul du déterminant donne un nombre réel
+  négatif. La hessienne a donc ou bien une valeur propre négative et
+  $2$ positives ou alors $3$ valeurs propres négatives. Comme sa trace
+  est positive, on est nécessairement dans le premier cas, donc la
+  fonction n'est ni convexe, ni concave.
+
+  Le cinquième cas est de loin, le plus technique. On peut l'aborder
+  de deux fa\c{c}ons. Dans les deux cas l'étude de la positivité de la
+  différentielle seconde $H(x, y, z)$ en $(x, y, z)$ est équivalent à
+  l'étude de 
+  \[
+  \overline{H}(x, y, z) = (e^x + e^y + e^z)^{-2}H(x, y, z)
+  \]
+  (on factorise par le facteur commun $(e^x + e^y + e^z)^2$), les
+  calculs ci-dessous sont fait en travaillant avec
+  $\smash{\overline{H}}$.
+  \begin{itemize}
+  \item En effectuant une décomposition de Gauss en regroupant les
+    carrés au fur et à mesure. On obtient dans ce cas la décomposition
+    suivante
+    \[
+    \overline{H}(x, y, z)(X, Y, Z) = e^y(e^x + e^y + e^z)Y^2 + e^z(e^x
+    + e^y + e^z)Z^2 + e^x\big((e^y+ e^z)^{1/2} - (e^yY+e^zZ)\big)^2
+    \]
+    qui montre que $H(x,y, z)$ est toujours positive. Donc $f$ est
+    convexe dans ce cas.
+  \item La seconde approche consiste à remarquer que la somme des
+    colonnes de la hessienne est nulle. Un vecteur propre de celle-ci
+    pour la valeur propre $0$ est $(1, 1, 1)$. Comme la hessienne est
+    symétrique, on peut étudier l'application linéaire induite par la
+    hessienne sur l'orthogonale de $(1, 1, 1)$. Les deux vecteurs
+    $(1, 0, -1)$ et $(1, -1, 0)$ forment une base de cet
+    orthogonal. L'étude de cette application induite (orthogonal
+    stable par la hessienne) permet de retrouver le résultat
+    précédent.
+  \end{itemize}  
+\end{solution}
+
+\newpage 
+
+\pretitle{\vspace{-2\baselineskip} \begin{center}}
+\title{%
+  { \huge Solutions du devoir maison}%
+}
+\posttitle{
+\end{center}
+  \vspace{.5\baselineskip}
+  \rule{\textwidth}{1.5pt}
+  \vspace{-5\baselineskip}
+}
+
+\maketitle\thispagestyle{fancy}
+
+\noindent Vous trouverez dans la suite l'ensemble des solutions aux questions de
+ce devoir maison. Faites en bonne usage.
+
+\printsolutions
+
+
+\bibliographystyle{alpha}
+\bibliography{./Ref/bibOCVX}
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

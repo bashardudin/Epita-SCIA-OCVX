@@ -1,0 +1,518 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[french]{babel}
+\usepackage{fancyhdr}
+\usepackage[margin=.8in]{geometry}
+
+\usepackage{Style/TeXingStyle}
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{1.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyhead[L]{EPITA\_ING2\_2018\_S8}
+\fancyhead[R]{Majeure SCIA}
+\fancyhead[C]{OCVX1}
+\fancyfoot[C]{\thepage} 
+\fancyfoot[L]{2017} 
+\fancyfoot[R]{\textbf{Chargé de cours :} \textsc{Bashar~DUDIN}}
+
+\pretitle{\vspace{-2.5\baselineskip} \begin{center}}
+\title{%
+  { \huge Feuille d'exercices}%
+}
+\posttitle{
+\end{center}
+\rule{\textwidth}{1.5pt}
+\vspace{-3\baselineskip}
+}
+\author{}
+\date{}
+
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Exercices OCVX - 2017)
+   /Subject (Optimisation convexe)
+}
+
+\begin{document}
+
+\maketitle\thispagestyle{fancy}
+
+\section{Calcul différentiel élémentaire}
+
+Cette série de questions est calculatoire. Savoir calculer la
+différentielle, le gradient (plus généralement la jacobienne) ou la
+dérivée directionnelle d'une fonction à plusieurs variable et/ou
+mulitivariées en tout point (ou du moins là où cela fait sens est
+nécessaire. Cela permet d'écrire par exemple les conditions KKT d'un
+problème d'optimisation.
+
+\begin{question}
+  Expliciter la jacobienne, en tout point ou cela fait sens, des
+  expressions différentiables suivantes :
+  \begin{enumerate}
+  \item $f(x, y) = e^{xy}(x+y)$ ;
+  \item $g(x, y, z) = (x + y\ln(z), xyz)$ ;
+  \item $h(x, y, z) = \left(\dfrac{x^2\sin(xy)}{z^2 + 2}, \tan(xyz)\right)$.
+  \end{enumerate}
+\end{question}
+\begin{solution}
+  \begin{enumerate}
+  \item $f$ est différentiable en tout point de $\R^2$ car elle est
+    somme, produit et composée de fonctions différentiable sur tout
+    $\R^2$. On a 
+    \[
+    \mathrm{J}_f(x, y) = \Big(e^{xy}\big(y^2+ xy + 1\big), e^{xy}\big(x^2+ yx + 1\big)\Big).
+    \]
+  \item $g$ est différentiable sur son domaine de définition,
+    c'est-à-dire $\R\times \R\times \R_+^*$, chacune de ses
+    composantes est la somme et produit de fonctions
+    différentiables. On a
+    \[ 
+    \mathrm{J}_g(x, y, z) = \begin{pmatrix} 1 & \ln(z) & y/z \\ yz & xz & yx \end{pmatrix}.
+    \]
+  \item $h$ est différentiable sur tout $\R^3$, car chaque composante
+    est somme produit et composée de fonctions différentiables. On a 
+    \[
+    \mathrm{J}_h(x, y, z) = 
+    \begin{pmatrix} 
+      \frac{x}{z^2 + 2}\big(2\sin(xy) + xy(\cos(xy)\big) 
+      & \frac{x^3}{z^2+2}\cos(xy) 
+      & \frac{-2zx^2}{(z^2+2)^2}\sin(xy) \\
+      \big(1+\tan^2(xyz)\big)yz 
+      & \big(1+\tan^2(xyz)\big)xz
+      & \big(1+\tan^2(xyz)\big)xy
+    \end{pmatrix}
+    \]
+  \end{enumerate}
+\end{solution}
+
+\begin{question}
+  Calculer la différentielle des fonctions suivantes:
+  \begin{enumerate}
+  \item $f : \R^n \rightarrow \R$ donnée par l'expressoin
+    $X \mapsto \cos^2(X^TAX)$, où $A$ est une matrice carrée de taille
+    $(n, n)$ ;
+  \item $g : M_n(\R) \rightarrow \R$ donnée par
+    $A \mapsto \mathrm{tr}(A)^2$ ;
+  \item $h : M_n(\R) \rightarrow M_n(\R)$ donnée par l'expressoin
+    $A \mapsto A^TA^2$.
+  \end{enumerate}
+\end{question}
+
+\begin{solution}
+  \begin{enumerate}
+  \item En utilisant la formule de différentiation des composées, en
+    tout point $X \in \R^n$ on obtient
+    \begin{align}
+    \Di{f}(X) & = 2\cos(X^TAX)\big(-\sin(X^TAX)\big)(2X^TA) \\
+              & = -2\sin(2X^TAX)X^TA
+    \end{align}
+    Il est sous entendu ici que l'application linéaire $\Di{f}(X)$ en
+    $h \in \R^n$ est donnée par
+    \[
+    \Di{f}(X)(h) = 2\sin(2X^TAX)X^TAh.
+    \]
+    On s'est permis d'aller plus vite sur l'écriture, en suivant la
+    formule différentiation des composées de fonctions.
+  \item Cette fois la variable de dérivation est une matrice (qu'on
+    peut identifier à un vecteur dans $\R^{n^2}$, on n'est pas en
+    train de sortir du cadre du cours). On est face à une composée de
+    fonctions. En rappelant que $\mathrm{tr}$ est linéaire en $A$
+    (donc se différentielle c'est elle même) on a
+    \[
+    \Di{g}(A) = 2\mathrm{tr}(A)\mathrm{tr}. 
+    \]
+    En $H\in M_n(\R)$, cette différentielle prend la valeur
+    \[
+    \Di{g}(A)(H) = 2\mathrm{tr}(A)\mathrm{tr}(H). 
+    \]
+  \item On va procéder à la main dans ce dernier cas. Sans raison
+    particulière à part le changement.
+    \begin{align}
+      \big(A+H\big)^T\big(A+H\big)^2 & = \big(A+H\big)^T\big(A^2 + AH + HA + H^2) \\
+                                     & = A^TA + A^TAH + A^THA + H^TA^2 + \underbrace{H^TAH + H^THA + H^TH^2}_{o(\|H\|_2)}
+    \end{align}
+    Par identification on trouve
+    \[
+    \Di{h}(A)(H) = A^TAH + A^THA + H^TA^2.
+    \]
+    Attention au fait que la mulitplication matricielle n'est pas commutative. 
+  \end{enumerate}
+\end{solution}
+
+\begin{question}
+  Soit $f : \R^3 \to \R$ une fonction différentiable en tout point de
+  $\R^3$. On considère la fonction $g : \R^3 \to \R$ donnée pour tout
+  $(x, y, z) \in \R^3$ par
+  \[
+  g(x, y, z) = f(x-y, y-z, z-x).
+  \]
+  La fonction $g$ est différentiable en tout point car composée de
+  fonction différentiables. Montrer qu'on a la relation
+  \[
+  \frac{\pa g}{\pa x}(a,b, c) + \frac{\pa g}{\pa y}(a, b, c) + \frac{\pa
+    g}{\pa z}(a, b, c) = 0
+  \]
+  pour tout point $(a, b, c) \in \R^3$. 
+\end{question}
+
+\begin{solution}
+  Il y a deux manières d'aborder cette question : 
+  \begin{itemize}
+  \item[\textbullet]
+    utiliser les formules des dérivées partielles de composées, qu'on
+    n'a pas vraiment apprises ;
+  \item[\textbullet]
+    calculer les jacobienne de chacun des termes de la composée en
+    suivant la formule de différentiation d'une composée ;
+  \end{itemize}
+  C'est cette dernière approche qu'on va suivre. La fonction $g$ est
+  la composée de $f$ et de la fonction
+  $\phi : (x, y, z) \mapsto (x-y, y-z, z-x)$. On note $v$ le vecteur
+  $v = (x-y, y-z, z-x)$. La jacobienne de $g$ en tout point
+  $(x, y, z)$ est donc donnée par
+  \begin{align}
+    \mathrm{J}_g(x, y, z) & = J_{f}(x, y, z)\times J_\phi(x, y, z)\\
+                          & = 
+                            \begin{pmatrix}
+                              \frac{\pa f}{\pa x}v & 
+                              \frac{\pa f}{\pa y}v & 
+                              \frac{\pa f}{\pa z}v 
+                            \end{pmatrix}
+                            \begin{pmatrix}
+                              1 & 0 & -1 \\
+                              -1 & 1 & 0 \\
+                              0 & -1 & 1
+                            \end{pmatrix}\\
+                          & = 
+                            \begin{pmatrix} 
+                              \frac{\pa f}{\pa x}v 
+                              - \frac{\pa f}{\pa y}v &
+                              \frac{\pa f}{\pa y}v
+                              - \frac{\pa f}{\pa z}v &
+                              \frac{\pa f}{\pa z}v
+                              -\frac{\pa f}{\pa x}v
+                            \end{pmatrix}\\
+                          & = 
+                            \begin{pmatrix}
+                              \frac{\pa g}{\pa x}(x, y, z) & 
+                              \frac{\pa g}{\pa y}(x, y, z) & 
+                              \frac{\pa g}{\pa z}(x, y, z) 
+                            \end{pmatrix}
+  \end{align}
+  La relation qu'on attend correspond au fait que la somme des
+  colonnes de la jacobienne de $g$ en $(a, b, c)$ soit nulle. Ce qui
+  est clair de ce qu'on vient mettre en évidence.
+\end{solution}
+
+\begin{question}
+  On considère la fonction définie sur $\R^2$ par
+  $f(x, y) = \frac{x^2\cos(y)}{y + \sin^2(x) + 1}$. Pour tout
+  $\vartheta \in \R$ on désigne par $w_\vartheta$ le vecteur
+  $(\vartheta, \vartheta^2)$. 
+  \begin{enumerate}
+  \item Calculer la dérivée directionnelle $\pa_{w_\vartheta}f(0, 0)$
+    en fonction de $\vartheta$ ;
+  \item Étudier cette fonction de $\vartheta$.
+  \item Pouvez-vous interpréter vos résultats géométriquement?
+  \end{enumerate}
+\end{question}
+\begin{solution}
+  \begin{enumerate}
+  \item
+    On cherche dont la dérivée en $0$ de la fonction numérique 
+    \[
+    t \xrightarrow{f_{W_\theta}} f\big((0,0) + tw_\theta\big) 
+    \]
+    On a
+    \[
+    f_{w_\theta}(t) = \dfrac{t^2\theta^2\cos(t\theta^2)}{t\theta^2 + \sin^2(t\theta) + 1}
+    \]
+    C'est une fonction dérivable sur $\R$. En y réfléchissant un peu, et
+    en suivant la règle de dérivation d'un produit (ou d'un quotient,
+    comme vous voulez) vous pouvez remarquer que le dénominateur de la
+    dérivée ne s'annule pas et qu'on a, par contre, un $t$ en facteur au
+    numérateur. La dérivée en $0$ est donc nulle. 
+  \item 
+    Pour l'étude de fonction, c'est un fail. Je ne pensais pas que
+    j'aurais quelque chose d'aussi simple en bidouillant mes
+    coefficients. C'est \c{c}a de devenir vieux, on ne réfléchit plus.
+  \item 
+    Cela signifie que la fonction $f$ a des dérivées directionnelles
+    constantes dans toutes les directions définies par l'origine et
+    les points de la parabole $y = x^2$.
+  \end{enumerate}
+\end{solution}
+
+\section{Géométrie différentielle élémentaire}
+
+Dans la suite, on travaille quelques notions de géométrie
+différentielle élémentaire.
+
+\begin{question}
+  Trouver les points sur le paraboloïde $z = 4x^2 + y^2$ où le plan
+  tangent est parallèle au plan $x + 2y + z = 6$. Faire de même avec le plan
+  $3x + 5y -2z = 5$.
+\end{question}
+\begin{solution}
+  Le plan tangent en un point $(x, y, z)$ est l'orthogonal du gradient
+  de $f : (x, y, z) \mapsto z - 4x^2 - y^2$ en ce point. Pour que le
+  plan tangent soit parallèle à tout autre plan, il faut et il suffit
+  que le gradient soit colinéaire à un vecteur normal de
+  celui-ci. Ainsi, dans le premier cas
+  \begin{align}
+    (1, 2, 1) = \lambda(-8x, -2y, 1) & \Longleftrightarrow x = -\frac{1}{8}, \quad y = -1
+  \end{align}
+  Comme $x$, $y$, $z$ doit satisfaire l'équation de départ (le point
+  appartient au paraboloïde de départ), on trouve
+  \[
+  x = -\frac{1}{8}, \quad y = -1, \quad z = \frac{-15}{16}.
+  \]
+  Dans le second cas on trouve : 
+  \[
+  x = \frac{3}{4}, \quad y = 5, \quad z = 27\frac{1}{4}.
+  \]
+\end{solution}
+
+
+\begin{question}
+  Un étudiant malheureux trouve pour plan tangent à la surface donnée
+  par $z = x^4-y^2$ au point $(2, 3, 7)$ la réponse
+  \[
+  z = 4x^3(x-2) - 2y(y-3) + 7.
+  \]
+  \begin{enumerate}
+  \item Sans calcul, pourquoi est-ce faux?
+  \item Donner la réponse correcte.
+  \item D'où venait la confusion de l'étudiant?
+  \end{enumerate}
+\end{question}
+
+\section{Programmes linéaires en petite dimension}
+
+Les programmes linéaires en dimension $2$ et parfois $3$ peuvent être
+résolus par une démarche géométrique qui suit les grandes lignes de
+l'optimisation convexe : on initialise en un point, on y calcule le
+gradient puis on met à jour l'estimation à l'aide de cette
+information. 
+
+\begin{question}
+  Donner un exemple d'un programme linéaire:
+  \begin{enumerate}
+  \item non borné
+  \item de lieu admissible non-borné mais de solution fini
+  \item ayant une infinité de solution
+  \item ayant une unique solution.
+  \end{enumerate}
+\end{question}
+
+\noindent On considère le programme linéaire (\emph{PL}) suivant : 
+\begin{displaymath}
+  \begin{linearProg} {
+      minimiser
+    }{
+      $f_0(x_1, x_2) = 3x_1 + 2x_2$
+    }{
+      \systeme{
+        x_1 - x_2 \leq 0,
+        4x_1 - x_2 \leq 1,
+        -x_1 - x_2 \leq -5
+      }
+    }    
+  \end{linearProg}
+\end{displaymath}
+\begin{question}
+  \begin{enumerate}
+  \item Représenter le lieu admissible de (\emph{PL}) dans le plan
+    euclidien.
+  \item 
+    \begin{enumerate}
+    \item[a.]  Tracer la courbe de niveau $6$ de la fonction objectif
+      de (\emph{PL}). Elle sera notée $C_6$.
+    \item[b.]  Indiquer les demi-espaces positif et négatif défini par
+      $C_6$. Dans quelle direction doit-on translater $C_6$ afin de
+      minimiser $f_0$. 
+    \end{enumerate}
+  \item     
+    Tracer la courbe de niveau qui réalise le minimum de (\emph{PL})
+    et calculer l'unique point optimal de (\emph{PL}). Quelle est la
+    valeur optimale de (\emph{PL})?
+  \item Résumer votre démarche en rappelant la condition d'optimalité
+    d'une solution de (\emph{PL}).
+  \end{enumerate}
+\end{question}
+
+On considère désormais le programme linéaire (\emph{PL'}) donné par
+\[
+  \begin{linearProg} {
+      minimiser
+    }{
+      $f_0(x_1, x_2) = x_1 + 2x_2$
+    }{
+      \systeme{
+        x_2 \leq 1,
+        x_1 \leq 1,
+        -x_2 \leq 1,
+        -x_1 \leq 1
+      }
+    }    
+  \end{linearProg}
+\]
+\begin{question}
+  Résoudre (\emph{PL'}) en suivant la démarche précédente.
+\end{question}
+
+\section{Problèmes d'optimisation}
+
+\subsection{Baby examples}
+
+L'approche géométrique dans le cas des programmes linéaires de petites
+dimensions s'étend à certains problèmes d'optimisations simples.
+
+\begin{question}
+On considère la fonction différentiable $f : \R^2 \to \R$ donnée par
+\[
+f(x, y) = 3x^2 + y^2.
+\]
+\begin{enumerate}
+\item Représenter les courbes de niveaux $2$ et $4$ de $f$ dans le
+  plan euclidien.
+\item À quel lieu correspond la condition $f(x, y) \leq 4$ ?
+\item On s'intéresse au problème d'optimisation (\emph{P1})
+  \[
+  \begin{PbOptim}{
+      minimiser
+    }{
+      $2x + y$
+    }{
+      $3x^2 + y^2 \leq 4$
+    }
+  \end{PbOptim}
+  \]
+  Représenter la courbe de niveau de la fonction objective qui
+  correspond à la valeur optimale de (\emph{P1}).
+\item Comment trouver le point optimale correspondant à (\emph{P1}) ?
+  Faites le calcul.
+\item Expliciter le problème dual (\emph{P1D}).
+\item Résoudre (\emph{P1D}) et comparer sa solution avec celle de
+  (\emph{P1}).
+\end{enumerate}
+\end{question}
+
+\noindent On s'intéresse désormais à la résolution du problème
+d'optimisation (\emph{P2})
+  \[
+  \begin{PbOptim}{
+      minimiser
+    }{
+      $x^2 + xy + 2y^2$
+    }{
+      $3x^2 + y^2 \leq 4$
+    }
+  \end{PbOptim}
+  \]
+  \begin{question}
+    \begin{enumerate}
+    \item Écrire le problème dual (\emph{P2D}) de (\emph{P2}). Lequel
+      est le plus simple à résoudre?
+    \item Résoudre le (\emph{P2}).
+    \item En écrivant les conditions KKT pour (\emph{P2}) préciser le
+      lien entre des solutions du dual et du primal.
+    \end{enumerate}
+\end{question}
+
+\subsection{Conditions KKT}
+
+Dans cette partie vous avez le droit d'utiliser tous les éléments du
+cours à votre disposition. Les conditions KKT sont certainement ce que
+vous avez vu de plus complet. N'oubliez pas que les conditions KKT ne
+donnent qu'une condition nécessaire dans le cas d'un problème
+d'optimisation non convexe.
+
+\begin{question}
+  Résoudre le problème d'optimisation
+  \[
+  \begin{linearProg}{
+      minimiser
+    }{
+      $x^2 -14x + y^2 - 6y - 7$
+    }{
+      \systeme{
+        x + y \leq 2,
+        x + 2y \leq 3
+      }  
+    }
+  \end{linearProg}
+  \]
+\end{question}
+
+\noindent On s'intéresse à un problème plus géométrique!
+
+\begin{question}
+  \begin{enumerate}
+  \item 
+    Déterminer le rectangle de plus grande surface inscrit dans
+    l'ellipse d'équation 
+    \[ 
+    \frac{x^2}{a} + \frac{y^2}{b} = 1.
+    \]
+  \item 
+    Faire de même avec le parallélépipède de plus grand volume inscrit
+    dans l'ellipsoïde d'équation 
+    \[
+    \frac{x^2}{a} + \frac{y^2}{b} + \frac{z^2}{c} = 1.
+    \]
+  \end{enumerate}
+\end{question}
+
+\noindent Question d'économie domestique.
+
+\begin{question}
+  Une ressource disponible en quantité d doit être affectée à trois
+  activités en quantités $x_1$ , $x_2$ et $x_3$
+  respectivement. L’allocation de $x_k$ unités de ressource à
+  l’activité $k$ procure une recette évaluée par
+  $f_k(x_k) = 8x_k - k{x_k}^2$. Calculer l'allocation qui procure la
+  plus grande recette dans les deux éventualités suivantes:
+  \begin{enumerate}
+  \item la quantité $d$ est complètement utilisée ;
+  \item l'excédant quand $d$ n'est pas épuisé est revendu au prix $p$.
+  \end{enumerate}
+  A-t-on intérêt à utiliser toutes les ressources disponibles?
+\end{question}
+
+\section{Un peu de généralité et de biblio}
+
+\begin{question}
+  Qu'est-ce que la méthode LASSO? Comment exprimer celle-ci comme un
+  programme d'optimisation? Comment aborder la résolution de ce
+  dernier?
+\end{question}
+
+\pretitle{\vspace{-2\baselineskip} \begin{center}}
+\title{%
+  { \huge Solutions des exercices}%
+}
+\posttitle{
+\end{center}
+  \vspace{.5\baselineskip}
+  \rule{\textwidth}{1.5pt}
+  \vspace{-5\baselineskip}
+}
+
+\maketitle\thispagestyle{fancy}
+
+\noindent Vous trouverez dans la suite solutions et indications d'une
+partie des exercices de la feuille. Ceci étant majoritairement
+accessibles il vous est suffisant de comparer votre travail au
+résultats que vous retrouverez dans la suite. 
+
+\printsolutions
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

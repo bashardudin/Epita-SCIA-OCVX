@@ -1,0 +1,261 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[french]{babel}
+\usepackage{fancyhdr}
+\usepackage[margin=.8in]{geometry}
+
+\usepackage{Style/TeXingStyle}
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{1.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyhead[L]{EPITA\_ING2\_2018\_S8}
+\fancyhead[R]{Majeure SCIA}
+\fancyhead[C]{OCVX1}
+\fancyfoot[C]{\thepage}
+\fancyfoot[L]{Juin 2017}
+\fancyfoot[R]{\textbf{Chargé de cours :} \textsc{Bashar~DUDIN}}
+
+\pretitle{\vspace{-.5\baselineskip} \begin{center}}
+\title{%
+  { \huge Examen d'optimisation convexe}%
+}
+\posttitle{
+\end{center}
+  \begin{flushleft}
+    \vspace{3\baselineskip} \textit{
+      \!\!\emph{Durée de l'épreuve 3h.}\\
+      \! \emph{Les documents du cours ainsi que les calculettes ne sont pas
+      autorisées.}  \\
+      Le barême est indicatif et peut évoluer de manière marginale. Il
+      contient un maximum de $28$ points non bonus, les notes seront
+      rapportées à une note inférieure, probablement $20$.
+    }
+  \end{flushleft}
+  \rule{\textwidth}{1.5pt}
+  \vspace{-5\baselineskip}
+}
+\author{}
+\date{}
+
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Examen optimisation convexe - 2017)
+   /Subject (Optimisation convexe)
+}
+
+\begin{document}
+
+\maketitle\thispagestyle{fancy}
+
+\section{Calcul différentiel élémentaire}
+
+À moins qu'on y fasse explicitement référence, il n'est pas nécessaire
+de justifier la différentiabilité des fonctions que vous
+manipulez. \emph{Vous ne devez résoudre que deux questions parmis les
+  trois de cette section!} À default, uniquement les deux premières
+seront corrigées.
+
+\begin{question}{2}
+  Expliciter la jacobienne, en tout point, des expressions
+  différentiables suivantes :
+  \begin{enumerate}
+  \item $f(x, y) = \big(y\sin(x), \cos(x)\big)$
+  \item $g(x, y, z) = \dfrac{x + y^2 + xyz}{x^2+1}$
+  \end{enumerate}
+\end{question}
+
+\begin{question}{3}
+  Calculer la différentielle des fonctions suivantes:
+  \begin{enumerate}
+  \item $f : M_n(\R) \rightarrow \R$ donnée par l'expressoin
+    $A \mapsto A^TA - \mathrm{tr}(A)$, où $I$ désigne la matrice
+    identité de $M_n(\R)$ et $\mathrm{tr}$ la trace.\footnote{La somme
+      des coefficients diagonaux d'une matrice.}
+  \item $f : M_n(\R) \rightarrow M_n(\R)$ donnée par l'expressoin
+    $A \mapsto \mathrm{tr}(A)A$.
+  \end{enumerate}
+\end{question}
+
+\begin{question}{2+1}
+  On considère la fonction définie sur $\R^2$ par
+  $f(x, y) = x\cos(y) + y\exp(x)$. Pour tout $\theta \in [0, 2\pi[$ on
+  désigne par $v_\theta$ le vecteur
+  $\big(\cos(\theta), \sin(\theta)\big)$.
+  \begin{enumerate}
+  \item Calculer la dérivée directionnelle $\pa_{v_\theta}f(0, 0)$ en fonction de $\theta$.
+  \item Pour quelles $\theta$ la dérivée directionnelle précédente est maximale (resp. minimale) ?
+  \item Comment interpréter ce résultat géométriquement ?
+  \end{enumerate}
+\end{question}
+
+\section{Problèmes d'optimisation}
+
+\subsection{Un programme linéaire en petite dimension}
+
+\noindent On considère le programme linéaire (\emph{PL}) suivant :
+\begin{displaymath}
+  \begin{linearProg} {
+      minimiser
+    }{
+      $f_0(x_1, x_2) = \dfrac{x_1}{2} + x_2$
+    }{
+      \systeme{
+        -x_1 - x_2 \leq 1,
+        -4x_1 + x_2 \leq -4,
+        -x_1 + 2x_2 \leq 2
+      }
+    }
+  \end{linearProg}
+\end{displaymath}
+On va chercher dans la suite à étudier (\emph{PL}) : vous aurez à le
+résoudre puis à vous en servir comme base de départ pour des exemples
+de comportements spécifiques de programmes linéaires.
+\begin{question}{5 + 1}
+  \begin{enumerate}
+  \item Représenter le lieu admissible de (\emph{PL}) dans le plan
+    euclidien.
+  \item
+    \begin{enumerate}
+    \item[a.]  Tracer la courbe de niveau $4$ de la fonction objectif
+      de (\emph{PL}). Elle sera notée $C_4$.
+    \item[b.]  Indiquer les demi-espaces positif et négatif défini
+      par $C_4$.
+    \item[c.]  Indiquer dans quelle direction on doit translater $C_4$
+      afin de minimiser $f_0$. Quelle est le lien avec le gradient de
+      $f_0$?
+    \end{enumerate}
+  \item
+    Tracer la courbe de niveau qui réalise le minimum de (\emph{PL})
+    et calculer l'unique point optimal de (\emph{PL}). Quelle est la
+    valeur optimale de (\emph{PL})?
+  \item Trouver des programmes linéaires ayant mêmes lieux admissibles
+    que (\emph{PL}) et qui satisfont, à tour de rôle, chacune des
+    condition suivantes :
+    \begin{enumerate}
+    \item[a.] être non borné ;
+    \item[b.] avoir une infinité de points optimaux.
+    \end{enumerate}
+    Par quelle condition sur le gradient de $f_0$ peut-on décrire
+    toutes les situations où l'on a une infinité de points optimaux?
+  \end{enumerate}
+\end{question}
+
+\subsection{Baby example}
+
+L'approche géométrique dans le cas des programmes linéaires de petites
+dimensions s'étend à certains problèmes d'optimisations simples.
+
+\begin{question}{6}
+On considère la fonction différentiable $f : \R^2 \to \R$ donnée par
+\[
+f(x, y) = 2x^2 + y^2 - 1.
+\]
+\begin{enumerate}
+\item Représenter les courbes de niveaux $0$, $1$, et $3$ de $f$
+  dans le plan euclidien.
+\item À quel lieu correspond la condition $f(x, y) \leq 3$ ?
+\item On s'intéresse au problème d'optimisation (\emph{P1})
+  \[
+  \begin{PbOptim}{
+      minimiser
+    }{
+      $x - y$
+    }{
+      $2x^2 + y^2 - 1 \leq 3$
+    }
+  \end{PbOptim}
+  \]
+  Représenter la courbe de niveau de la fonction objective qui
+  correspond à la valeur optimale de (\emph{P1}).
+\item Comment trouver le point optimale correspondant à (\emph{P1}) ?
+  Faites le calcul.
+\item Expliciter le problème dual (\emph{P1D}).
+\item Résoudre (\emph{P1D}) et comparer sa solution avec celle de
+  (\emph{P1}).
+\end{enumerate}
+\end{question}
+
+\subsection{Optimisation sans contraintes}
+
+Le problème des moindres carrés est un problème d'optimisation
+(\emph{P2}) qui prend la forme
+\[
+\textrm{minimiser  } \frac{1}{2}\| A\theta - y\|_2^2
+\]
+où $A$ est une matrice dans $M_{n, m}(\R)$, $y \in \R^n$ et $\theta$
+est un vecteur de $m$ paramètres à determiner. Le vecteur $y$ est
+pensé comme la variable à expliquer. Le vecteur $\theta$ correspond
+aux paramètres de la fonction affine qui explique $y$ suivant les
+lignes de $A$.
+\begin{question}{3}
+  On suppose que les colonnes de $A$ sont indépendantes, cela implique
+  que $A^TA$ est inversible.
+  \begin{enumerate}
+  \item Justifier le fait que (\emph{P2}) est un problème
+    d'optimisation convexe. Vous êtes autorisés à utiliser des
+    résultats du devoir maison.
+  \item Résoudre le problème d'optimisation (\emph{P2}).
+  \end{enumerate}
+\end{question}
+Sous les mêmes hypothèses précédentes on s'intéresse désormais au
+problème d'optimisation (\emph{P2'})
+\[
+\textrm{minimiser } \frac{1}{2}\| A\theta - y\|_2^2 +
+\frac{\nu}{2}\|\theta\|^2
+\]
+avec $\nu \geq 0$.
+\begin{question}{4+1}
+  \begin{enumerate}
+  \item Justifier le fait que (\emph{P2'}) est un problème
+    d'optimisation convexe.
+  \item Écrire la condition d'annulation du gradient de la fonction
+    objective de (\emph{P2'}).
+  \item Donner une condition sous laquelle on peut résoudre
+    (\emph{P2'}).
+  \item Qu'apporte le problème (\emph{P2'}) par rapport à (\emph{P2}),
+    notamment quand $\nu$ est assez grand?
+  \end{enumerate}
+\end{question}
+
+\subsection{Conditions KKT}
+
+Une entreprise fabrique deux modèles de clés USB, les modèles $X$ et
+$Y$. Le modèle $X$ se vend à $1$\euro{} pièce, le modèle $Y$ se vend pour
+sa part à $3$\euro{} pièce. Le coût de fabrication en \euro{} est donné par
+l'expression :
+\[
+C(x, y) = 5x^2 + 5y^2 - 2xy - 2x - 1000.
+\]
+où $x$ est le nombre de clés USB de type $X$ et $y$ celui de type
+$Y$. On suppose que toutes les clés USB ont été toutes écoulées sur le
+marché.
+
+\begin{question}{6}
+  \begin{enumerate}
+  \item Soit $(x, y) \in (\R_+^*)^2$. Déterminer le profit $P(x, y)$
+    réalisé par l’entreprise lorsqu’elle a vendu $x$ clés de modèle $X$
+    et $y$ clés de modèle $Y$.
+  \item Étudier la convexité de la fonction de profit $P$ sur
+    $(\R_+^*)^2$. Vous pouvez vous aider de la hessienne de $P$ en
+    tout point.
+  \item La capacité de production de l’entreprise est au total de $20$
+    clés par jour\footnote{C'est des clés fait main!}. Décrire le
+    problème de maximisation du profit de l'entreprise comme un
+    problème d'optimisation convexe.
+  \item En supposant que l’entreprise tourne à plein régime, trouver
+    la répartition optimale entre les modèles de type $X$ et $Y$
+    permettant de maximiser le profit quotidien. Calculer dans ce cas
+    le profit réalisé. \textit{Vous êtes invités, en un premier temps,
+      à ne pas tenir compte des contraintes de positivité de $x$ et
+      $y$.}
+  \item Pourquoi peut-on se dispenser des contraintes de positivité ?
+  \end{enumerate}
+\end{question}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
