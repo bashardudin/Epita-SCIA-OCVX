@@ -1,0 +1,220 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[french]{babel}
+\usepackage{fancyhdr}
+\usepackage[margin=.8in]{geometry}
+
+\usepackage{Style/TeXingStyle}
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{1.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyhead[L]{EPITA\_ING2\_2018\_S8}
+\fancyhead[R]{Majeure SCIA}
+\fancyhead[C]{OCVX2}
+\fancyfoot[C]{\thepage}
+\fancyfoot[L]{Janvier 2018}
+\fancyfoot[R]{\textbf{Chargé de cours :} \textsc{Bashar~DUDIN}}
+
+\pretitle{\vspace{-.5\baselineskip} \begin{center}}
+\title{%
+  { \huge Évaluation optimisation convexe II}%
+}
+\posttitle{
+\end{center}
+  \begin{flushleft}
+    \vspace{3\baselineskip}
+    \textit{
+      L'évaluation est un travail d'analyse, à faire en groupe
+      d'un \emph{maximum de $\bs{\mathit{3}}$ personnes et d'un
+        minimum de $\bs{\mathit{2}}$}. Ce travail doit donner lieu à
+      un exposé. Ces exposés auront lieu entre le
+      \emph{$\bs{\mathit{24}}$ et le $\bs{\mathit{31}}$ janvier}.  \\
+      Il revient à chaque groupe de me transmettre les noms de ses
+      membres par mail à l'addresse \emph{bashar.dudin@epita.fr} avant
+      le \emph{$\bs{\mathit{12}}$ janvier}.
+    }
+  \end{flushleft}
+  \rule{\textwidth}{1.5pt}
+  \vspace{-5\baselineskip}
+}
+\author{}
+\date{}
+
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Évaluation optimisation convexe II - 2018)
+   /Subject (Optimisation convexe)
+}
+
+\begin{document}
+
+\maketitle\thispagestyle{fancy}
+
+
+\subsubsection*{Exposé}
+
+L'exposé est d'une durée de \emph{20} minutes suivies de \emph{5} à
+\emph{10} minutes de discussion avec le jury\footnote{Moi :).}.  Vous
+serez évalués sur la \emph{compréhension} que vous aurez du contenu
+que vous abordez mais également sur la \emph{clarté} de
+l'exposé. Rappelez-vous qu'un dessin vaut parfois mieux qu'un long
+discours.
+
+\subsubsection*{Rendu}
+
+L'ensemble des implémentations ainsi que les datasets et les problèmes
+d'optimisations générés sont à rendre au plus tard le
+\emph{$\bs{\mathit{23}}$ janvier}, il en va de même de vos slides.
+
+\subsubsection*{Contraintes techniques}
+
+Les implémentations seront à faire en \texttt{python}. L'environement
+\texttt{python} permet un prototypage agréable et les bibliothèques de
+ML qui y sont disponibles nous seront utiles pour faire des
+comparatifs. On ajoute à cela le fait que vous n'avez pas à vous
+préoccuper de dépassement de taille maximal des flottants, vu le
+comportement par défaut de \texttt{python}.
+
+Vous pouvez utiliser les fonctions \texttt{numpy}, \texttt{scipy} et
+\texttt{pandas} liées au calcul différentiel, à l'algèbre linéaire et
+au pré-traitement et traitement des datasets que vous seriez amenés à
+manipuler. Tout ce qui n'est pas explicitement mentionné est à
+proscrire.
+
+\subsubsection*{Attendus}
+
+Des \emph{dessins} pour résumer les études de performances. On attend
+de vous des tests fiables, donc en nombre suffisamment important et de
+préférence avec une estimation du risque. Aucun comparatif ou analyse
+de performance d'un algo n'a de sens sinon. À vous de vous mettre dans
+la peau de quelqu'un qui participe par son expertise à une decision
+importante sur un choix de techno.
+
+\vspace{\baselineskip}
+\noindent \emph{Quand on parle de comparaison, on entend batch de
+  tests et résumé des résultats en sortie.}
+
+\section{Descentes de gradient sans contraintes}
+
+Cette section \emph{n'est pas optionnelle}, ce qui n'est pas en bonus
+doit être traité par chaque groupe.
+
+\begin{question}{6}
+  \begin{enumerate}
+  \item Construires des familles de fonctions qui ont des nombres de
+    conditionnements quelconques ($\geq 1$).
+  \item Tracer le nombre d'itérations d'une descente de gradient à pas
+    constant contre le nombre de conditionnement d'une même famille de
+    fonctions.
+  \item Effectuer l'étude précédente pour différents pas.
+  \end{enumerate}
+\end{question}
+
+\begin{question}{2}
+  Comparer les descentes de gradients en normes $\ell_2$ et $\ell_1$.
+\end{question}
+
+\begin{question}{+2}
+  Procéder de même en comparant l'une des deux descentes précédentes à
+  celle de la descente de gradient stochastique. Pour quelle raison
+  nous ne l'avons pas aabordé en cours?
+\end{question}
+
+\section{Thématiques plus avancées}
+
+Les thématiques de cette section sont aux choix, il vous revient de
+choisir lesquelles et combien d'entre elles vous souhaitez traiter.
+
+\subsection{Méthode de Newton}
+
+Cette thématique est centrée autour de la méthode de Newton dans le
+cas des contraintes d'égalité. Dans les implémentations que vous
+abordez il n'est pas nécessaire de traiter le cas d'un point initial
+non-admissible. Son traitement sera comptabilisé s'il est fait par des
+points bonus\footnote{Tout travail mérite salaire.}.
+
+Il vous est également autorisé d'utiliser les méthodes de calcul
+numérique ou symbolique des gradients, hessiennes et les solveurs de
+systèmes linéaires disponibles dans les bibliothèques \texttt{numpy}
+et \texttt{scipy}.
+
+\begin{question}{4}
+  Implémenter et tester une méthode de Newton sur un problème
+  d'optimisation convexe avec contraintes d'égalité.
+\end{question}
+
+\begin{question}{3}
+  Comparer la méthode de Newton précédente avec une approche qui
+  procède par élimination des contraintes d'égalité.
+\end{question}
+
+\begin{question}{3}
+  Expliquer une méthode de quasi-Newton. Comparer celle implémentée par
+  \texttt{scipy} à la méthode de Newton précédente.
+\end{question}
+
+\subsection{SVM et SMO}
+
+Dans cette thématique on cherche à implémenter la \emph{Sequential
+  Minimal Optimisation} concernant le traitement des SVMs. C'est une
+implémentation du contenu abordé en cours.
+
+\begin{question}{5}
+  Implémenter la SMO. Laisser la possibilité de passer le noyau
+  souhaité en argument.
+\end{question}
+
+\begin{question}{3 + 1}
+  Tester l'implémentation précédente sur le problème de classification
+  proposé par le dataset \emph{MNIST}. Dans le but de traiter un
+  problème de classification binaire on se limite au repérage d'un
+  chiffre.
+
+  \noindent Garder le noyau qui vous donne les meilleurs résultats
+  suivant la métrique de votre choix.
+\end{question}
+
+\begin{question}{2}
+  Comparer votre modèle précédent au classificateur SVM proposé par
+  \texttt{sklearn}.
+\end{question}
+
+\subsection{Méthode du point intérieur}
+
+Cette thématique est plus théorique que les précédentes. La méthode du
+point intérieur n'a pas été abordée en cours ; elle est évaluée en
+conséquence. On part ici sur le prolongement naturel des
+problématiques abordées en cours ; étudier une méthode générale de
+résolution de problèmes d'optimisation convexe. Elle sera intégrée dès
+cette année au contenu des cours d'OCVX.
+
+Le but est de comparer la performance de la méthode du point intérieur
+à celle du simplexe.
+
+\begin{question}{4}
+  Expliquer la méthode primal-dual du point intérieur exposée
+  dans \cite[11.7]{Boyd:2004:CO:993483}.
+\end{question}
+
+\begin{question}{6}
+  En donner une implémentation en présupposant que l'origine est
+  toujours un point admissible\footnote{Il y a des méthodes standards
+    pour se ramener à ce cas.}.
+\end{question}
+
+\begin{question}{+2}
+  Comparer la performance de la méthode précédente à celle de la
+  méthode du simplexe implémentée par \texttt{scipy}\footnote{Bien
+    entendu, dans le cas des programmes linéaires.}.
+\end{question}
+
+\bibliographystyle{alpha}
+\bibliography{./Ref/bibOCVX}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
