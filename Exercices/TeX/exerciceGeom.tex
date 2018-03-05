@@ -230,20 +230,26 @@ d'une base à une autre.
   linéaire dans les bases en question.
 \end{exmp}
 \begin{exmp}
+  La translation de vecteur $b$ est l'application affine donnée dans
+  toute base $\bs{v}$ de $\R^n$ par
+  $x_{\bs{v}} \mapsto x_{\bs{v}} + b_{\bs{v}}$.
+\end{exmp}
+\begin{exmp}
   L'\emph{homothétie} de rapport $\lambda$ et centre $b$ est
   l'application affine de $\R^n$ dans lui-même dont l'écriture en
   toute base $\bs{v}$ prend la forme
   \[
-  x_{\bs{v}} \mapsto \lambda x_{\bs{v}} + b_{\bs{v}}
+  x_{\bs{v}} \mapsto \lambda (x_{\bs{v}}-b_{\bs{v}}) + b_{\bs{v}}
   \]
-  Une homothétie de rapport $1$ est appelée une \emph{translation}.
+  L'homothétie de rapport $1$ est simplement l'identité.
 \end{exmp}
 \begin{question}
-  Quelle est la particularité d'une homothétie de rapport
-  $\lambda \neq 1$.
+  Donner une particularité que partage les homothéties et les
+  translations.
 \end{question}
 \begin{question}
-  Que donne la composition de deux translations? de deux homothéties?
+  Que donne la composition de deux translations? Celle de deux
+  homothéties?
 \end{question}
 \begin{question}
   Dessiner l'image du carré de sommets $(\pm 1, \pm 1)$
@@ -271,10 +277,14 @@ appelée projection sur $F$ parallèlement à $G$.
   affine si sa matrice dans une base quelconque est la matrice d'une
   projection linéaire.
 \end{defn}
-Si on désigne par $M$ et $b_{\bs{v}}$ la matrice et le terme constant
-de l'expression de $f$ dans une base $\bs{v}$, on appelle $b_{\bs{v}}$
-centre de la projection $f$. Dans ce contexte $f$ est la projection de
-$b_{\bs{v}} + \Ker(M)$ parallèlement à $\Ker(M-I_n)$.
+Plus précisément une projection affine s'écrit dans une base $\bs{v}$
+de $\R^n$ sous la forme
+\[
+x_{\bs{v}} \mapsto M(x_{\bs{v}} - b_{\bs{v}}) + b_{\bs{v}}
+\]
+On appelle parfois $b_{\bs{v}}$ le centre de la projection $f$. Dans ce
+contexte $f$ est la projection de $b_{\bs{v}} + \Ker(M)$ parallèlement
+à $b_{\bs{v}} + \Ker(M-I_n)$.
 
 \begin{question}
   Étudier des exemples de projections affines dans $\R^2$. Dessiner
