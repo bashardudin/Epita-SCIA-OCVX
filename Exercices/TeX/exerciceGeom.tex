@@ -1,0 +1,308 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[french]{babel}
+\usepackage{fancyhdr}
+\usepackage[margin=.8in]{geometry}
+
+\usepackage{Style/TeXingStyle}
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{1.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyhead[L]{EPITA\_ING2\_2019\_S8}
+\fancyhead[R]{Majeure SCIA}
+\fancyhead[C]{OCVX1}
+\fancyfoot[C]{\thepage}
+\fancyfoot[L]{2018}
+\fancyfoot[R]{\textbf{Chargé de cours :} \textsc{Bashar~DUDIN}}
+
+\pretitle{\vspace{-2.5\baselineskip} \begin{center}}
+\title{%
+  { \huge Transformations Affines}%
+}
+\posttitle{
+\end{center}
+\rule{\textwidth}{1.5pt}
+\vspace{-3\baselineskip}
+}
+\author{}
+\date{}
+
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Exercices Geometrie - 2018)
+   /Subject (Geometrie Affine)
+}
+
+\begin{document}
+
+\maketitle\thispagestyle{fancy}
+
+Cette feuille est centrée autour des applications affines de $\R^n$,
+plus particulièrement autours des projections et transformations de
+l'espace affine euclidien. L'objectif est de vous apporter les
+éléments de langage et les résultats de structure qui vous permettent
+de les expliciter et les utiliser dans les contextes de ML. Pour
+rappel la majeure partie des algorithmes de ML sont de nature
+géométrique.
+
+Nous allons en passant en profiter pour faire quelques rappels de
+calcul matriiel ainsi que d'algèbre linéaire quand nécessaire.
+
+\section{Pivot de Gauss}
+\label{sec:pivotGauss}
+
+On se donne une matrice $M \in \mc{M}_{m, n}(\R)$. Une opération
+élémentaire sur $M$ est une des deux opérations suivantes:
+\begin{itemize}
+\item[\textbullet]
+  pour $i \in \{1, \ldots, m\}$ et $j \in \{1, \ldots, n\}$
+  interchanger les lignes $L_i$ et $L_j$
+  \[
+  L_i \leftrightarrow L_j
+  \]
+\item[\textbullet]
+  pour $i \in \{1, \ldots, m\}$, $j \in \{1, \ldots, n\}$, $i \neq j$,
+  $\lambda_i \in \R^*$ et $\lambda_i \in \R$, remplacer la ligne $L_i$
+  par $\lambda_i L_i + \lambda_jL_j$ :
+  \[
+  L_i \leftarrow \lambda_iL_i + \lambda_jL_j.
+  \]
+\end{itemize}
+Le pivot de Gauss est un algorithme de transformation d'une matrice
+$M$ en matrice triangulaire supérieur et éventuellement en matrice
+identité, dans le but d'inverser une matrice, de calculer un
+déterminent ou de résoudre un système linéaire. Il est d'utilisation
+constante en calcul numérique.\footnote{L'expression de l'inverse
+  d'une matrice inversible à l'aide des cofacteurs est à prohiber!
+  Elle est théoriquement intéressante et particulièrement esthétique
+  mais numériquement inéfficace.}
+
+\subsection{Opérations élémentaires}
+\label{subsec:opElementaires}
+
+On traduit par la suite les opérations élémentaires précédentes à
+l'aide du produit matriciel.
+\begin{question}
+  Trouver des matrices $P(i, j)$ et $U(i, j, \lambda, \nu)$ dont la
+  multiplications avec $M$ réalise les opérations élémentaires
+  précédentes.
+\end{question}
+
+\begin{question}
+  Trouver les matrices $P_t(i, j)$ et $U_t(i, j, \lambda, \nu)$ qui
+  réalisent les opérations précédentes sur les colonnes.
+\end{question}
+
+\subsection{Systèmes linéaires}
+
+\begin{question}
+  Déduire de la section \ref{subsec:opElementaires} que les opérations
+  élémentaires du pivot de Gausse transforme tout système linéaire
+  dont $M$ est une matrice (si appliqué des deux côtés de l'égalité)
+  en un système linéaire ayant les mêmes solutions.
+\end{question}
+
+\begin{question}
+  Comment procéder pour décrire toute les solutions d'un système
+  linéaire?
+\end{question}
+
+\begin{question}
+  Discuter de l'efficacité de l'implémentation de l'algorithme
+\end{question}
+
+\subsection{Déterminent}
+
+\begin{question}
+  Retrouver les relations standards sur le déterminent d'une matrice
+  qui subit une opération élémentaire à l'aide de la formule
+  \[
+  \det(AB) = \det(A)\det(B).
+  \]
+\end{question}
+
+\begin{question}
+  Comment procéder pour calculer le déterminent d'une matrice à l'aide
+  du pivot de Gauss?
+\end{question}
+
+\subsection{Matrices équivalentes}
+
+\noindent Deux matrices $A$ et $B$ sont dites équivalentes s'il
+existe deux matrices inversibles $P$ et $Q$ telle que
+\[
+A = PBQ.
+\]
+\begin{question}
+  Justifier le fait que toute matrice est équivalente à une matrice
+  ayant un bloc identité et des zéros partout ailleurs.
+\end{question}
+
+
+\section{Applications Affines}
+\label{sec:defnappaffine}
+
+Cette section est un kit de survie en milieu hostile. Il s'agit de
+s'armer des différentes notions de transformations et applications
+affines dont vous aurez l'usage lors de vos cours de ML. Notre
+démarche dans la suite est particulièrement pragmatique\footnote{Elle
+  pourrait heurter certaines âmes sensibles et quelques matheux qu'on
+  garder un peu de sens esthétique.}; on se limite au cas des
+applications affines de $\R^n$ dans $\R^m$.
+\begin{defn}
+  Une application $f : \R^n \to \R^m$ est une application affine s'il
+  existe
+  \begin{itemize}
+  \item[\textbullet]
+    des bases $\bs{v} = (v_i)_{i=1}^n$ et
+    $\bs{w} = (w_j)_{j=1}^m$ respectivement de $\R^n$ et
+    $\R^m$
+  \item[\textbullet]
+    une matrice $M$ de $\mc{M}_{m, n}(\R)$
+  \item[\textbullet]
+    un vecteur $b_{\bs{w}}$ écrit en coordonnées dans la base $\bs{w}$
+  \end{itemize}
+  tels que pour tout vecteur $x_{\bs{v}}$ écrit dans la base $\bs{v}$,
+  $f$ prend la forme
+  \begin{equation}
+    \label{defn:affine}
+    f(x_{\bs{v}}) = Mx_{\bs{v}} + b_{\bs{w}}.
+  \end{equation}
+  L'équation \ref{defn:affine} est dite équation de $f$ dans les bases
+  $\bs{v}$ et $\bs{w}$.
+\end{defn}
+\begin{exmp}
+  Une application affine peut être donné par une experssion dans la
+  base canonique
+  \[
+  x \mapsto Mx + b
+  \]
+  où $x$ et $b$ sont des vecteurs respectivement dans $\R^n$ et $\R^m$
+  et $M \in \mc{M}_{m, n}(\R)$. Par exemple
+  \[
+  \begin{pmatrix} x \\ y \end{pmatrix} \mapsto \begin{pmatrix} 1 & 1
+    \\ 2 & -1 \end{pmatrix}\begin{pmatrix} x \\ y \end{pmatrix}
+  + \begin{pmatrix} 3 \\ -2 \end{pmatrix}
+  \]
+  Ce qui nous donne une fonction de $\R^2$ dans $\R^2$ affine en $x$
+  et $y$ au sens qu'on entend depuis tout petit.
+\end{exmp}
+Afin de pouvoir donner des résultats de structure sur les applications
+affines (autrement dit pour pouvoir en simplifier l'expression en les
+écrivant en fonction d'autres coordonnées) on doit pouvoir passer
+d'une base à une autre.
+\begin{prop}
+  Soient $\bs{v}$ et $\bs{v'}$ deux bases de $\R^n$, $\bs{w}$ et
+  $\bs{w'}$ deux bases de $\R^m$, $M$, $b$ les données d'une écriture
+  d'une application affine $f$ dans les bases $\bs{v}$ et $\bs{w}$, et
+  $M'$ et $b'$ les données de cette de l'écriture de cette même
+  application dans les bases $\bs{w}$ et $\bs{w'}$. Si
+  $P_{\bs{v'}}^{\bs{v}}$ est la matrice des vecteurs de $\bs{v}$ dans
+  la base $\bs{v'}$ et $Q_{\bs{w'}}^{\bs{w}}$ celle des vecteurs de
+  $\bs{w}$ dans la base $\bs{w'}$ alors pour tout $x \in \R^n$
+  \[
+  M'x_{\bs{v'}} + b'_{\bs{w'}} = f(x) =
+  P_{\bs{w'}}^{\bs{w}}M\left(P_{\bs{v'}}^{\bs{v}}\right)^{-1}x_{\bs{v}}
+  + P_{\bs{w'}}^{\bs{w}}b_{\bs{w}}
+  \]
+\end{prop}
+\begin{question}
+  Écrire la fonction du premier exemple dans la base de $\R^2$ au
+  départ et à l'arrivée donnée par la base $\{(1, 1), (1, -1)\}$.
+\end{question}
+\begin{rem}
+  Dans les faits, on n'aura pas souvent à faire ce type de changement
+  de bases. À partir des propriété de notre application on sera à
+  même de trouver un bonne base dans laquelle la décrire. Il reste que
+  de tels changements de bases doivent être compris et faits quand
+  nécessaire.
+\end{rem}
+\begin{exmp}
+  Les applications affines constantes sont celles dont l'expression
+  dans toute base a une matrice qui est nulle.
+\end{exmp}
+\begin{exmp}
+  Avec la définition qu'on a donné toute application linéaire va
+  décrire une application affine. L'expression de l'application affine
+  dans des bases $\bs{v}$ et $\bs{w}$ des espaces de départ et
+  d'arrivée est simplement donnée par la matrice de l'application
+  linéaire dans les bases en question.
+\end{exmp}
+\begin{exmp}
+  L'\emph{homothétie} de rapport $\lambda$ et centre $b$ est
+  l'application affine de $\R^n$ dans lui-même dont l'écriture en
+  toute base $\bs{v}$ prend la forme
+  \[
+  x_{\bs{v}} \mapsto \lambda x_{\bs{v}} + b_{\bs{v}}
+  \]
+  Une homothétie de rapport $1$ est appelée une \emph{translation}.
+\end{exmp}
+\begin{question}
+  Quelle est la particularité d'une homothétie de rapport
+  $\lambda \neq 1$.
+\end{question}
+\begin{question}
+  Que donne la composition de deux translations? de deux homothéties?
+\end{question}
+\begin{question}
+  Dessiner l'image du carré de sommets $(\pm 1, \pm 1)$
+  dans $\R^2$ par les homothéties suivantes:
+  \begin{itemize}
+  \item[\textbullet]
+    de rapport $2$ et de centre l'origine
+  \item[\textbullet]
+    de rapport $2$ et de centre $(1, 0)$.
+  \end{itemize}
+\end{question}
+
+\subsection{Projections Affines}
+
+Les projections affines sont la généralisation des projections
+linéaires. Pour rappel une projection $p : E \rightarrow E$ de
+l'espace vectoriel $E$ sur lui même est un application linéaire qui
+satisfait la relation $p^2 = p$. Cette relation garanti le fait que
+$G = \Ker(p)$ et $F = \Ker(p-\id)$ sont des espaces vectoriels
+supplémentaires dans $E$. Ainsi pour tout $x = x_F + x_G$ la
+projection $p$ est définie par $p(x) = x_F$. L'application $p$ est
+appelée projection sur $F$ parallèlement à $G$.
+\begin{defn}
+  Une application affine $f$ de $\R^n$ dans $\R^n$ est une projection
+  affine si sa matrice dans une base quelconque est la matrice d'une
+  projection linéaire.
+\end{defn}
+Si on désigne par $M$ et $b_{\bs{v}}$ la matrice et le terme constant
+de l'expression de $f$ dans une base $\bs{v}$, on appelle $b_{\bs{v}}$
+centre de la projection $f$. Dans ce contexte $f$ est la projection de
+$b_{\bs{v}} + \Ker(M)$ parallèlement à $\Ker(M-I_n)$.
+
+\begin{question}
+  Étudier des exemples de projections affines dans $\R^2$. Dessiner
+  systématiquement les droites affines qui caractérisent cette
+  projection.
+\end{question}
+
+\pretitle{\vspace{-2\baselineskip} \begin{center}}
+\title{%
+  { \huge Solutions des exercices}%
+}
+\posttitle{
+\end{center}
+  \vspace{.5\baselineskip}
+  \rule{\textwidth}{1.5pt}
+  \vspace{-5\baselineskip}
+}
+
+\maketitle\thispagestyle{fancy}
+
+\noindent Vous trouverez dans la suite solutions et indications d'une
+partie des exercices de la feuille. Ceci étant majoritairement
+accessibles il vous est suffisant de comparer votre travail au
+résultats que vous retrouverez dans la suite.
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
