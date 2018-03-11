@@ -78,7 +78,7 @@ constante en calcul numérique.\footnote{L'expression de l'inverse
   Elle est théoriquement intéressante et particulièrement esthétique
   mais numériquement inéfficace.}
 
-\subsection{Opérations élémentaires}
+\subsection{Opérations Élémentaires}
 \label{subsec:opElementaires}
 
 On traduit par la suite les opérations élémentaires précédentes à
@@ -94,7 +94,7 @@ l'aide du produit matriciel.
   réalisent les opérations précédentes sur les colonnes.
 \end{question}
 
-\subsection{Systèmes linéaires}
+\subsection{Systèmes Linéaires}
 
 \begin{question}
   Déduire de la section \ref{subsec:opElementaires} que les opérations
@@ -127,7 +127,7 @@ l'aide du produit matriciel.
   du pivot de Gauss?
 \end{question}
 
-\subsection{Matrices équivalentes}
+\subsection{Matrices Équivalentes}
 
 \noindent Deux matrices $A$ et $B$ sont dites équivalentes s'il
 existe deux matrices inversibles $P$ et $Q$ telle que
@@ -151,30 +151,42 @@ démarche dans la suite est particulièrement pragmatique\footnote{Elle
   garder un peu de sens esthétique.}; on se limite au cas des
 applications affines de $\R^n$ dans $\R^m$.
 \begin{defn}
-  Une application $f : \R^n \to \R^m$ est une application affine s'il
-  existe
-  \begin{itemize}
-  \item[\textbullet]
-    des bases $\bs{v} = (v_i)_{i=1}^n$ et
-    $\bs{w} = (w_j)_{j=1}^m$ respectivement de $\R^n$ et
-    $\R^m$
-  \item[\textbullet]
-    une matrice $M$ de $\mc{M}_{m, n}(\R)$
-  \item[\textbullet]
-    un vecteur $b_{\bs{w}}$ écrit en coordonnées dans la base $\bs{w}$
-  \end{itemize}
-  tels que pour tout vecteur $x_{\bs{v}}$ écrit dans la base $\bs{v}$,
-  $f$ prend la forme
+  Une application $f : \R^n \to \R^m$ est dite affine s'il existe un
+  point $\bs{a} \in \R^m$ tel que $f - \bs{a}$ soit une application
+  linéaire.
+\end{defn}
+\noindent Cette définition formelle nécessite une réalisation plus concrète afin
+qu'on puisse l'utiliser. Pour cela on va introduire une généralisation
+de la notion de bases dans le cas de $\R^n$ qui nous permettra de se
+placer en un point quelconque pour y travailler.
+\begin{defn}
+  Un repère de l'espace affine $\R^n$ est la donnée d'un point
+  $\bs{o}$ appelé origine du repère et d'une base
+  $\bs{v} = (v_1, \ldots, v_n)$ de $\R^n$. On note
+  $(\bs{o}, \bs{v})$ une telle donnée.
+\end{defn}
+\noindent Le repère canonique de $\R^n$ est le repère
+$(\underline{0}, e_1, \ldots, e_n)$, que vous aviez eu l'habitude de
+manipuler dans le secondaire et en physique. Du moins dans les cas de
+dimensions $1$ ou $2$.
+\begin{defn}
+  Soient $(\bs{o}, \bs{v})$ et $(\bs{l}, \bs{w})$ deux repères
+  respetivement de $\R^n$ et $\R^m$. L'écriture de $f$ dans les
+  repères $(\bs{o}, \bs{v})$ et $(\bs{l}, \bs{w})$ est la donnée d'une
+  matrice $M$ telle que pour tout $x \in \R^n$,
   \begin{equation}
     \label{defn:affine}
-    f(x_{\bs{v}}) = Mx_{\bs{v}} + b_{\bs{w}}.
+    f(x) = M(x - \bs{o})_{\bs{v}} + f(\bs{o}).
   \end{equation}
-  L'équation \ref{defn:affine} est dite équation de $f$ dans les bases
-  $\bs{v}$ et $\bs{w}$.
+  où $\bullet_{\bs{v}}$ désigne l'écriture du vecteur $\bullet$ dans
+  la base $\bs{v}$. Le membre de droite de l'équation
+  \ref{defn:affine} est sous-entendu être décrit dans le repère
+  $(\bs{l}, \bs{w})$. Cette équation est parfois appelée équation de
+  $f$ dans les repères $(\bs{o}, \bs{v})$ et $(\bs{l}, \bs{w})$.
 \end{defn}
 \begin{exmp}
-  Une application affine peut être donné par une experssion dans la
-  base canonique
+  Une application affine peut être donné par une experssion dans le
+  repère canonique
   \[
   x \mapsto Mx + b
   \]
@@ -188,63 +200,80 @@ applications affines de $\R^n$ dans $\R^m$.
   Ce qui nous donne une fonction de $\R^2$ dans $\R^2$ affine en $x$
   et $y$ au sens qu'on entend depuis tout petit.
 \end{exmp}
-Afin de pouvoir donner des résultats de structure sur les applications
-affines (autrement dit pour pouvoir en simplifier l'expression en les
-écrivant en fonction d'autres coordonnées) on doit pouvoir passer
-d'une base à une autre.
-\begin{prop}
-  Soient $\bs{v}$ et $\bs{v'}$ deux bases de $\R^n$, $\bs{w}$ et
-  $\bs{w'}$ deux bases de $\R^m$, $M$, $b$ les données d'une écriture
-  d'une application affine $f$ dans les bases $\bs{v}$ et $\bs{w}$, et
-  $M'$ et $b'$ les données de cette de l'écriture de cette même
-  application dans les bases $\bs{w}$ et $\bs{w'}$. Si
-  $P_{\bs{v'}}^{\bs{v}}$ est la matrice des vecteurs de $\bs{v}$ dans
-  la base $\bs{v'}$ et $Q_{\bs{w'}}^{\bs{w}}$ celle des vecteurs de
-  $\bs{w}$ dans la base $\bs{w'}$ alors pour tout $x \in \R^n$
+Dans le but de trouver des expressions agréables ou standardisées
+d'une application affine on est amené à écrire ces applications
+affines dans des repères adaptées. Pour pouvoir exprimer un tel
+contexte il nous faut être en mesure de formaliser la notion
+de changement de repères.
+\begin{defn}
+  Le changement de repères de $\R^n$ de $(\bs{o}, \bs{v})$ vers
+  $(\bs{l}, \bs{w})$ est l'application affine donnée dans les repères
+  précédents par
   \[
-  M'x_{\bs{v'}} + b'_{\bs{w'}} = f(x) =
-  P_{\bs{w'}}^{\bs{w}}M\left(P_{\bs{v'}}^{\bs{v}}\right)^{-1}x_{\bs{v}}
-  + P_{\bs{w'}}^{\bs{w}}b_{\bs{w}}
+  x \longmapsto P_{\bs{v}}^{\bs{w}}(x - \bs{o})_{\bs{v}} + \bs{l}
+  \]
+  où $P_{\bs{v}}^{\bs{w}}$ est la matrice de passage de la base
+  $\bs{v}$ vers la base $\bs{w}$ ; c'est-à-dire la matrice des
+  vecteurs de $\bs{v}$ écrits dans la base $\bs{w}$.
+\end{defn}
+\noindent Voici enfin comment formaliser le passage de l'écriture
+d'une application dans un repère vers un autre.
+\begin{prop}
+  Soient $(\bs{o}, \bs{v})$ et $(\bs{o'}, \bs{v'})$ deux bases de
+  $\R^n$, $(\bs{l}, \bs{w})$ et $(\bs{l'}, \bs{w'})$ deux bases de
+  $\R^m$. On note $M$ la matrice d'une application affine $f$ dans les
+  repères $(\bs{o}, \bs{v})$ et $(\bs{l}, \bs{w})$, et $M'$ celle de
+  $f$ dans les repères $(\bs{o'}, \bs{v'})$ et $(\bs{l'}, \bs{w'})$.
+  Si $P_{\bs{v'}}^{\bs{v}}$ désigne la matrice de passage de $\bs{v}$
+  vers $\bs{v'}$ et $P_{\bs{w'}}^{\bs{w}}$ la matrice correspondante
+  dans le cas de $\bs{w}$ et $\bs{w'}$ alors pour tout $x \in \R^n$
+  \[
+  M'(x - \bs{o'})_{\bs{v'}} + f(\bs{o'}) = f(x) =
+  P_{\bs{w'}}^{\bs{w}}M\left(P_{\bs{v'}}^{\bs{v}}\right)^{-1}(x -
+  \bs{o})_{\bs{v}} + f(\bs{o})
   \]
 \end{prop}
 \begin{question}
-  Écrire la fonction du premier exemple dans la base de $\R^2$ au
-  départ et à l'arrivée donnée par la base $\{(1, 1), (1, -1)\}$.
+  Écrire la fonction du premier exemple dans le repère de $\R^2$ donné
+  au départ et à l'arrivée par
+  $\big((0, 0), \{(1, 1), (1, -1)\}\big)$.
 \end{question}
 \begin{rem}
-  Dans les faits, on n'aura pas souvent à faire ce type de changement
-  de bases. À partir des propriété de notre application on sera à
-  même de trouver un bonne base dans laquelle la décrire. Il reste que
-  de tels changements de bases doivent être compris et faits quand
-  nécessaire.
+  Dans les faits, on ne fera pas souvent à faire ce type de changement
+  de repères. À partir des propriétés des applications à l'étude on
+  sera à même de trouver un bon repère dans lesquels les décrire. Il
+  reste que de tels changements de repères doivent être compris et
+  faits quand nécessaire.
 \end{rem}
 \begin{exmp}
   Les applications affines constantes sont celles dont l'expression
-  dans toute base a une matrice qui est nulle.
+  dans tous les repères a une matrice qui est nulle.
 \end{exmp}
 \begin{exmp}
   Avec la définition qu'on a donné toute application linéaire va
-  décrire une application affine. L'expression de l'application affine
-  dans des bases $\bs{v}$ et $\bs{w}$ des espaces de départ et
-  d'arrivée est simplement donnée par la matrice de l'application
-  linéaire dans les bases en question.
+  décrire une application affine.
 \end{exmp}
+
+\subsection{Translations et Homothéties}
+
+On s'attarde un instant sur les plus simples des applications affines
+non triviales.
 \begin{exmp}
   La translation de vecteur $b$ est l'application affine donnée dans
-  toute base $\bs{v}$ de $\R^n$ par
-  $x_{\bs{v}} \mapsto x_{\bs{v}} + b_{\bs{v}}$.
+  tous repère $(\bs{o}, \bs{v})$ de $\R^n$ par
+  $x \mapsto (x - \bs{o})_{\bs{v}} + b$.
 \end{exmp}
 \begin{exmp}
-  L'\emph{homothétie} de rapport $\lambda$ et centre $b$ est
-  l'application affine de $\R^n$ dans lui-même dont l'écriture en
-  toute base $\bs{v}$ prend la forme
+  L'\emph{homothétie} de rapport $\lambda$ et centre $\bs{o}$ est
+  l'application affine de $\R^n$ dans lui-même dont l'écriture dans le
+  repère $(\bs{o}, \bs{v})$ prend la forme
   \[
-  x_{\bs{v}} \mapsto \lambda (x_{\bs{v}}-b_{\bs{v}}) + b_{\bs{v}}
+  x \mapsto \lambda (x - \bs{o})_{\bs{v}} + \bs{o}
   \]
   L'homothétie de rapport $1$ est simplement l'identité.
 \end{exmp}
 \begin{question}
-  Donner une particularité que partage les homothéties et les
+  Donner une particularité que partagent les homothéties et les
   translations.
 \end{question}
 \begin{question}
@@ -269,46 +298,217 @@ linéaires. Pour rappel une projection $p : E \rightarrow E$ de
 l'espace vectoriel $E$ sur lui même est un application linéaire qui
 satisfait la relation $p^2 = p$. Cette relation garanti le fait que
 $G = \Ker(p)$ et $F = \Ker(p-\id)$ sont des espaces vectoriels
-supplémentaires dans $E$. Ainsi pour tout $x = x_F + x_G$ la
+supplémentaires dans $E$. Ainsi, pour tout $x = x_F + x_G$, la
 projection $p$ est définie par $p(x) = x_F$. L'application $p$ est
 appelée projection sur $F$ parallèlement à $G$.
 \begin{defn}
   Une application affine $f$ de $\R^n$ dans $\R^n$ est une projection
-  affine si sa matrice dans une base quelconque est la matrice d'une
-  projection linéaire.
+  affine si sa matrice dans un repère est la matrice d'une projection
+  linéaire.
 \end{defn}
-Plus précisément une projection affine s'écrit dans une base $\bs{v}$
-de $\R^n$ sous la forme
+\noindent Une projection affine, dans un repère $(\bs{o}, \bs{v})$ de
+$\R^n$, s'écrit donc sous la forme
 \[
-x_{\bs{v}} \mapsto M(x_{\bs{v}} - b_{\bs{v}}) + b_{\bs{v}}
+x \mapsto M(x - \bs{o})_{\bs{v}} + \bs{o}
 \]
-On appelle parfois $b_{\bs{v}}$ le centre de la projection $f$. Dans ce
-contexte $f$ est la projection de $b_{\bs{v}} + \Ker(M)$ parallèlement
-à $b_{\bs{v}} + \Ker(M-I_n)$.
-
+On voit dans cette écriture que $\bs{o}$ est fixé par la
+projection. On vient d'écrire la projection de $\bs{o} + \Ker(M-I_n)$
+parallèlement à $\bs{o} + \Ker(M)$.
 \begin{question}
   Étudier des exemples de projections affines dans $\R^2$. Dessiner
   systématiquement les droites affines qui caractérisent cette
   projection.
 \end{question}
 
-\pretitle{\vspace{-2\baselineskip} \begin{center}}
-\title{%
-  { \huge Solutions des exercices}%
-}
-\posttitle{
-\end{center}
-  \vspace{.5\baselineskip}
-  \rule{\textwidth}{1.5pt}
-  \vspace{-5\baselineskip}
-}
+\section{Transformations Orthogonales}
 
-\maketitle\thispagestyle{fancy}
+\subsection{Aparté sur l'Orthogonalité}
 
-\noindent Vous trouverez dans la suite solutions et indications d'une
-partie des exercices de la feuille. Ceci étant majoritairement
-accessibles il vous est suffisant de comparer votre travail au
-résultats que vous retrouverez dans la suite.
+On se donne un produit scalaire $\langle \cdot, \cdot \rangle$ sur
+$\R^n$\footnote{Pensez au produit scalaire usuel si \c{c}a vous
+  facilite la vie.}. On rappelle que c'est une forme bilinéaire
+symétrique définie positive. Elle vient avec une norme associée dite
+norme euclidienne définie par
+\[
+\|x\| = \sqrt{<x, x>}.
+\]
+\begin{defn}
+  Deux vecteurs $x$, $y$ in $\R^n$ sont dit orthogonaux pour
+  $\langle \cdot, \cdot \rangle$ si $\langle x, y \rangle = 0$.
+\end{defn}
+\noindent Nous avons vu que cette notion correspond dans le cas du
+produit scalaire usuel au fait que l'angle entre $x$ et $y$ est
+$\pi/2$ $[\pi]$.
+\begin{defn}
+  Une base $\bs{v}$ est dite \emph{orthognale} si les vecteurs qui la
+  constituent sont orthogonaux deux à deux. Elle est
+  \emph{orthonormale} si ses vecteurs sont de norme $1$.
+\end{defn}
+\noindent L'exemple le plus simple d'une base orthonormée est celui de
+la base canonique de $\R^n$ pour le produit scalaire usuel.
+\begin{question}
+  Donner d'autres bases orthonormales de $\R^3$.
+\end{question}
+\begin{question}
+  Comment construire une base orthonormée de $\R^3$ à partir de la
+  base
+  \[
+  \{(1, 0, 1), (0, 1, 1), (1, 1, 0)\}?
+  \]
+\end{question}
+\begin{defn}
+  Étant donné une partie $K$ de $\R^n$ on appelle orthogonal de $K$
+  pour $\langle \cdot, \cdot \rangle$ le sous-espace vectoriel
+  \[
+  K^\perp = \{ x \in \R^n \mid \forall y \in K, \; \langle x, y \rangle = 0 \}.
+  \]
+\end{defn}
+\noindent Ainsi un hyperplan $H$ de $\R^n$ quand il est donné implicitement est
+décrit comme l'orthogonal d'un vecteur de $\R^n$ qu'on appelle un
+vecteur \emph{normal}.
+\begin{question}
+  Décrire dans $\R^3$ l'orthogonal à la partie $\{(1, 1, 1), (1, 0, 1)\}$.
+\end{question}
+
+\subsection{Transformations vectorielles}
+
+La notion de produit scalaire permet à la fois de formaliser la notion
+d'angle ainsi que celle de distance\footnote{On étudiera plus en
+  détail la seconde question un peu plus tard.}. Les transformations
+affines de $\R^n$, c'est-à-dire les applications affines bijectives,
+qui présèrvent les angles et les distances sont d'un grand intérêt
+géométrique; elles ne touchent pas aux dispositions relatives de
+configurations de parties dans $\R^n$ et donc présèrvent les
+propriétés géométriques de celles-ci. Elles présèrvent par exemple la
+perpendicularité ou le parallélisme. Pour l'instant on se limite au
+cas vectoriel avant d'exposer la situation affine, plus générale.
+
+Avant de poursuivre notre travail on prend un instant pour étudier de
+plus prêt une écriture matricielle de $\langle \cdot, \cdot \rangle$.
+Étant donné une base $\bs{v}$ de $\R^n$, on appelle matrice de
+$\langle \cdot, \cdot \rangle$ dans la base $\bs{v}$ la matrice
+\[
+\bs{A} = \big(\langle v_i, v_j \rangle\big)_{i, j}.
+\]
+\begin{question}
+  Montrer que, dans la base $v$, on a pour tout $x$, $y \in \R^n$,
+  $\langle x, y \rangle = x^TAy$.
+\end{question}
+Si $\bs{v}$ est une base orthonormale dans ce cas $A = I$ et on a,
+pour tout $x$, $ y \in \R^n$ écrits dans cette base
+\[
+\langle x, y \rangle = x^Ty.
+\]
+Ce qui nous ramène à l'écriture usuelle du produit scalaire.
+\begin{hyp}
+  Quitte à se ramener à une base orthonormée
+  appropriée\footnote{\c{C}a existe toujours. Voir algorithme de
+    Gram-Schmidt.} on peut supposer que notre produit scalaire a la
+  forme usuelle.
+\end{hyp}
+Soit $M$ une matrice inversible dans une base orthonormée de
+$\R^n$. Dire que $M$ préserve le produit scalaire
+$\langle \cdot, \cdot \rangle$ signifie que pour tout $x$,
+$y \in \R^n$ on a
+\[
+(Mx)^T(My) = x^Ty.
+\]
+D'où l'on obtient, pour tout $x$, $y \in \R^n$
+\[
+x^T\left(M^TM - I_n\right)y = 0.
+\]
+En prenant $x$ et $y$ ayant des coefficients nuls sauf un on peut
+montrer que les coefficients de $M^TM - I_n$ sont tous nuls. Donc
+\[
+M^TM = I_n.
+\]
+\begin{prop}
+  Une isomorphisme de $\R^n$ préserve un produit scalaire si et
+  seulement sa matrice dans une base orthonormée satisfait
+  \[
+  M^TM = I_n.
+  \]
+  Une matrice qui satisfait la propriété précédente est dite
+  \emph{orthogonale}.
+\end{prop}
+\begin{question}
+  Quel peut être le déterminant d'une matrice orthogonale?
+\end{question}
+\begin{question}
+  Traduire la proposition précédente en fonction des vecteurs colonnes
+  de la matrice $M$.
+\end{question}
+\noindent On étudie un premier exemple de matrices orthogonales. On se
+fixe une base orthonormée de $\R^n$ dans laquelle on travaille. Soit
+$\theta \in \R$ on note $R(\theta)$ la matrice
+\[
+R(\theta) =
+\begin{pmatrix}
+  \cos(\theta) & - \sin(\theta) \\
+  \sin(\theta) & \cos(\theta)
+\end{pmatrix}.
+\]
+\begin{question}
+  Montrer que $R(\theta)$ est une matrice orthogonale pour tout
+  $\theta$. Quel est son déterminant?
+\end{question}
+\begin{question}
+  Dessiner l'image du carré de points extrémaux $(\pm 1, \pm 1)$ par
+  $R(\theta)$ pour $\theta = 0$, $\pi/4$.
+\end{question}
+Un exemple de matrice orthogonale qui n'est pas de déterminant $1$ est
+celui-ci
+\[
+s =
+\begin{pmatrix}
+1 & 0 \\
+0 & -1
+\end{pmatrix}.
+\]
+\begin{question}
+  Interpréter géométriquement cette matrice.
+\end{question}
+\begin{question}
+  Dessiner l'image du carré de points extrémaux
+  $\{(0, 0), (0, 1), (1, 0), (1, 1)\}$
+  par $R(\theta)$ pour $\theta = 0$, $\pi/4$.
+\end{question}
+\begin{question}
+  Déterminer toute les matrices orthogonales de $\R^2$ muni de son
+  produit scalaire usuel. Vous pourrez les étudier suivant leurs
+  spectres.
+\end{question}
+\begin{question}
+  Donner des exemples de matrices orthogonales en toute
+  dimension. Essayez d'être le plus général possible.
+\end{question}
+\begin{question}
+  Étendre la classification des matrices orthogonales au cas de
+  dimension $3$.
+\end{question}
+
+\subsection{Transformations Affines}
+
+\emph{TODO}
+
+
+% \pretitle{\vspace{-2\baselineskip} \begin{center}}
+% \title{%
+%   { \huge Solutions des Exercices}%
+% }
+% \posttitle{
+% \end{center}
+%   \vspace{.5\baselineskip}
+%   \rule{\textwidth}{1.5pt}
+%   \vspace{-5\baselineskip}
+% }
+
+% \maketitle\thispagestyle{fancy}
+
+% \noindent Vous trouverez dans la suite solutions et indications d'une
+% partie des exercices de la feuille. Ceci étant majoritairement
+% accessibles il vous est suffisant de comparer votre travail au
+% résultats que vous retrouverez dans la suite.
 
 \end{document}
 
