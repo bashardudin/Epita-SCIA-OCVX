@@ -1,0 +1,249 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[french]{babel}
+\usepackage{fancyhdr}
+\usepackage[margin=.8in]{geometry}
+
+\usepackage{Style/TeXingStyle}
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{1.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyhead[L]{EPITA\_ING2\_2019\_S8}
+\fancyhead[R]{Majeure SCIA}
+\fancyhead[C]{OCVX2}
+\fancyfoot[C]{\thepage}
+\fancyfoot[L]{Juillet 2018}
+\fancyfoot[R]{\textbf{Chargé de cours :} \textsc{Bashar~DUDIN}}
+
+\pretitle{\vspace{-.5\baselineskip} \begin{center}}
+\title{%
+  { \huge Évaluation optimisation convexe II}%
+}
+\posttitle{
+\end{center}
+  \begin{flushleft}
+    \vspace{3\baselineskip}
+    \textit{
+      L'évaluation est un travail d'analyse, à faire en groupe d'un
+      \emph{maximum de $\bs{\mathit{3}}$ personnes et d'un minimum de
+        $\bs{\mathit{2}}$}. Ce travail doit donner lieu à un rapport,
+      dans le format de votre choix, ainsi qu'à une soutenance. \\
+      Un suivi intermédiare \emph{obligatoire} est prévu ; il a pour
+      but d'aiguiller chaque groupe sur les objectifs à atteindre et
+      d'apporter un support au problèmes rencontrés. Il sera également
+      l'occasion de rappeler mes attentes en terme de rendu.
+    }
+  \end{flushleft}
+  \rule{\textwidth}{1.5pt}
+  \vspace{-5\baselineskip}
+}
+\author{}
+\date{}
+
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Évaluation optimisation convexe II - 2019)
+   /Subject (Optimisation convexe)
+}
+
+\begin{document}
+
+\maketitle\thispagestyle{fancy}
+
+\subsubsection*{Rendu}
+
+Le rendu doit contenir:
+\begin{itemize}
+\item un rapport;
+\item l'ensemble des implémentations;
+\item les datasets utilisés et les problèmes d'optimisations générés, si applicable;
+\item les slides de la soutenance.
+\end{itemize}
+Les dates de soutenances seront fixés le $9$ juillet après discussion
+avec les délégués de classe et l'administration pédagogique. Les
+contenus hors slides seront à rendre $24$ heures avant l'heure de
+soutenance. Vous êtes libres en ce qui concerne le format de
+rendu. Votre choix sera jugé quant à son adéquation avec les
+contraintes de \emph{clarté}, de \emph{compréhensibilité} et
+d'\emph{éxhaustivité}.
+
+Des répertoirs git seront crée au cours de la semaine du $16$ juillet
+pour accueillir vos rendus.
+
+\subsubsection*{Contraintes techniques}
+
+Les implémentations seront à faire en \texttt{python}. L'environement
+\texttt{python} permet un prototypage agréable et les bibliothèques de
+ML qui y sont disponibles vous seront utiles pour faire des
+comparatifs.
+
+Vous pouvez utiliser les fonctions de \texttt{numpy}, \texttt{scipy}
+et de \texttt{pandas} liées au calcul différentiel, à l'algèbre
+linéaire et au pré-traitement et traitement des datasets que vous
+seriez amenés à manipuler. Tout ce qui n'est pas explicitement
+mentionné est à proscrire\footnote{Je suis seul à pouvoir vous libérer
+  de cette contrainte. Il vous revient de me tenir informé de toute
+  contravention à cette règle.}.
+
+\subsubsection*{Attendus}
+
+Des \emph{dessins} pour résumer les études de performances. On attend
+de vous des tests fiables, donc en nombre suffisamment important et de
+préférence avec une estimation du risque. Aucun comparatif ou analyse
+de performance d'un algo n'a de sens sinon. À vous de vous mettre dans
+la peau de quelqu'un qui participe par son expertise à une decision
+importante sur un choix de techno.
+
+\vspace{\baselineskip}
+\noindent \emph{Quand on parle de comparaison, on entend batch de
+  tests et résumé des résultats en sortie.}
+
+\section{Descentes de gradient sans contraintes}
+
+Cette section \emph{n'est pas optionnelle}, ce qui n'est pas en bonus
+doit être traité par chaque groupe.
+
+\subsection{Le classique}
+
+\begin{question}
+  \begin{enumerate}
+  \item Construires des familles de fonctions qui ont des nombres de
+    conditionnements quelconques ($\geq 1$).
+  \item Tracer le nombre d'itérations d'une descente de gradient à pas
+    constant contre le nombre de conditionnement d'une même famille de
+    fonctions.
+  \item Effectuer l'étude précédente pour différents pas.
+  \end{enumerate}
+\end{question}
+
+\begin{question}
+  Comparer les descentes de gradients en normes $\ell_2$ et $\ell_1$.
+\end{question}
+
+\subsection{Accélération de convergence}
+
+Dans cette section on étudie des techniques d'accélération et/ou de
+garantie de convergence liée à la descente de gradient en norme
+$\ell_2$.
+\begin{question}
+  Qu'est-ce \emph{Learning Rate Scheduling}? En implémenter une
+  instance et le tester sur le batch test généré à la section
+  précédente.
+\end{question}
+
+\begin{question}
+  Qu'est-ce que le \emph{Nesterov Accelerated Gradient} et la
+  \emph{Adam Optimization}? Implémenter des instances de
+  chacune. Générer des exempes qui permettent de les comparer entre
+  elles et contre une descente de gradient classique.
+\end{question}
+
+\section{Thématiques plus avancées}
+
+Les thématiques de cette section sont aux choix, il vous revient de
+choisir lesquelles et combien d'entre elles vous souhaitez traiter.
+
+\subsection{Méthode de Newton}
+
+Cette thématique est centrée autour de la méthode de Newton dans le
+cas des contraintes d'égalité. Dans les implémentations que vous
+abordez il n'est pas nécessaire de traiter le cas d'un point initial
+non-admissible. Son traitement sera comptabilisé s'il est
+fait\footnote{Tout travail mérite salaire.}.
+
+Il vous est également autorisé d'utiliser les méthodes de calcul
+numérique ou symbolique des gradients, hessiennes et les solveurs de
+systèmes linéaires disponibles dans les bibliothèques \texttt{numpy}
+et \texttt{scipy}.
+
+\begin{question}
+  Générer des problèmes d'optimisations convexes avec contraintes
+  d'égalités.
+\end{question}
+
+\begin{question}
+  Implémenter et tester une méthode de Newton.
+\end{question}
+
+\begin{question}
+  Utiliser la méthode de Newton avec contraintes d'égalités pour
+  minimiser des fonctions polynômiales dans les valuations d'un flot
+  sur un graphe\footnote{Me demander des explications.}.
+\end{question}
+
+\begin{question}{+}
+  Quid d'une méthode de Quasi-Newton?
+\end{question}
+
+\subsection{SVM et SMO}
+
+Dans cette thématique on cherche à implémenter la \emph{Sequential
+  Minimal Optimisation} concernant le traitement des SVMs.
+
+\begin{question}
+  Expliqer le problème d'optimisation sous-jacent à un \emph{Support
+    Vector Classifier}?
+\end{question}
+
+\begin{question}
+  Implémenter la SMO. Laisser la possibilité de passer le noyau
+  souhaité en argument.
+\end{question}
+
+\begin{question}
+  Tester l'implémentation précédente sur le problème de classification
+  proposé par le dataset \emph{MNIST}. Dans le but de traiter un
+  problème de classification binaire on se limite au repérage d'un
+  chiffre.
+
+  \noindent Garder le noyau qui vous donne les meilleurs résultats
+  suivant la métrique de votre choix.
+\end{question}
+
+\begin{question}{+}
+  Implémenter une méthode de résolution par barrière logarithmique
+  d'un \emph{SVM}. Comparer cette démarche à la SMO.
+\end{question}
+
+\subsection{Méthode du point intérieur}
+
+Cette thématique est plus théorique que les précédentes. La méthode du
+point intérieur n'a pas été abordée en cours ; elle est évaluée en
+conséquence.
+
+Le but est de comparer la performance de la méthode du point intérieur
+à celle du simplexe.
+
+\begin{question}{4}
+  Expliquer la méthode primal-dual du point intérieur exposée
+  dans \cite[11.7]{Boyd:2004:CO:993483}.
+\end{question}
+
+\begin{question}{6}
+  En donner une implémentation en présupposant que l'origine est
+  toujours un point admissible\footnote{Il y a des méthodes standards
+    pour se ramener à ce cas.}.
+\end{question}
+
+\begin{question}{+2}
+  Comparer la performance de la méthode précédente à une méthode du
+  simplexe de votre cru. \footnote{Bien entendu, dans le cas des
+    programmes linéaires.}.
+\end{question}
+
+\begin{question}
+  Appliquer les méthodes de résolution précédentes au cas des flots
+  maximaux sur les graphes.
+\end{question}
+
+
+\bibliographystyle{alpha}
+\bibliography{./Ref/bibOCVX}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

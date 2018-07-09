@@ -1,0 +1,241 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[french]{babel}
+\usepackage{fancyhdr}
+\usepackage[margin=.8in]{geometry}
+
+\usepackage{Style/TeXingStyle}
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{1.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyhead[L]{EPITA\_ING2\_2019\_S8}
+\fancyhead[R]{Majeure SCIA}
+\fancyhead[C]{OCVX1}
+\fancyfoot[C]{\thepage}
+\fancyfoot[L]{Avril 2018}
+\fancyfoot[R]{\textbf{Chargé de cours :} \textsc{Bashar~DUDIN}}
+
+\pretitle{\vspace{-.5\baselineskip} \begin{center}}
+\title{%
+  { \huge Examen d'optimisation convexe}%
+}
+\posttitle{
+\end{center}
+  \begin{flushleft}
+    \vspace{3\baselineskip} \textit{
+      \!\!\emph{Durée de l'épreuve 3h.}\\
+      \! \emph{Les documents du cours ainsi que les calculettes ne sont pas
+      autorisées.}  \\
+      Le barême est indicatif et peut évoluer de manière marginale. Il
+      contient un maximum de $36$ points bonus compris, les notes seront
+      rapportées à une note inférieure, probablement $20$.
+    }
+  \end{flushleft}
+  \rule{\textwidth}{1.5pt}
+  \vspace{-5\baselineskip}
+}
+\author{}
+\date{}
+
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Examen optimisation convexe - 2019)
+   /Subject (Optimisation convexe)
+}
+
+\begin{document}
+
+\maketitle\thispagestyle{fancy}
+
+\section{Géométrie élémentaire dans $\R^2$}
+\label{sec:geom}
+
+Dans cette section je cherche à vous faire représenter des lieux de
+$\R^2$ que vous rencontrerez régulièrement. Elle permettra d'évaluer
+également les différents éléments de terminologie introduit en cours.
+
+\noindent On désigne par $A$ la partie de $\R^2$ donnée par
+\[
+A = \left\{ (x, y) \in \R^2 \; \left| \; \begin{matrix} x + 2y & \leq 3 \\ x - y &
+      \geq 2 \end{matrix}\right.\right\}.
+\]
+\begin{question}{4}
+  \begin{enumerate}
+  \item
+    Représenter $A$ graphiquement en indiquant les éléments qui
+    permettent de décomposer votre représentation.
+  \item
+    Quel est le lieu qu'on obtient si on inverse les inégalités.
+  \item
+    Donner l'équation d'un demi-espace dont l'intersection avec $A$
+    est un lieu non-vide borné de $\R^2$.
+  \end{enumerate}
+\end{question}
+On note désormais $B$ l'intersection de l'épigraphe de la fonction
+$x \mapsto -\sqrt{x}$ sur $\R_+$ et de la partie
+\[
+\left\{(x, y) \mid y \leq \sqrt{x}\right\}.
+\]
+\begin{question}{4}
+  \begin{enumerate}
+  \item Représenter $B$ graphiquement.
+  \item Rappeler la définition de convexité d'une partie.
+  \item Donner deux arguments qui permettent de justifier le fait que
+    $B$ est convexe.
+  \end{enumerate}
+\end{question}
+On considère les fonctions suivantes notées $f$, $g$ et $h$
+respectivement données par les expressions
+\[
+  f(x, y) = x + 4y, \quad g(x, y) = xy, \quad h(x, y) = \frac{x^2}{2} + \frac{y^2}{4}.
+\]
+\begin{question}{3 + 2}
+  \begin{enumerate}
+  \item Représenter les courbes de niveaux $\mc{C}_1{f}$,
+    $\mc{C}_2(g)$ et $\mc{C}_{4}(h)$.
+  \item Donner un hyperplan d'appui à $\mc{C}_{\leq 4}(h)$.
+  \item Justifier le fait que $\mc{C}_{\leq 2}(g)$ n'a pas d'hyperplan
+    d'appui.
+  \end{enumerate}
+\end{question}
+On s'intéresse pour terminer cette section à la convexité de la
+fonction $x \mapsto x^2$ sur $\R$\footnote{Cet exercice est légèrement
+  technique et vous pourrez le garder pour la suite.}.
+\begin{question}{3}
+  À l'aide de la définition de convexité d'une fonction, montrer que
+  $x \mapsto x^2$ est une fonction convexe sur $\R$.
+\end{question}
+
+
+\section{Calcul différentiel élémentaire}
+
+À moins qu'on y fasse explicitement référence, il n'est pas nécessaire
+de justifier la différentiabilité des fonctions que vous
+manipulez.
+\begin{question}{1}
+  Calculer la différentielle de l'application sur $\R$,
+  $f(x) = \frac{\sin(x)}{x^2+1}$ en tout point $x$. Quelle est la
+  différence avec la dérivée de $f$.
+\end{question}
+On se donne une matrice $A \in \mc{M}_n(\R)$.
+\begin{question}{5}
+  Calculer la différentielle des fonctions suivantes:
+  \begin{enumerate}
+  \item $f :\R^n \rightarrow \R$ donnée par l'expressoin
+    $X \mapsto X^TAX$.
+  \item $h : \mc{M}_n(\R) \rightarrow \mc{M}_n(\R)$ donnée par
+    l'expression $B \mapsto \mathrm{tr}(AB)B$.
+  \item $g : \R^n \rightarrow \R$ donnée par l'expression
+    $X \mapsto 1/(X^TX + 1)$.
+  \item $k :\R^n \rightarrow \R$ donnée par l'expressoin
+    $X \mapsto \sin(X^TAX)$.
+  \end{enumerate}
+\end{question}
+\begin{question}{3}
+  Expliciter le gradient, en tout point, des expressions
+  différentiables suivantes :
+  \begin{enumerate}
+  \item $f(x, y, z) = \dfrac{x + y + z}{x+y^2+1}$ ;
+  \item $g(x, y) = \dfrac{\cos(xy)}{\sqrt{x^2 + y^2}}$ ;
+  \item $h(x, y, z) = \exp(xy - z)$.
+  \end{enumerate}
+\end{question}
+
+\section{Problèmes d'optimisation simples}
+
+\subsection{De l'existence de points optimaux}
+
+On considère les contraintes linéares sur $\R^2$
+\[
+\systeme{
+  x + 2y \leq 3,
+  x - y  \geq 2
+}
+\]
+décrivant la partie $A$ section \ref{sec:geom}.
+\begin{question}{1.5}
+  Donner pour chacune des propriétés suivantes un programme linéaire
+  ayant $A$ pour lieu admissible\footnote{Lieu décrit par les
+    contraintes du programme linéare.} et satisfaisant cette propriété
+  \begin{enumerate}
+  \item le programme linéaire n'a qu'un seul point optimal ;
+  \item le programme linéaire en a une infinité;
+  \item le programme linéaire n'est pas borné.
+  \end{enumerate}
+\end{question}
+
+\subsection{Un programme linéaire en petite dimension}
+
+\noindent On considère le programme linéaire (\emph{PL}) suivant :
+\begin{displaymath}
+  \begin{linearProg} {
+      minimiser
+    }{
+      $x + 2y$
+    }{
+      \systeme{
+        x + y \leq 1,
+        -x + 2y \leq 2,
+        x - 3y \leq 3
+      }
+    }
+  \end{linearProg}
+\end{displaymath}
+On va chercher dans la suite à étudier (\emph{PL}).
+\begin{question}{4}
+  \begin{enumerate}
+  \item Représenter le lieu admissible de (\emph{PL}) dans $\R^2$.
+  \item
+    \begin{enumerate}
+    \item[a.]  Tracer la courbe de niveau $0$ de la fonction objectif
+      de (\emph{PL}). Elle sera notée $\mc{C}_0$.
+    \item[b.]  Indiquer les demi-espaces positif et négatif définis
+      par $\mc{C}_0$.
+    \item[c.]  Indiquer dans quelle direction on doit translater
+      $\mc{C}_0$ afin de minimiser la fonction objective.
+    \end{enumerate}
+  \item
+    Tracer la courbe de niveau qui réalise le minimum de (\emph{PL})
+    et calculer l'unique point optimal de (\emph{PL}). Quelle est la
+    valeur optimale de (\emph{PL})?
+  \end{enumerate}
+\end{question}
+
+\subsection{Baby example}
+
+L'approche géométrique dans le cas des programmes linéaires de petites
+dimensions s'étend à certains problèmes d'optimisations simples. On
+considère le probème d'optimisation (\emph{P}) suivant
+\[
+\begin{PbOptim}{
+    minimiser
+  }{
+    $x + y$
+  }{
+    $\begin{matrix}
+      x+2y \leq 3 \\
+      x \in B
+    \end{matrix}$
+  }
+\end{PbOptim}
+\]
+où $B$ est la partie de $\R^2$ qu'on a décrit section \ref{sec:geom}.
+
+\begin{question}{1.5 + 3}
+  \begin{enumerate}
+  \item Dessiner le lieu admissible du problème de (\emph{P}).
+  \item Représenter la courbe de niveau de la fonction objective qui
+    réalise le minimum de (\emph{P})\footnote{croquis de son
+      positionnement.}.
+  \item Calculer le point optimal ainsi que la valeur optimale de
+    (\emph{P}).
+  \end{enumerate}
+\end{question}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
