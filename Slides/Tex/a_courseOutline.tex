@@ -1,0 +1,288 @@
+\documentclass[aspectratio = 169]{beamer}
+
+\usepackage[utf8]{inputenc} % Character encoding.
+
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Contour de Cours)
+   /Subject (Optimisation Convexe)
+}
+
+\usepackage{./Style/ODSBeamer} % This is extra styling for Beamer environments.
+\usepackage{./Style/ODSStyle} % This is a set of commands for maths content.
+
+%-------------------------------------------------------------------------------
+%   TITLE PAGE
+%-------------------------------------------------------------------------------
+
+\author[BD]{Bashar Dudin}
+
+\institute[]{EPITA}
+
+\title{Optmisation convexe} %
+\subtitle{Contour du cours}
+
+%-------------------------------------------------------------------------------
+%   DOCUMENT BODY
+%-------------------------------------------------------------------------------
+
+\begin{document}
+
+\begin{frame}[plain]
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+\section{Les problèmes d'optimisation}
+
+\begin{frame}{Introduction}
+
+  L'optimisation fait partie des missions historiques de
+  l'ingénierie. Elle naît avec l'ère industrielle: une fois un
+  concept élaboré il s'agit de réduire les coups, minimiser les
+  risques de défauts de livraisons ou étendre le scope d'action ...
+
+  \pause Les techniques mathématiques qui permettent de résoudre une
+  partie de ces problèmes d'optimisation balayent un large spectre des
+  thématiques mathématiques que vous avez pu aborder jusque
+  là\footnote{Ou non ...}; l'algèbre linéaire, le calcul
+  différentielle et un peu de géométrie. Le cours d'OCVX a pour
+  objectif de vous donner le bon degré de confort pour manipuler ces
+  techniques.
+\end{frame}
+
+\begin{frame}{Problèmes d'opti -- De quoi on parle?}
+  Voici quelques exemples qu'on pourrait croiser lorsqu'on s'intéresse
+  à l'optimisation.
+  \begin{itemize}
+  \item<1-> Chercher le plus court/rapide chemin entre deux coordonnées
+    GPS.
+  \item<2-> Décider des meilleures routes aériennes qui minimisent le
+    prix d'approvisionnement en kérosène.
+  \item<3-> Identifier des images d'IRM qui correspondent à des
+    malformations du cerveau.
+  \item<4-> Chercher des patterns dans la population d'étudiants
+    intégrants Epita.
+  \item<5-> Décider d'achat/vente d'assets prenant en compte
+    l'historique disponible.
+  \end{itemize}
+\end{frame}
+
+\section{Formulation mathématique}
+
+\begin{frame}{Problèmes d'opti -- définition formelle}
+  On écrit en général un problème d'optimisation $(P)$ sous la forme
+  standard
+  \[
+    \begin{PbOptim}{
+        $\mathrm{minimiser}$
+       }{
+         $f_0(x)$
+       }{
+         $f_i(x) \leq 0, \quad \forall i \in \{1, \ldots, p\}$
+       }{
+         $h_j(x)  = 0, \quad \forall j \in \{1, \ldots, m\}$
+       }
+    \end{PbOptim}
+  \]
+  où $f_0$, les $f_i$ et les $h_j$ sont des applications de $\R^n$
+  vers $\R$. La fonction $f_0$ est dite \emph{fonction objectif} ;
+  suivant le contexte ce sera une fonction de \emph{coût} ou
+  d'\emph{erreur}.  Les inégalités sont qualifiées de \emph{contraintes
+    d'inégalités} et les égalités de \emph{contraintes d'inégalités}.
+  \begin{halfshyblock}{Question}
+    Vous pouvez chercher à formuler les problèmes précédents en
+    problème d'optimisation, ce n'est pas toujours évident.
+  \end{halfshyblock}
+\end{frame}
+
+\begin{frame}{Problèmes d'opti -- définition formelle}
+
+  Un problème d'optimisation du type de $(P)$ est dit
+  \begin{itemize}
+  \item<1-> différentiable si toutes les fonctions en jeux le sont ;
+  \item<2-> \emph{non-contraint} s'il n'a aucune contraintes
+    d'inégalités ou égalités ;
+  \item<3-> \emph{convexe} si l'ensemble des fonctions en jeu sont
+    convexes, les contraintes d'égalités étant de plus affines.
+  \end{itemize}
+  \pause[4] Sous la première hypothèse on a une série d'outils
+  mathématiques qui nous permettront d'apporter un éclairage riche sur
+  $(P)$. \pause[5] Si l'on rajoute la seconde on est en mesure de
+  construire des procédés itératifs efficaces en état de
+  \textit{résoudre} ces problèmes. \pause[6] La dernière nous garantie
+  de trouver \textit{la} solution optimale.
+
+  \pause[7]
+  \begin{alertblock}{\emph{Fake News}}
+    Les éléments en italiques sont là pour marquer le fait que
+    nos assertions à ce stade sont encore un peu fausses. L'image est un
+    peu moins idyllique.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Problèmes d'opti -- lexique}
+
+  Étant donné un problème d'optimisation $(P)$ on appelle:
+  \begin{itemize}
+  \item<1-> \emph{point admissible} de $(P)$ tout point de $\R^n$
+    satisfaisant toutes les contraintes. L'ensemble de tous les points
+    admissibles est appelé \emph{lieu admissible} de $(P)$.
+  \item<2-> \emph{valeur objectif} d'un point admissible la valeur que
+    prend la fonction objectif en celui-ci.
+  \item<3-> \emph{valeur optimale} de $(P)$ la meilleure borne
+    inférieure sur la fonction objectif.
+  \item<4-> \emph{point optimale} de $(P)$ tout point admissible dont
+    la valeur objectif est la valeur optimale.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Problèmes d'opti -- premières remarques qualitatives}
+  Comme est le cas de tout système d'équations, il est utile de se
+  poser le type de questions suivantes:
+  \begin{itemize}
+  \item<2-> y a-t-il au moins une solution?
+  \item<3-> s'il y a au moins une solution combien?
+  \item<4-> peut-on toujours décrire l'ensemble des solutions?
+  \item<5-> y a-t-il moyen d'approcher des solutions?
+  \end{itemize}
+  \pause[5]
+  \begin{question}
+    Chercher un problème d'optimisation qui:
+    \begin{itemize}
+    \item a un lieu admissible est vide ;
+    \item a plus d'un seul point optimal ;
+    \item n'a pas de valeur optimale mais a un lieu admissible non vide ;
+    \item a une valeur optimale mais pas de point optimal.
+    \end{itemize}
+  \end{question}
+\end{frame}
+
+\section{ML -- Un exemple d'opti à garder en tête}
+
+\begin{frame}{Map Fitting}
+  On s'intéresse plus en détail à un problème d'opti qu'on qualifie
+  de \textit{map fitting}.
+  \begin{defn}
+    Une famille différentiable d'applications
+    $f_{\alpha} : \R^n \to \R$ indexées par $\alpha \in \R^k$ est une
+    famille de fonctions pour laquelle l'application
+    $\phi : \R^k \times \R^n \to \R$ qui envoie $(\alpha, x)$ sur
+    $f_{\alpha}(x)$ est différentiable.
+  \end{defn}
+  \begin{halfshyblock}{\textit{Map Fitting}}
+    On considère un ensemble de couples $(X_i, y_i) \in \R^n\times \R$
+    pour $i \in \{1, \ldots, p\}$ et une famille différentiable
+    d'applications $\{f_\alpha\}_{\alpha \in \R^k}$. Le problème de
+    \textit{map fitting} relatif aux données précédentes consiste à
+    trouver les meilleurs paramètres $\alpha^\star$ tels que
+    $f_{\alpha^\star}$ approche \textit{au mieux}\footnote{Pour une
+      métrique pré-choisie.} les $(X_i, y_i)$.
+  \end{halfshyblock}
+\end{frame}
+
+\begin{frame}{La régression linéaire}
+  Le plus simple des problèmes de \textit{map fitting} est celui de la
+  régression linéaire. Dans le cas de dimension $1$ (on cherche à
+  approcher une fonction de $\R$ dans $\R$) il se décline comme ceci:
+  \begin{itemize}
+  \item<2-> la famille différentiable à laquelle on s'intéresse est
+    indexées par $\R^2$: $f_\alpha(x) = \alpha_1 x + \alpha_0$ pour
+    $\alpha = (\alpha_0, \alpha_1)$ ;
+  \item<3-> la métrique standard utilisée est la \emph{MSE} pour
+    \emph{Mean Square Error} donnée pour un $f_\alpha$ par
+    \[
+      \mc{E}(\alpha) = \sum_{i=1}^p \frac{1}{p}\big(f_\alpha(X_i) - y_i\big)^2
+    \]
+    c'est une estimation moyenne de la variance des prédictions de
+    $f_\alpha$.
+  \end{itemize}
+  \pause[4] Le but est de trouver un paramètre
+  $\alpha = (\alpha_1, \alpha_0)$ tel que $\mc{E}(\alpha)$ est
+  minimal, autrement dit de résoudre le problème d'optimisation sans
+  contraintes
+  \[
+    \mathrm{minimiser }\; E(\alpha).
+  \]
+\end{frame}
+
+\section{Méthodes itératives pour résoudre un problème d'opti}
+
+\begin{frame}{Approximation séquentielle}
+  Il est rare qu'un problème d'optimisation ait une solution
+  analytique\footnote{Une solution donnée par une expression explicite
+    en fonction des entrées.}. Même quand cela est le cas il est
+  souvent plus efficace de chercher une solution approchée.
+
+  Un processus itératif qui résout un problème d'optimisation $(P)$
+  est
+  \begin{itemize}
+  \item<2-> un choix initial d'un point de départ (de préférence)
+    admissible $x_0$ ;
+  \item<3-> un processus itératif qui construit un point admissible
+    $x_{n+1}$ à partir de $x_n$ et de données locales ayant une valeur
+    objectif plus petite que celle de $x_n$.
+  \end{itemize}
+  \pause[4]
+  Lors de ce cours on va introduire l'ensemble des contenus
+  nécessaires à la compréhension des méthodes itératives standards
+  pour résoudre des problèmes d'optimisation.
+\end{frame}
+
+\section{Contour du cours}
+
+\begin{frame}{Contour du cours -- évaluation}
+  \begin{itemize}
+  \item
+    La première partie de cours, plutôt théorique sera évaluée par un DM
+    ainsi qu'un partiel sur table en avril.
+  \item
+    La seconde, plus applicative
+    sera évaluée par un travail d'analyse par groupe. Il donnera lieu à
+    une soutenance.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Contour du cours -- contenus}
+\begin{enumerate}
+  \item<1->
+    Pré-requis techniques.
+    \begin{itemize}
+    \item Des éléments de géométries ; occasionne un retour sur PROL ;
+      la plus simple des familles de problèmes d'optimisation et le
+      point de départ des techniques étudiées.
+    \item Du calcul différentiel ; introduit les éléments utiles pour
+      généraliser la démarche PROL.
+    \end{itemize}
+  \item<2->
+    Étude qualitative des problèmes d'optimisation.
+    \begin{itemize}
+    \item Cas sans contrainte ; lieu critique.
+    \item Le langrangien et le problème dual.
+    \item Les conditions KKT.
+    \item L'apport de la convexité et applicabilité en général.
+    \end{itemize}
+  \item<3->
+    Méthodes de résolutions itératives.
+    \begin{itemize}
+    \item Les descentes de gradients et méthodes de Newton.
+    \item Les Méthodes de point intérieurs.
+    \item La SMO pour les SVMs.
+    \item<4-> Guillaume ? À l'aide.
+    \end{itemize}
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    {\huge \textbf{Bon courage pour la suite!}}
+   \end{center}
+ \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

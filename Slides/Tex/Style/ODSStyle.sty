@@ -1,0 +1,86 @@
+%%%% This package contains my shortcuts and predefined commands
+
+\ProvidesPackage{ODSStyle}[2019/01/11 Styling Content]
+
+\RequirePackage{amsmath, amssymb, amsfonts, mathrsfs}
+\RequirePackage{xcolor}
+\RequirePackage{colortbl}
+\RequirePackage{tcolorbox}
+\RequirePackage{wrapfig}
+\RequirePackage{systeme}
+
+\RequirePackage{minted}
+\RequirePackage{alltt}
+\RequirePackage{algpseudocode}
+\RequirePackage{algorithm}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\newcommand{\algorithmicbreak}{\textbf{break}}
+\newcommand{\Break}{\State \algorithmicbreak}
+
+\RequirePackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+\usepgfplotslibrary{colorbrewer}
+
+\RequirePackage{tikz, tkz-tab}
+\usetikzlibrary{colorbrewer}
+
+\RequirePackage{multicol}
+\RequirePackage{hyperref}
+\RequirePackage{centernot}
+
+%%% Standard sets
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+%%% Fonts
+\renewcommand{\emph}[1]{\textit{\textbf{#1}}}
+\newcommand{\mr}[1]{\mathrm{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\mf}[1]{\mathfrak{#1}}
+\newcommand{\mbf}[1]{\mathbf{#1}}
+\newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\ms}[1]{\mathscr{#1}}
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\newcommand{\rmb}[1]{\rm{\bf{#1}}}
+
+%%% Standard operators
+\DeclareMathOperator{\dd}{d\!}  %% Integration element
+\DeclareMathOperator{\Di}{D\!} %% differential ## TODO: make it better for higher order diff
+\DeclareMathOperator{\Ker}{Ker}  %% Kernel of a linear map
+\DeclareMathOperator{\Img}{Im}  %% Image of a linear map
+\DeclareMathOperator{\bigO}{\mathscr{O}}  %% Big O landau notation
+\DeclareMathOperator{\argmin}{argmax}
+
+%% Standard notation
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\Card}[1]{\mathrm{Card}\left(#1\right)}
+\newcommand{\pa}{\partial}
+
+%%% Linear Program formatting
+\newenvironment{linearProg}[3]{
+    \def\arraystretch{1.1}
+    \begin{tabular}{lc}
+        #1 & #2 \\
+        subject to & \\
+        & \sysdelim..{#3}
+}{
+    \end{tabular}
+}
+
+%%% General optimisation problem formatting
+\newenvironment{PbOptim}[4]{
+    \def\arraystretch{1.1}
+    \begin{tabular}{lc}
+        #1 & #2 \\
+        sujet à & \\
+           & #3 \\
+           & #4
+}{
+    \end{tabular}
+}
