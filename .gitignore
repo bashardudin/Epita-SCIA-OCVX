@@ -103,3 +103,9 @@ ENV/
 # TeX temp files
 *_minted*
 *auto*
+
+# MacOs Backup Folders
+.DS_Store
+
+# Emacs temp files
+*~
