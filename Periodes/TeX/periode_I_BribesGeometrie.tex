@@ -1,0 +1,1819 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[french]{babel}
+\usepackage{fancyhdr}
+\usepackage[margin=.8in]{geometry}
+
+\usepackage{Style/TeXingStyle}
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{1.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyhead[L]{EPITA\_ING2\_2020\_S8}
+\fancyhead[R]{Majeures SCIA \& IMAGE}
+\fancyhead[C]{OCVX}
+\fancyfoot[C]{\thepage}
+\fancyfoot[L]{2019}
+\fancyfoot[R]{\footnotesize{\textbf{Chargés de cours :} \textsc{B.~DUDIN} \& \textsc{G.~TOCHON}}}
+
+\pretitle{\vspace{-2.5\baselineskip} \begin{center}}
+\title{%
+  { \huge Bribes de géométrie}%
+}
+\posttitle{
+\end{center}
+\rule{\textwidth}{1.5pt}
+\vspace{-3\baselineskip}
+}
+\author{}
+\date{}
+
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Bribes de géométrie - 2019)
+   /Subject (SCIA/IMAGE - Optimisation convexe)
+}
+
+\setlength\parindent{0pt}
+
+\begin{document}
+
+\maketitle\thispagestyle{fancy}
+
+\begin{abstract}
+  Cette première série de séances pédagogiques se focalise sur les
+  éléments de géométrie et, dans une certaine mesure, de topologie
+  sous-jacents aux différents contextes qu'on aborde dans la
+  suite.
+\end{abstract}
+
+\tableofcontents
+
+\newpage
+
+\begin{center}
+ \begin{minipage}{.6\textwidth}
+    \begin{convention}
+      On fixe dans la suite un entier naturel $n$ strictement positif. Le
+      cas nul, même s'il garderait un sens dans les énoncés a suivre, nous
+      est pas d'un grand intérêt. Afin de ne pas alourdir le texte, la
+      $i$-ème coordonnée d'un vecteur $x \in \R^n$ sera
+      systématiquement notée $x_i$. La transposée d'une matrice $A$ sera
+      notée $A^T$.
+    \end{convention}
+  \end{minipage}
+\end{center}
+
+\section{Structure euclidienne usuelle sur $\R^n$}
+
+Un espace euclidien est un espace vectoriel muni d'un produit
+scalaire, c'est-à-dire d'une forme bilinéaire symétrique définie
+positive. On vous renvoie à la section (\ref{sec:FBS}) pour un
+rafraîchissement de mémoire. L'espace vectoriel $\R^n$ vient
+muni d'une structure euclidienne, dite usuelle, définie par le produit
+scalaire suivant: à tout couple de vecteurs $(x, y)$ dans
+$\R^n$ on associe le scalaire
+\[
+\langle x, y \rangle = \sum_{i=1}^n x_iy_i.
+\]
+Cette quantité est souvent exprimée de manière plus compacte par
+\[
+\langle x, y \rangle = x^Ty.
+\]
+La longueur au sens intuitif du vecteur $x$, appelée norme euclidienne
+de $x$, s'exprime alors sous la forme
+\[
+  \|x\|_2 = \langle x, x\rangle^{1/2} = \sum_{i=1}^n x_i^2.
+\]
+En ce sens la norme $\|\cdot\|_2$ est dite \emph{norme associée au
+  produit scalaire} $\langle \cdot\,, \cdot \rangle$. On rappelle que
+celle-ci permet d'écrire l'inégalité de \tsc{Cauchy}-\tsc{Schwarz}
+sous la forme
+\[
+\big| \langle x, y\rangle \big| \leq \|x\|_2\|y\|_2
+\]
+où $x$ et $y$ sont des vecteurs quelconques de $\R^n$.
+
+\subsection{Produit scalaire de deux vecteurs}
+
+Le signe du produit scalaire de deux vecteurs porte une signification
+géométrique dont la compréhension est essentielle à l'étude
+qualitative des problèmes d'optimisation, ainsi qu'aux méthodes
+itératives qui permettent d'en approcher une solution.
+
+On se place en un premier temps dans le cas de dimension $2$, du plan
+euclidien. Soient $x$ et $y$ deux vecteurs de $\R^2$, on
+désigne par $\theta$ l'angle orienté (dans le sens direct) entre $x$
+et $y$ et par $\phi$ (resp. $\psi$) celui entre $x$ (resp. $y$) et la
+partie positive de l'axe des abscisses.
+\begin{question}
+  \begin{enumerate}
+  \item Exprimer les coordonnées de $x$ et $y$ en fonction de leurs
+    normes respectives et des angles $\phi$ et $\psi$.
+  \item En déduire une expression du produit scalaire de
+    $\langle x, y \rangle$ en fonction de $\theta$ et des normes de $x$
+    et $y$.
+  \end{enumerate}
+\end{question}
+\begin{solution}
+  De vagues souvenirs de
+  physique devraient vous revenir, les coordonnées de $x$ et $y$ dans la
+  base canonique de $\R^2$ s'expriment par
+  \[
+    \begin{matrix}
+      x_1 = \|x\|_2\cos(\phi), & x_2 = \|x\|_2\sin(\phi), \\
+      y_1 = \|y\|_2\cos(\psi), & y_2 = \|x\|_2\sin(\psi).
+    \end{matrix}
+  \]
+  Donc
+  \[
+    \begin{array}{rcl}
+      \langle x, y \rangle & = & x_1y_1 + x_2y_2 \\
+                           & = & \|x\|_2\|y\|_2\big(\cos(\phi)\cos(\psi) + \sin(\phi)\sin(\psi)\big) \\
+                           & = & \|x\|_2\|y\|_2\cos(\phi - \psi) \\ \\
+      \langle x, y \rangle & = & \|x\|_2\|y\|_2\cos(\theta).
+    \end{array}
+  \]
+\end{solution}
+
+L'étude précédente s'étend relativement facilement au cas $n \geq
+2$. Soit $P$ un plan contenant les vecteurs $x$ et $y$ de
+$\R^n$, si ceux-ci sont indépendants $P$ est bien entendu
+l'espace vectoriel engendre par $x$ et $y$. La restriction du produit
+scalaire $\langle \cdot\, , \cdot\rangle$ à $P$ prend la forme usuelle
+dans toute base orthonormée de $P$. Pour en trouver une dans $P$ il
+suffit de normaliser un vecteur non nul $f_1$ de $P$ puis de
+normaliser un vecteur $f_2$ de son orthogonal dans $P$. C'est la
+première étape de l'algorithme de \tsc{Gram}-\tsc{Schmidt}. La base
+$(f_1, f_2)$ nous ramène au cas de $\R^2$ précédent.
+
+Le travail précédent permet d'établir en particulier le fait que
+l'orthogonalité de deux vecteurs, au sens intuitif que vous avez
+<<\,\textit{l'angle entre les deux vecteur est égal à $\pi/2 [\pi]$}\,>>,
+correspond à l'annulation de leur produit scalaire. C'est cette
+définition, plus algébrique et n'impliquant pas de définir ce qu'est
+un angle, qui est utilisée en pratique.
+\begin{defn}
+  Deux vecteurs $x$, $y$ d'un espace euclidien
+  $(E, \langle \cdot, \cdot \rangle)$ sont dits \emph{orthogonaux} si
+  leur produit scalaire est nul.
+\end{defn}
+Cette notion d'orthogonalité de deux vecteurs va également permettre
+de décrire certains sous-espace d'un espace euclidien.
+\begin{defn}
+  Soit $(E, \langle \cdot, \cdot \rangle)$ un espace
+  euclidien. L'\emph{orthogonal} d'un sous-espace vectoriel $F$ de $E$
+  est le sous-espace vectoriel défini par
+  \[
+    F^\perp = \{x \in E \mid \forall y \in F, \langle x, y \rangle =
+    0\}.
+  \]
+\end{defn}
+Par abus on parlera d'orthogonal à un vecteur (ou une famille de
+vecteur) quand on sous-entend l'orthogonal au sous-espace vectoriel
+engendré. À noter que lorsque un vecteur est orthogonal à une famille
+de vecteurs, il est également orthogonal à toute combinaison linéaire
+d'éléments de celle-ci.
+
+On revient à la signification géométrique du produit scalaire. On est
+désormais en mesure de voir qu'étant donné un vecteur non nul
+$\nu \in \R^2$, le lieu des vecteurs $x$ sujets à la contrainte
+$\langle \nu, x \rangle = \nu^Tx \geq 0$ est celui des vecteurs $x$
+tels que $\measuredangle x\nu$ est aigu (ou orthogonal). C'est
+précisément le demi-espace de $\R^2$ délimité par $\{\nu\}^\perp$ et
+vers lequel pointe $\nu$. La contrainte $\nu^Tx \leq 0$ correspond de
+son côté au demi-espace délimité par $\{\nu\}^{\perp}$ et hors duquel
+pointe $\nu$. C'est l'ensemble des vecteurs $x$ qui décrivent un angle
+$\measuredangle x\nu$ obtus.
+\begin{question}
+  \label{q:exmpdetravail}
+  Décrire le lieu de $\R^2$ donné par la relation matricielle:
+  \[
+    \begin{pmatrix}
+      1 & 2 \\
+      -1 & 1 \\
+    \end{pmatrix}
+    \begin{matrix}
+      x \\ y
+    \end{matrix}
+    \leq
+    \begin{pmatrix}
+      0 \\ 0
+    \end{pmatrix}
+  \]
+\end{question}
+Dans $\R^n$ un demi-espace n'est plus délimité par une droite
+mais par un sous-espace vectoriel de dimension $n-1$, c'est ce qu'on
+appelle un \emph{hyperplan} de $\R^n$. Si $\nu$ est un vecteur
+non nul de $\R^n$, la condition de $\nu^Tx \geq 0$ décrit les
+vecteurs $x$ dans le demi-espace délimité par l'orthogonal de $\nu$ et
+vers lequel pointe $\nu$. Inverser l'inégalité revient à étudier le
+demi-espace hors duquel pointe $\nu$.
+\begin{question}
+  Représenter le lieu de $\R^3$ décrit par la reations
+  $x_1 + x_2 + x_3 \geq 0$.
+\end{question}
+
+\subsection{Dualité}
+
+Si $E$ est un espace vectoriel on note $E^\vee$ l'espace vectoriel
+$\mathcal{L}(E, \R)$ des formes linéaires sur $E$. C'est ce
+qu'on appelle l'espace \emph{dual} de $E$, il est de même dimension
+que $E$. Quand $E$ est euclidien, c'est-à-dire muni d'un produit
+scalaire $\langle \cdot\, , \cdot\rangle$ et de dimension finie, on a
+un isomorphisme d'espace vectoriel donné par l'application linéaire
+naturelle
+\[
+\begin{array}{rll}
+\Psi : E & \longrightarrow & E^\vee \\
+x & \longmapsto & \big[\Phi_x : y \longmapsto \langle x, y \rangle\big]
+\end{array}
+\]
+Pour s'en convaincre il suffit d'étudier le noyau de $\Psi$: si
+celui-ci est trivial $\Psi$ est injective et donc bijective car $E$ et
+$E^\vee$ ont même dimension, finie. Un vecteur $x$ est dans le noyau
+de $\Psi$ si
+\[
+\forall y \in \R^2, \quad \langle x, y\rangle = 0.
+\]
+En particulier, on doit avoir $\langle x, x\rangle = 0$ donc $x = 0$.
+
+Le résultat précédent signifie qu'étudier, par exemple, l'image d'une
+sous-partie $A$ de $\R^n$ par toutes les formes linéaires de
+son dual revient à regarder l'image de $A$ par les applications
+linéaires $\Phi_x = \langle x\, , \cdot\rangle$ pour $x$ qui varie
+dans $\R^n$. Cette seconde approche est plus explicite, elle
+est donc plus évidente à implémenter (avec toutes les précautions
+d'usage quant aux questions de discrétisation). Elle est également
+loin d'être dénuée d'intérêt applicatif, on pourrait par exemple
+s'intéresser à la trace que laisse un objet 3D par projections sur des
+droites vectorielles de $\R^3$.
+\section{Sous-espaces affines de $\R^n$}
+
+Afin de rendre compte des situations géométriques auxquelles on fera
+face, il va nous falloir élargir le panel des sous-ensembles de $\R^n$
+que nous sommes capables de manipuler. La première étape est d'être en
+mesure de travailler avec des translatés d'espaces vectoriels: les
+sous-espaces affines de $\R^n$. On se limitera a une approche
+utilitariste qui ne s'attarde pas sur la définition d'espace affine en
+général (on vous renvoie vers l'annexe pour plus de formalisme). De ce
+point de vue, de nombreux abus de terminologie seront fait.
+
+\subsection{Définition}
+
+\begin{defn}
+  Un sous-espace affine de $\R^n$ est un translaté de sous-espace
+  vectoriel de $\R^n$. Plus précisément, une partie $A$ de $\R^n$ est
+  un sous-espace affine de $\R^n$ s'il existe un point $x$ dans $\R^n$
+  et un sous-espace vectoriel $F$ de $\R^n$ tels que
+\[
+ A = x + F
+\]
+ou la notation $x + F$ désigne l'ensemble $\{x+y \mid y \in \R^n\}$.
+
+Quand cette écriture a lieu, l'espace vectoriel $F$ est unique, il est
+appelé la direction de $A$. Le point $x$ ne l'est cependant pas, voir
+pour un exemple (\ref{q:affinesecritures}).
+\end{defn}
+La dimension d'un sous-espace affine de $\R^n$ est la
+dimension de sa direction. En particulier, un hyperplan affine est le
+translaté d'un hyperplan vectoriel de $\R^n$. Dans la pratique
+on omet les adjectifs, le fait d'être vectoriel ou non est clair du
+contexte.
+
+\begin{exmp}
+  Tout sous-espace vectoriel de $\R^n$ est un sous-espace affine de
+  $\R^n$. En effet, on a toujours $F = 0 + F$.
+\end{exmp}
+\begin{exmp}
+  Tout singleton $\{x\}$ de $\R^n$ définit un sous-espace affine de
+  $\R^n$. Pour tout $x \in \R^n$ on peut toujours écrire
+  $\{x\} = x + \{0\}$.
+\end{exmp}
+\begin{exmp}
+  \label{exmp:espaceaffine}
+  La partie $A = \{(1,t) \in \R^2 \mid t \in \R\}$ est un sous-espace
+  affine de $\R^2$. On constate effectivement que
+  \[
+    A = (1, 0) + \{(0, t) \mid t \in \R\}
+  \]
+  le second terme étant évidemment un sous-espace vectoriel de
+  $\R^2$. On peut par exemple remarquer que c'est le noyau de la
+  projection $\pi_1 : \R^2 \rightarrow \R$ sur la première coordonnée
+  (ou encore l'espace vectoriel engendré par $(0, 1)$). Donc
+  \[
+    A = (1, 0) + \Ker(\pi_1)
+  \]
+\end{exmp}
+\begin{question}
+  \label{q:affinesecritures}
+  \begin{enumerate}
+  \item Donner une écriture différente de l'espace affine $A$ dans l'exemple
+    (\ref{exmp:espaceaffine}).
+  \item Décrire toutes les écritures possibles de l'espace affine $A$ ;
+    que pouvez vous en déduire en général?
+  \end{enumerate}
+\end{question}
+\begin{solution}
+  On peut également écrire $A$ sous la forme
+  \[
+    A = (1, 2) + \Ker(\pi_1).
+  \]
+  Toute écriture de $A$ prend la forme $x + \Ker(\pi_1)$ avec
+  $x - (1, 0) \in \Ker(\pi_1)$. Cela vient du fait général suivant:
+  écritures $x + F$ et $x'+ F$ sont égales si et seulement si $x - x'$
+  soit dans $F$. On voit bien que dans notre cas particulier
+  $(1, 2) - (1, 0) = (0, 2)$ est bien dans $\Ker(\pi_1)$.
+\end{solution}
+\begin{question}
+  Décrire les sous-espaces affines de $\R$, $\R^2$ et $\R^3$.
+\end{question}
+\begin{solution}
+  Dans $\R$ les sous-espaces affines sont les singletons et tout
+  $\R$. Dans $\R^2$ on a les singletons, les droites
+  affines et tout $\R^2$. Dans $\R^3$, on retrouve les
+  singletons, les droites et les plans affines et enfin tout
+  $\R^3$. La définition qu'on vient de donner rejoint donc les
+  notions que vous avez du manipuler plus jeunes.
+\end{solution}
+
+\subsection{Se donner un sous-espace affine de $\R^3$}
+
+Un sous-espace vectoriel de $\R^n$ est ou bien décrit par les
+équations que vérifient ses éléments ou alors explicitement à l'aide
+d'un certains nombres de paramètres. Dans le premier cas on dit que le
+sous-espace vectoriel est donné implicitement, dans le second qu'il
+est donné paramétriquement. Cela correspond à se donner un sous-espace
+vectoriel ou bien comme le noyau ou alors comme l'image d'une
+application linéaire. On peut encore dire qu'il est donné par
+contrainte ou par le biais d'une base par laquelle l'espace vectoriel
+est généré. La situation des sous-espaces affines est similaire.
+
+\subsubsection{Paramétriquement}
+
+Soit $P$ le sous-espace vectoriel de $\R^3$ donné parametriquement par
+\[
+P = \{(t, 3t+u, -u) \mid (t, u) \in \R^2\}
+\]
+C'est l'espace vectoriel engendré par la famille libre de $\R^3$,
+$\{(1, 3, 0), (0, 1, -1)\}$.  C'est encore l'image de $\R^2$ par
+l'application linéaire $(t, u) \mapsto (t, 3t+u, -u)$. Tout translaté
+de $P$ est un sous-espace affine de $\R^3$, par exemple
+\[
+A = (1, 2, -1) + P = \{(1+t, 3t+u+2, -u-1)\mid (t, u) \in \R^2\}
+\]
+est un sous-espace affine de $\R^3$ donné paramétriquement. On voit
+que la forme des coordonnées de $A$ est affine au sens que vous
+entendiez plus jeunes. Une application affine est une application
+linéaire une fois qu'on se débarrasse des constantes, plus
+formellement
+\begin{defn}
+  Une application $f : \R^n \rightarrow \R^p$ est
+  affine s'il existe $x_0 \in \R^p$ tel que
+  $x \mapsto f(x) - x_0$ soit linéaire.
+\end{defn}
+Dans notre cas $x_0 = (1, 2, -1)$. Afin d'éviter un détour qui nous
+écarterait de nos objectifs premiers nous garderons l'approche
+intuitive de la notion d'application affines: une applications dont
+l'expression des coordonnées est affines dans les variables de
+départ. Pour plus détail on vous renvoie à (\ref{}).
+\begin{question}
+  Écrire paramétriquement:
+  \begin{enumerate}
+  \item la droite de $\R^2$ de vecteur directeur $(1, -1)$ et passant
+    par $(2, 3)$ ;
+  \item le plan de $\R^3$ donné par l'équation $x_1 + x_2 + x_3 = 2$.
+  \end{enumerate}
+\end{question}
+
+\subsubsection{Implicitement}
+
+Un sous-espace vectoriel $F$ de $\R^n$ est donne implicitement
+s'il est décrit comme le noyau d'une application linéaire. Soit $M$
+une matrice de taille $(p, n)$ et de coefficients $(m_{i,j})$. Un
+vecteur $x \in \R^n$ est dans le noyau de l'application
+linéaire associée à $M$ si
+\[
+Mx = 0
+\]
+relation compacte pour designer le système linéaire
+\[
+\left\{\begin{array}{cccccccc}
+m_{1, 1} x_1 & + & \cdots & + & m_{1, n}x_n & = & 0 \\
+m_{2, 1} x_1 & + & \cdots & + & m_{2, n}x_n & = & 0 \\
+\vdots & & & & \vdots & \vdots & \vdots \\
+m_{p, 1}x_1 & + & \cdots & + & m_{p, n}x_n & = & 0.
+\end{array}\right.
+\]
+Un sous-espace affine de $\R^n$ est de manière similaire donné
+par un système linéaire avec un second membre non nul, qui prend la
+forme
+\[
+Mx = R \Longleftrightarrow \left\{\begin{array}{cccccccc}
+m_{1, 1} x_1 & + & \cdots & + & m_{1, n}x_n & = & r_1 \\
+m_{2, 1} x_1 & + & \cdots & + & m_{2, n}x_n & = & r_2 \\
+\vdots & & & & \vdots & \vdots & \vdots \\
+m_{p, 1}x_1 & + & \cdots & + & m_{p, n}x_n & = & r_3.
+\end{array}\right.
+\]
+où $R$ désigne un vecteur de $\R^n$. Pour s'en convaincre on
+se donne une solution particulière $x_0$ de $Mx = R$. L'équation
+précédente est donc équivalente a
+\[
+Mx = Mx_0 \Longleftrightarrow M(x-x_0) = 0.
+\]
+L'ensemble des solutions de $Mx = R$ est donc ou bien vide ou alors
+$x_0 + \Ker(M)$ pour une solution particul'nière $x_0$. Une fois donné
+une base de $\Ker(M)$ on obtient une écriture paramétrique de $F$.
+\begin{rem}
+  Dans la pratique, on n'a pas à trouver d'abord une solution
+  particulière de notre système afin d'en trouver toutes les
+  solutions. Le pivot de Gauss s'en charge, vous êtes invités à vous
+  rafraîchir la mémoire avec l'annexe (\ref{sec:pivotGauss}).
+\end{rem}
+\begin{question}
+  Dessiner le lieu de $\R^2$ décrit par les contraintes
+  \[
+    \begin{pmatrix}
+      -1 & 2 \\
+      1 & 1
+    \end{pmatrix}
+    \begin{pmatrix}
+      x \\ y
+    \end{pmatrix}
+    \leq
+    \begin{pmatrix}
+      -1 \\ 1
+    \end{pmatrix}.
+  \]
+  \begin{itemize}
+  \item Décrire chacun des composants du lieu géométrique précédent
+    paramétriquement.
+  \item Que change le fait de rajouter la contrainte $x - 3 y \leq 6$?
+  \item Quel lieu correspond à la situation où l'on change le sens de
+    toutes les inégalités?
+  \end{itemize}
+\end{question}
+\begin{question}
+  On désigne par $A$ la partie de $\R^2$ donnée par\footnote{Question
+    1-1 Exam 2019.}
+  \[
+    A = \left\{ (x, y) \in \R^2 \; \left| \; \begin{matrix} x + 2y & \leq 3 \\ x - y &
+          \geq 2 \end{matrix}\right.\right\}.
+  \]
+  \begin{enumerate}
+  \item
+    Représenter $A$ graphiquement en indiquant les éléments qui
+    permettent de décomposer votre représentation.
+  \item
+    Quel est le lieu qu'on obtient si on inverse les inégalités.
+  \item
+    Donner l'équation d'un demi-espace dont l'intersection avec $A$
+    est un lieu non-vide borné de $\R^2$.
+  \end{enumerate}
+\end{question}
+
+\subsection{Cas extrémaux}
+
+On a toujours le choix entre exprimer un sous-espace affine
+paramétriquement ou implicitement. Il est cependant plus simple
+d'exprimer une droite paramétriquement (on a besoin que d'un paramètre
+pour le faire) et un hyperplan implicitement (une seule équation y
+suffit).
+\begin{itemize}
+\item On pense une droite comme un point de départ auquel on ajoute
+  les multiples scalaires d'un vecteur. On peut par exemple écrire
+\[
+  D = \{(0,1) + \lambda(2, 3) \mid \lambda \in \R\}
+\]
+Dans la pratique on verra souvent une écriture équivalente où l'on
+pense une droite comme l'unique droite passant par deux points
+donnés, dans le cas de $D$ on peut écrire
+\[
+  D = \{(1-t)(0, 1) + t(2, 4) \mid t \in \R\}
+\]
+\item Un hyperplan affine $H$ est pour sa part donné par une équation
+  de la forme $\nu^Tx = r$. Si $x_0$ est une solution particulière de
+  l'équation précédente celle-ci est équivalente à
+\[
+  \nu^T(x - x_0) = 0
+\]
+Donc $H = x_0 + \{\nu\}^{\perp}$. C'est le translaté de l'orthogonal
+de $\nu$ par $x_0$.
+\end{itemize}
+\begin{question}
+  Retrouver une écriture implicite de la droite $D$
+  précédente. Comment s'y prendre pour transformer une écriture
+  paramétrique en une écriture implicite?\footnote{Vous êtes invités à
+    étudier plus en profondeur le passage représentation implicite
+    $\to$ représentation paramétriques et inversement}
+\end{question}
+\section{Sous-espaces de $\R^n$}
+
+On ne verra dans le cadre de ce cours qu'un contexte restreint de la
+géométrie des parties de $\R^n$. On se limite par exemple aux parties
+de $\R^n$ qu'on se donne à l'aide de fonctions de $\R^n$ vers $\R$. De
+plus, dans le cas des descriptions paramétriques on se limite aux
+graphes.
+
+\subsection{Se donner des parties de $\R^n$}
+
+Tout comme dans le cas des sous-espaces affines de $\R^n$, on peut se
+donner une partie de $\R^n$ de manière \emph{implicite} ou
+\emph{paramétrique}.
+
+Une partie de $\R^n$ est décrite \emph{implicitement} lorsqu'elle est
+donnée comme zéros de fonctions. Dans notre cadre, une telle partie
+$A$ est de la forme
+\[
+  A = \{ x \in \R^n \mid f(x) = 0\}
+\]
+où $f$ est une fonction $f : \R^n \to \R$. Notez que cette écriture
+regroupe les parties décrites par les équations de la forme
+$f(x) = \star$ pour une constante $\star \in \R$. Une telle partie est
+zéros de la fonction $g = f - \star$.
+\begin{defn}
+  Étant donné une fonction $f : \R^n \to \R$ on appelle \emph{courbe
+    de niveau $\bs{r}$} de $f$ la partie de $\R^n$ définie par
+  \[
+    \mc{C}_r = \{ x \in \R^n \mid f(x) = r\}.
+  \]
+\end{defn}
+Dans la suite on s'intéresse également au lieu de sous-niveau $r$
+d'une fonction $f : \R^n \to \R$ ; c'est la partie de $\R^n$
+\[
+  \mc{C}_{\leq r} = \{ x \in \R^n \mid f(x) \leq r \}.
+\]
+\begin{question}
+  Dessiner les courbes de niveaux $0$, $1$ et $2$ des fonctions
+  $f : \R^2 \to \R$ et $g : \R^2 \to \R$ données par les expressions
+  $f(x, y) = x^2 + y^2$ et $g(x, y) = x^2 + 4y^2$.
+\end{question}
+\begin{question}
+  Comment décrire la surface délimitée par les deux branches d'une
+  hyperbole?
+\end{question}
+
+On dira qu'une partie de $\R^{n+1}$ est décrite
+\emph{paramétriquement} si elle prend la forme du graphe d'une
+fonction
+\[
+  \Gamma(f) = \{ \big(t, f(t)\big) \mid t \in \R^n \}
+\]
+où $f : \R^n \to \R$. Une partie de $\R^{n+1}$ décrite
+paramétriquement au sens précédent s'écrit facilement sous forme
+implicite: c'est les zéros de la fonction
+\[
+  \begin{array}{rcl}
+    \R^n \times \R & \longrightarrow & \R \\
+    (x, y) & \longmapsto & f(x) - y
+  \end{array}
+\]
+L'inverse n'est cependant pas vrai en général.
+\begin{question}
+  Trouver un exemple d'une partie de $\R^2$ qu'on peut décrire
+  implicitement mais pas paramétriquement. Que faudrait-il modifier
+  pour qu'il soit possible de parler d'écriture paramétrique dans
+  votre exemple?
+\end{question}
+\begin{rem}
+  Même avec une notion plus fine d'écriture paramétrique le passage
+  implicite - paramétrique n'est pas toujours possible. Je vous invite
+  à vous intérsser au théorème des fonctions implicites pour plus de
+  détails.
+\end{rem}
+Les graphes de fonctions apparaissent régulièrement dans la suite ;
+parmi les parties définies à partir de ceux-ci on retrouve l'épigraphe
+d'une fonction $f : \R^n \to \R$
+\[
+  \mathrm{epi\,}(f) = \{ (x, t) \mid t \geq f(x) \}.
+\]
+\begin{question}
+  Représenter l'épigraphe de la fonction $\sin$ sur
+  $[0, \frac{\pi}{2}]$ puis sur $[\frac{\pi}{2}, \pi]$.
+\end{question}
+\begin{question}
+  \label{q:partieB}
+  Représenter graphiquement l'intersection de l'épigraphe de la
+  fonction $x \mapsto -\sqrt{x}$ sur $\R_+$ et de la partie
+  \[
+    \left\{(x, y) \mid y \leq \sqrt{x}\right\}.
+  \]
+\end{question}
+\begin{question}
+  \label{q:courbeniveau}
+  On considère les fonctions suivantes notées $f$, $g$ et $h$
+  respectivement données par les expressions
+  \[
+    f(x, y) = x + 4y, \quad g(x, y) = xy, \quad h(x, y) = \frac{x^2}{2} + \frac{y^2}{4}.
+  \]
+  Représenter les courbes de niveaux $\mc{C}_1(f)$, $\mc{C}_2(g)$ et
+  $\mc{C}_{4}(h)$.
+\end{question}
+
+\subsection{Convexité dans $\R^n$}
+
+Les techniques d'optimisation se déroulent au mieux dans des contextes
+convexes. C'est une notion qu'il est important de garder en mémoire ;
+des comportements pathologiques voient le jour hors de ce cadre.
+
+\subsubsection{Parties convexes de $\R^n$}
+\label{sec:partiesconvexes}
+
+\begin{defn}
+  Une partie $A \subset \R^n$ est dite \emph{convexe} si l'on peut
+  relier $2$ points quelconques de $A$ par un segment intégralement
+  inclus dans $A$. Plus formellement : $A$ est convexe si
+  \[
+    \forall x, y \in A, \forall t \in [0, 1] \qquad (1-t)x + ty \in A.
+  \]
+\end{defn}
+\begin{exmp}
+  Tout intervalle de $\R$ est convexe.
+\end{exmp}
+\begin{exmp}
+  Les sous-espaces affines de $\R^n$ sont convexes, il en va de même des
+  demi-espaces de $\R^n$.
+\end{exmp}
+Dans la pratique reconnaître des parties convexes de $\R^n$ revient à
+les construire à partir de parties convexes à l'aide d'opérations
+préservant la convexité.
+\begin{itemize}
+\item L'intersection de parties convexes est convexe; le lieu
+  admissible d'un programme linéaire est donc convexe.
+\item L'image d'une partie convexe par une fonction affine est
+  convexe; les changements de variables affines dans les contraintes
+  d'un porgramme linéaire ne changent donc pas le caractère convexe de
+  celui-ci.
+\end{itemize}
+\begin{question}
+  Donner deux arguments qui permettent de justifier le fait que la
+  partie décrite question (\ref{q:partieB}) est convexe.
+\end{question}
+\begin{question}
+  Est-ce que l'union de parties convexes est convexe?
+\end{question}
+\begin{question}
+  Qu'est-ce que l'enveloppe convexe d'une partie de $\R^n$?
+\end{question}
+Les parties convexes de $\R^n$ jouissent de propriétés géométriques
+qui permettent de les isoler (séparer), lorsqu'elles ne s'intersectent
+pas\footnote{Il faut un peu plus de rigueur, mais l'idée est là
+  ...}. Ces problématiques sont en dehors de la portée de ce cours,
+elles nous donnent cependant une information géométrique utile pour
+généraliser l'étude des programmes linéaires au cas (convexe)
+non-linéaire.
+\begin{defn}
+  Un point $x$ d'une partie $A \subset \R^n$ est \emph{point du bord}
+  de $A$ si pour tout disque $D$ centré en $x$ et de rayon non nul
+  $D \cap A \neq \emptyset$.
+
+  L'ensemble des point du bord d'une partir $A$ est appelée
+  \emph{bord} de $A$, elle est notée $\partial A$. L'union
+  $\overline{A} = A \cup \partial A$ est appelée \emph{adhérence} de
+  $A$.
+\end{defn}
+\begin{question}
+  Dessiner la définition précédente.
+\end{question}
+\begin{defn}
+  Soit $A$ une partie de $\R^n$ et $x \in A$. Un \emph{hyperplan
+    d'appui} à $A$ en $x$ est un hyperplan $H$
+  \begin{itemize}
+  \item passant par $x$
+  \item defini par un vecteur normal $\nu$ tel que
+    $\forall y \in A, \langle y-x, \nu \rangle \leq 0$.
+  \end{itemize}
+\end{defn}
+Un hyperplan d'appui à $A$ cantonne donc la partie $A$ à l'un des
+demi-espaces qu'il definit.
+\begin{question}
+  Dessiner un exemple de partie
+  \begin{itemize}
+  \item n'ayant pas d'hyperplan d'appui en un point donné de son bord ;
+  \item n'ayant aucun hyperplan d'appui ;
+  \item ayant plus d'un hyperplan d'appui en un même point.
+  \end{itemize}
+\end{question}
+\begin{prop}
+  Une partie convexe de $\R^n$ admet un hyperlan d'appui en tout point
+  de son bord\footnote{Celui-ci pouvant être vide.}.
+\end{prop}
+Cette propriété est une conséquence du théorème de séparations des
+convexes fermés par des hyperplans.
+\begin{question}
+  On reprend les notations de la question (\ref{q:courbeniveau})
+  \begin{enumerate}
+  \item Donner un hyperplan d'appui à $\mc{C}_{\leq 4}(h)$.
+  \item Justifier le fait que $\mc{C}_{\leq 2}(g)$ n'a pas d'hyperplan
+    d'appui.
+  \end{enumerate}
+\end{question}
+
+\subsubsection{Fonctions convexes}
+\label{sec:fonctionsconvexe}
+
+\begin{defn}
+  Une fonction $f : \R^n \to \R$ est \emph{convexe} si
+  \begin{itemize}
+  \item son domaine de définition est une partie convexe de $\R^n$ ;
+  \item $\forall x$, $y$ dans le domaine de définition de $f$,
+    \[
+      \forall t \in [0, 1], f(ty + (1-t)x) \leq tf(y) + (1-t)f(x).
+    \]
+  \end{itemize}
+\end{defn}
+\begin{question}
+  Dessiner la définition précédente et en donner une interprétation
+  géométrique.
+\end{question}
+\begin{defn}
+  Une fonction $f$ est dite \emph{concave} si son opposé $-f$ est
+  convexe.
+\end{defn}
+\begin{question}
+  Donner des exemples de fonctions convexes.
+\end{question}
+\begin{question}
+  Prouver, en n'utilisant que la définition, que la fonction
+  $x \mapsto x^2$ définie sur $\R$ est convexe.
+\end{question}
+\begin{question}
+  Justifier le fait
+  \begin{enumerate}
+  \item que la somme pondérée, de poids positifs de fonctions convexes est convexe ;
+  \item qu'une fonctoin sous-linéaire est convexe? en donner des exemples ;
+  \item que le $\max$ de fonctions convexes est convexe ;
+  \item que la composition d'une fonction affine avec une fonction
+    convexe est convexe.
+  \end{enumerate}
+\end{question}
+\begin{question}
+  Généraliser l'étude du $\max$ au contexte qui suit: soit
+  $g : \R^n \times \R^p \times \R$ une fonction qui pour tout
+  $x \in A \subset \R^n$ a une fonction partielle $y \mapsto g(x, y)$
+  qui est convexe, montrer que $f(y) = \sup_{x \in A} g(x, y)$ est
+  également convexe.
+\end{question}
+\begin{question}
+  Montrer que les sous-niveaux d'une fonction convexe sont
+  convexes. La réciproque est-elle vraie?
+\end{question}
+
+
+\section{Programmes linéaires dans le plan}
+\label{sec:proglinplan}
+
+Un programme linéaire est un problème d'optimisation qui prend la
+forme
+\[
+\begin{PbOptim}{
+    $\min$
+  }{
+    $f_0(x)$
+  }{
+    $f_i(x) \leq 0$, $1 \leq i \leq p$.
+  }
+\end{PbOptim}
+\]
+où la fonction objectif $f_0$ ainsi que les $f_i$ sont à valeurs
+réelles et de domaine $\R^n$. Les programmes linéaires forment la plus
+simple famille de problèmes d'optimisation contraints. Ils modélisent
+cela dit la majeure partie des problèmes de recherche opérationnelle
+classiques, ils permettent de résoudre les problèmes de plus courts
+chemins dans un graphes, de flots maximaux ou encore de problèmes de
+transports. Leur aspect unificateurs permet d'évaluer la difficulté de
+résoudre ces problèmes les uns par rapport aux autres.
+
+Le travail effectué jusqu'à présent pose déjà le cadre pour résoudre
+autrement que par l'algorithme du simplexe ces types de problèmes. On
+se limite au cas de la dimension $2$ afin de représenter les objets
+qu'on manipule.
+
+\begin{question}
+  On revient sur les lieux géométriques décrits question
+  (\ref{q:exmpdetravail}). On note $\mc{A}_u$ le lieu décrit par les
+  contraintes
+  \[
+    \mc{A}_u : \begin{matrix}
+      -x + 2 y & \leq & -1 \\
+      x + y & \leq & 1
+    \end{matrix}
+  \]
+  et $\mc{A}_b$ celui décrit par les contraintes précédentes
+  auxquelles on ajoute
+  \[
+    x - 3y \leq 6.
+  \]
+  \begin{enumerate}
+  \item Étudier le programme linéaire de lieu admissible $\mc{A}_u$ et
+    mininisant $y$. Que se passe-t-il si l'on remplace $y$ par $-y$?
+  \item A-t-on toujours une valeur minimal pour un programme linéaire
+    ayant pour lieu admissible $\mc{A}_b$?
+  \item Étudier le prgramme linéaire de lieu admissible $\mc{A}_b$ et
+    minimisant $x + y$. Effectuer cette même étude pour la fonction
+    objectif $-x-y$.
+  \item Décrire une procédure géométrique qui permet de résoudre par
+    acoups les programmes linéaires en dimension $2$.
+  \end{enumerate}
+\end{question}
+
+\begin{question}
+  Donner un exemple d'un programme linéaire:
+  \begin{enumerate}
+  \item non borné ;
+  \item de lieu admissible non-borné mais de solution fini ;
+  \item ayant une infinité de solution ;
+  \item ayant une unique solution.
+  \end{enumerate}
+\end{question}
+
+\begin{question}
+  On considère le programme linéaire (\emph{P1}) suivant :
+  \begin{displaymath}
+    \begin{linearProg} {
+        minimiser
+      }{
+        $f_0(x_1, x_2) = 3x_1 + 2x_2$
+      }{
+        \systeme{
+          x_1 - x_2 \leq 0,
+          4x_1 - x_2 \leq 1,
+          -x_1 - x_2 \leq -5
+        }
+      }
+    \end{linearProg}
+  \end{displaymath}
+  \begin{enumerate}
+  \item Représenter le lieu admissible de (\emph{P1}) dans le plan
+    euclidien.
+  \item
+    \begin{enumerate}
+    \item[a.]  Tracer la courbe de niveau $6$ de la fonction objectif
+      de (\emph{P1}). Elle sera notée $C_6$.
+    \item[b.]  Indiquer les demi-espaces positif et négatif défini par
+      $C_6$. Dans quelle direction doit-on translater $C_6$ afin de
+      minimiser $f_0$.
+    \end{enumerate}
+  \item
+    Tracer la courbe de niveau qui réalise le minimum de (\emph{P1})
+    et calculer l'unique point optimal de (\emph{P1}). Quelle est la
+    valeur optimale de (\emph{P1})?
+  \item Résumer votre démarche en rappelant la condition d'optimalité
+    d'une solution de (\emph{P1}).
+  \end{enumerate}
+\end{question}
+
+\begin{question}
+  On considère le programme linéaire (\emph{P2}) donné par
+  \[
+    \begin{linearProg} {
+        minimiser
+      }{
+        $f_0(x_1, x_2) = x_1 + 2x_2$
+      }{
+        \systeme{
+          x_2 \leq 1,
+          x_1 \leq 1,
+          -x_2 \leq 1,
+          -x_1 \leq 1
+        }
+      }
+    \end{linearProg}
+  \]
+  Résoudre (\emph{P2}) en suivant la démarche précédente.
+\end{question}
+
+\begin{question}
+  On considère le programme linéaire (\emph{P3}) suivant :
+  \[
+    \begin{linearProg} {
+        minimiser
+      }{
+        $x + 2y$
+      }{
+        \systeme{
+          x + y \leq 1,
+          -x + 2y \leq 2,
+          x - 3y \leq 3
+        }
+      }
+    \end{linearProg}
+  \]
+  \begin{enumerate}
+  \item Représenter le lieu admissible de (\emph{P3}) dans $\R^2$.
+  \item
+    \begin{enumerate}
+    \item[a.]  Tracer la courbe de niveau $0$ de la fonction objectif
+      de (\emph{P3}). Elle sera notée $\mc{C}_0$.
+    \item[b.]  Indiquer les demi-espaces positif et négatif définis
+      par $\mc{C}_0$.
+    \item[c.]  Indiquer dans quelle direction on doit translater
+      $\mc{C}_0$ afin de minimiser la fonction objectif.
+    \end{enumerate}
+  \item Tracer la courbe de niveau qui réalise le minimum de
+    (\emph{PL3}) et calculer l'unique point optimal de
+    (\emph{P3}). Quelle est la valeur optimale de (\emph{P3})?
+  \end{enumerate}
+\end{question}
+
+La démarche qui a été introduite précédemment permet de résoudre une
+famille un peu plus large de problèmes d'optimisation dans $\R^2$.
+
+\begin{question}
+On considère la fonction différentiable $f : \R^2 \to \R$ donnée par
+\[
+f(x, y) = 3x^2 + y^2.
+\]
+\begin{enumerate}
+\item Représenter les courbes de niveaux $2$ et $4$ de $f$ dans le
+  plan euclidien.
+\item À quel lieu correspond la condition $f(x, y) \leq 4$ ?
+\item On s'intéresse au problème d'optimisation (\emph{P4})
+  \[
+  \begin{PbOptim}{
+      minimiser
+    }{
+      $2x + y$
+    }{
+      $3x^2 + y^2 \leq 4$
+    }
+  \end{PbOptim}
+  \]
+  Représenter la courbe de niveau de la fonction objectif qui
+  correspond à la valeur optimale de (\emph{P4}).
+\item Comment trouver le point optimale correspondant à (\emph{P4})?
+  Faire le calcul.
+\end{enumerate}
+\end{question}
+
+\begin{question}
+  On considère le problème d'optimisation (\emph{P5}) suivant
+  \[
+    \begin{PbOptim}{
+        minimiser
+      }{
+        $x + y$
+      }{
+        $\begin{matrix}
+          x+2y \leq 3 \\
+          x \in B
+        \end{matrix}$
+      }
+    \end{PbOptim}
+  \]
+  où $B$ est la partie de $\R^2$ qu'on a décrit section
+  (\ref{q:partieB}).
+  \begin{enumerate}
+  \item Dessiner le lieu admissible du problème de (\emph{P5}).
+  \item Représenter la courbe de niveau de la fonction objective qui
+    réalise le minimum de (\emph{P5}).
+  \item Calculer le point optimal ainsi que la valeur optimale de
+    (\emph{P5}).
+  \end{enumerate}
+\end{question}
+
+La résolution de problèmes d'optimisation à la main comme on vient de
+le faire se heurte à deux obstacles:
+\begin{itemize}
+\item les dimensions des espaces concernés, qui représentent souvents
+  des \textit{features} d'un dataset, dépassent de loin les dimensions
+  représentables graphiquement ;
+\item les fonctions concernées, que cela soit au niveau des
+  contraintes ou des fonctions objectifs ne sont pas souvent
+  linéaires.
+\end{itemize}
+Cela étant dit la démarche qu'on vient de mettre en évidence ici est
+le point de départ de l'essentiel des démarches itératives pour
+résoudre les problèmes d'optimisation. Pour être en mesure d'aborder
+cette généralisation il nous faudra, pour commencer, étudier les
+conditions sous lesquelles on est en mesure d'approcher localement et
+par des fonctions affines les courbes de niveau d'une fonction
+objectif. Cette étude recoupe le besoin de généraliser les notions de
+dérivabilité et dérivée d'une fonction numérique de domaine réel au
+cas multivarié.
+
+\appendix
+
+\section{Pivot de Gauss}
+\label{sec:pivotGauss}
+
+On se donne une matrice $M \in \mc{M}_{m, n}(\R)$. Une opération
+élémentaire sur $M$ est une des deux opérations suivantes:
+\begin{itemize}
+\item
+  pour $i \in \{1, \ldots, m\}$ et $j \in \{1, \ldots, n\}$
+  interchanger les lignes $L_i$ et $L_j$
+  \[
+  L_i \leftrightarrow L_j
+  \]
+\item
+  pour $i \in \{1, \ldots, m\}$, $j \in \{1, \ldots, n\}$, $i \neq j$,
+  $\lambda_i \in \R^*$ et $\lambda_i \in \R$, remplacer la ligne $L_i$
+  par $\lambda_i L_i + \lambda_jL_j$ :
+  \[
+  L_i \leftarrow \lambda_iL_i + \lambda_jL_j.
+  \]
+\end{itemize}
+Le pivot de Gauss est un algorithme de transformation d'une matrice
+$M$ en matrice triangulaire supérieure et éventuellement en matrice
+identité, dans le but d'inverser une matrice, de calculer un
+déterminant ou de résoudre un système linéaire. Il est d'utilisation
+constante en calcul numérique.\footnote{L'expression de l'inverse
+  d'une matrice inversible à l'aide des cofacteurs est à prohiber!
+  Elle est théoriquement intéressante et particulièrement esthétique
+  mais numériquement inéfficace.}
+
+\subsection{Opérations élémentaires}
+\label{subsec:opElementaires}
+
+On traduit par la suite les opérations élémentaires précédentes à
+l'aide du produit matriciel.
+\begin{question}
+  Trouver des matrices $P(i, j)$ et $U(i, j, \lambda, \nu)$ dont la
+  multiplications avec $M$ réalise les opérations élémentaires
+  précédentes.
+\end{question}
+
+\begin{question}
+  Trouver les matrices $P_t(i, j)$ et $U_t(i, j, \lambda, \nu)$ qui
+  réalisent les opérations précédentes sur les colonnes.
+\end{question}
+
+\subsection{Systèmes linéaires}
+
+\begin{question}
+  Déduire de la section \ref{subsec:opElementaires} que les opérations
+  élémentaires du pivot de Gausse transforment tout système linéaire
+  dont $M$ est une matrice (si appliqué des deux côtés de l'égalité)
+  en un système linéaire ayant les mêmes solutions.
+\end{question}
+
+\begin{question}
+  Comment procéder pour décrire toute les solutions d'un système
+  linéaire?
+\end{question}
+
+\begin{question}
+  Discuter de l'efficacité de l'implémentation de l'algorithme
+\end{question}
+
+\subsection{Déterminant}
+
+\begin{question}
+  Retrouver les relations standards sur le déterminant d'une matrice
+  qui subit une opération élémentaire à l'aide de la formule
+  \[
+  \det(AB) = \det(A)\det(B).
+  \]
+\end{question}
+
+\begin{question}
+  Comment procéder pour calculer le déterminant d'une matrice à l'aide
+  du pivot de Gauss?
+\end{question}
+
+\subsection{Matrices équivalentes}
+
+\noindent Deux matrices $A$ et $B$ sont dites équivalentes s'il
+existe deux matrices inversibles $P$ et $Q$ telle que
+\[
+A = PBQ.
+\]
+\begin{question}
+  Justifier le fait que toute matrice est équivalente à une matrice
+  ayant un bloc identité et des zéros partout ailleurs.
+\end{question}
+
+
+\section{Géométrie affine}
+
+Cette feuille est centrée autour des applications affines de $\R^n$,
+plus particulièrement autours des projections et transformations de
+l'espace affine euclidien. L'objectif est de vous apporter les
+éléments de langage et les résultats de structure qui vous permettent
+de les expliciter et les utiliser dans les contextes de ML. Pour
+rappel la majeure partie des algorithmes de ML sont de nature
+géométrique.
+
+\subsection{Applications affines}
+\label{sec:defnappaffine}
+
+Cette section est un kit de survie en milieu hostile. Il s'agit de
+s'armer des différentes notions de transformations et applications
+affines dont vous aurez l'usage lors de vos cours de ML. Notre
+démarche dans la suite est particulièrement pragmatique\footnote{Elle
+  pourrait heurter certaines âmes sensibles et quelques matheux qui ont
+  gardés un peu de sens esthétique.}; on se limite au cas des
+applications affines de $\R^n$ dans $\R^m$.
+\begin{defn}
+  Une application $f : \R^n \to \R^m$ est dite affine s'il existe un
+  point $\bs{a} \in \R^m$ tel que $f - \bs{a}$ soit une application
+  linéaire.
+\end{defn}
+\noindent Cette définition formelle nécessite une réalisation plus concrète afin
+qu'on puisse l'utiliser. Pour cela on va introduire une généralisation
+de la notion de bases dans le cas de $\R^n$ qui nous permettra de se
+placer en un point quelconque pour y travailler.
+\begin{defn}
+  Un repère de l'espace affine $\R^n$ est la donnée d'un point
+  $\bs{o}$ appelé origine du repère et d'une base
+  $\bs{v} = (v_1, \ldots, v_n)$ de $\R^n$. On note
+  $(\bs{o}, \bs{v})$ une telle donnée.
+\end{defn}
+\noindent Le repère canonique de $\R^n$ est le repère
+$(\underline{0}, e_1, \ldots, e_n)$, que vous aviez eu l'habitude de
+manipuler dans le secondaire et en physique. Du moins dans les cas de
+dimensions $1$ ou $2$.
+\begin{defn}
+  Soient $(\bs{o}, \bs{v})$ et $(\bs{l}, \bs{w})$ deux repères
+  respetivement de $\R^n$ et $\R^m$. L'écriture de $f$ dans les
+  repères $(\bs{o}, \bs{v})$ et $(\bs{l}, \bs{w})$ est la donnée d'une
+  matrice $M$ telle que pour tout $x \in \R^n$,
+  \begin{equation}
+    \label{defn:affine}
+    f(x) = M(x - \bs{o})_{\bs{v}} + f(\bs{o}).
+  \end{equation}
+  où $\bullet_{\bs{v}}$ désigne l'écriture du vecteur $\bullet$ dans
+  la base $\bs{v}$. Le membre de droite de l'équation
+  \ref{defn:affine} est sous-entendu être décrit dans le repère
+  $(\bs{l}, \bs{w})$. Cette équation est parfois appelée équation de
+  $f$ dans les repères $(\bs{o}, \bs{v})$ et $(\bs{l}, \bs{w})$.
+\end{defn}
+\begin{exmp}
+  Une application affine peut être donné par une experssion dans le
+  repère canonique
+  \[
+  x \mapsto Mx + b
+  \]
+  où $x$ et $b$ sont des vecteurs respectivement dans $\R^n$ et $\R^m$
+  et $M \in \mc{M}_{m, n}(\R)$. Par exemple
+  \[
+  \begin{pmatrix} x \\ y \end{pmatrix} \mapsto \begin{pmatrix} 1 & 1
+    \\ 2 & -1 \end{pmatrix}\begin{pmatrix} x \\ y \end{pmatrix}
+  + \begin{pmatrix} 3 \\ -2 \end{pmatrix}
+  \]
+  Ce qui nous donne une fonction de $\R^2$ dans $\R^2$ affine en $x$
+  et $y$ au sens qu'on entend intuitivement.
+\end{exmp}
+Dans le but de trouver des expressions agréables ou standardisées
+d'une application affine on est amené à écrire ces applications
+affines dans des repères adaptés. Pour pouvoir exprimer un tel
+contexte il nous faut être en mesure de formaliser la notion
+de changement de repères.
+\begin{defn}
+  Le changement de repères de $\R^n$ de $(\bs{o}, \bs{v})$ vers
+  $(\bs{l}, \bs{w})$ est l'application affine donnée dans les repères
+  précédents par
+  \[
+  x \longmapsto P_{\bs{v}}^{\bs{w}}(x - \bs{o})_{\bs{v}} + \bs{l}
+  \]
+  où $P_{\bs{v}}^{\bs{w}}$ est la matrice de passage de la base
+  $\bs{v}$ vers la base $\bs{w}$ ; c'est-à-dire la matrice des
+  vecteurs de $\bs{v}$ écrits dans la base $\bs{w}$.
+\end{defn}
+\noindent Voici enfin comment formaliser le passage de l'écriture
+d'une application dans un repère vers un autre.
+\begin{prop}
+  Soient $(\bs{o}, \bs{v})$ et $(\bs{o'}, \bs{v'})$ deux bases de
+  $\R^n$, $(\bs{l}, \bs{w})$ et $(\bs{l'}, \bs{w'})$ deux bases de
+  $\R^m$. On note $M$ la matrice d'une application affine $f$ dans les
+  repères $(\bs{o}, \bs{v})$ et $(\bs{l}, \bs{w})$, et $M'$ celle de
+  $f$ dans les repères $(\bs{o'}, \bs{v'})$ et $(\bs{l'}, \bs{w'})$.
+  Si $P_{\bs{v'}}^{\bs{v}}$ désigne la matrice de passage de $\bs{v}$
+  vers $\bs{v'}$ et $P_{\bs{w'}}^{\bs{w}}$ la matrice correspondante
+  dans le cas de $\bs{w}$ et $\bs{w'}$ alors pour tout $x \in \R^n$
+  \[
+  M'(x - \bs{o'})_{\bs{v'}} + f(\bs{o'}) = f(x) =
+  P_{\bs{w'}}^{\bs{w}}M\left(P_{\bs{v'}}^{\bs{v}}\right)^{-1}(x -
+  \bs{o})_{\bs{v}} + f(\bs{o})
+  \]
+\end{prop}
+\begin{question}
+  Écrire la fonction du premier exemple dans le repère de $\R^2$ donné
+  au départ et à l'arrivée par
+  $\big((0, 0), \{(1, 1), (1, -1)\}\big)$.
+\end{question}
+\begin{rem}
+  Dans les faits, on ne fera pas souvent ce type de changement de
+  repères. À partir des propriétés des applications à l'étude on sera
+  à même de trouver un bon repère dans lesquels les décrire. Il reste
+  que de tels changements de repères doivent être compris et faits
+  quand nécessaire.
+\end{rem}
+\begin{exmp}
+  Les applications affines constantes sont celles dont l'expression
+  dans tous les repères a une matrice qui est nulle.
+\end{exmp}
+\begin{exmp}
+  Avec la définition qu'on a donné toute application linéaire va
+  décrire une application affine.
+\end{exmp}
+
+\subsubsection{Translations et homothéties}
+
+On s'attarde un instant sur les plus simples des applications affines
+non triviales.
+\begin{exmp}
+  La translation de vecteur $b$ est l'application affine donnée dans
+  le repère canonique de $\R^n$ par $x \mapsto x + b$.
+\end{exmp}
+\begin{exmp}
+  L'\emph{homothétie} de rapport $\lambda$ et centre $\bs{o}$ est
+  l'application affine de $\R^n$ dans lui-même dont l'écriture dans le
+  repère $(\bs{o}, \bs{v})$ prend la forme
+  \[
+  x \mapsto \lambda (x - \bs{o})_{\bs{v}} + \bs{o}
+  \]
+  L'homothétie de rapport $1$ est simplement l'identité.
+\end{exmp}
+\begin{question}
+  Donner une particularité que partagent les homothéties et les
+  translations.
+\end{question}
+\begin{question}
+  Que donne la composition de deux translations? Celle de deux
+  homothéties?
+\end{question}
+\begin{question}
+  Dessiner l'image du carré de sommets $(\pm 1, \pm 1)$
+  dans $\R^2$ par les homothéties suivantes:
+  \begin{itemize}
+  \item
+    de rapport $2$ et de centre l'origine
+  \item
+    de rapport $2$ et de centre $(1, 0)$.
+  \end{itemize}
+\end{question}
+
+\subsubsection{Projections affines}
+
+Les projections affines sont la généralisation des projections
+linéaires. Pour rappel une projection $p : E \rightarrow E$ de
+l'espace vectoriel $E$ sur lui même est un application linéaire qui
+satisfait la relation $p^2 = p$. Cette relation garanti le fait que
+$G = \Ker(p)$ et $F = \Ker(p-\id)$ sont des espaces vectoriels
+supplémentaires dans $E$. Ainsi, pour tout $x = x_F + x_G$, la
+projection $p$ est définie par $p(x) = x_F$. L'application $p$ est
+appelée projection sur $F$ parallèlement à $G$.
+\begin{defn}
+  Une application affine $f$ de $\R^n$ dans $\R^n$ est une projection
+  affine si sa matrice dans un repère est la matrice d'une projection
+  linéaire.
+\end{defn}
+\noindent Une projection affine, dans un repère $(\bs{o}, \bs{v})$ de
+$\R^n$, s'écrit donc sous la forme
+\[
+x \mapsto M(x - \bs{o})_{\bs{v}} + \bs{o}
+\]
+On voit dans cette écriture que $\bs{o}$ est fixé par la
+projection. On vient d'écrire la projection de $\bs{o} + \Ker(M-I_n)$
+parallèlement à $\bs{o} + \Ker(M)$.
+\begin{question}
+  Étudier des exemples de projections affines dans $\R^2$. Dessiner
+  systématiquement les droites affines qui caractérisent cette
+  projection.
+\end{question}
+
+\subsection{Transformations orthogonales}
+
+\subsubsection{Aparté sur l'orthogonalité}
+
+On se donne un produit scalaire $\langle \cdot, \cdot \rangle$ sur
+$\R^n$\footnote{Pensez au produit scalaire usuel si \c{c}a vous
+  facilite la vie.}. On rappelle que c'est une forme bilinéaire
+symétrique définie positive. Elle vient avec une norme associée dite
+norme euclidienne définie par
+\[
+\|x\| = \sqrt{<x, x>}.
+\]
+\begin{defn}
+  Deux vecteurs $x$, $y$ in $\R^n$ sont dit orthogonaux pour
+  $\langle \cdot, \cdot \rangle$ si $\langle x, y \rangle = 0$.
+\end{defn}
+\noindent Nous avons vu que cette notion correspond dans le cas du
+produit scalaire usuel au fait que l'angle entre $x$ et $y$ est
+$\pi/2$ $[\pi]$.
+\begin{defn}
+  Une base $\bs{v}$ est dite \emph{orthognale} si les vecteurs qui la
+  constituent sont orthogonaux deux à deux. Elle est
+  \emph{orthonormale} si ses vecteurs sont de norme $1$.
+\end{defn}
+\noindent L'exemple le plus simple d'une base orthonormée est celui de
+la base canonique de $\R^n$ pour le produit scalaire usuel.
+\begin{question}
+  Donner d'autres bases orthonormales de $\R^3$.
+\end{question}
+\begin{question}
+  Comment construire une base orthonormée de $\R^3$ à partir de la
+  base
+  \[
+  \{(1, 0, 1), (0, 1, 1), (1, 1, 0)\}?
+  \]
+\end{question}
+\begin{defn}
+  Étant donné une partie $K$ de $\R^n$ on appelle orthogonal de $K$
+  pour $\langle \cdot, \cdot \rangle$ le sous-espace vectoriel
+  \[
+  K^\perp = \{ x \in \R^n \mid \forall y \in K, \; \langle x, y \rangle = 0 \}.
+  \]
+\end{defn}
+\noindent Ainsi un hyperplan $H$ de $\R^n$ quand il est donné implicitement est
+décrit comme l'orthogonal d'un vecteur de $\R^n$ qu'on appelle un
+vecteur \emph{normal}.
+\begin{question}
+  Décrire dans $\R^3$ l'orthogonal à la partie $\{(1, 1, 1), (1, 0, 1)\}$.
+\end{question}
+
+\subsubsection{Transformations vectorielles}
+
+La notion de produit scalaire permet à la fois de formaliser la notion
+d'angle ainsi que celle de distance\footnote{On étudiera plus en
+  détail la seconde question un peu plus tard.}. Les transformations
+affines de $\R^n$, c'est-à-dire les applications affines bijectives,
+qui présèrvent les angles et les distances sont d'un grand intérêt
+géométrique; elles ne touchent pas aux dispositions relatives de
+configurations de parties dans $\R^n$ et donc présèrvent les
+propriétés géométriques de celles-ci. Elles présèrvent par exemple la
+perpendicularité ou le parallélisme. Pour l'instant on se limite au
+cas vectoriel avant d'exposer la situation affine, plus générale.
+
+Avant de poursuivre notre travail on prend un instant pour étudier de
+plus prêt une écriture matricielle de $\langle \cdot, \cdot \rangle$.
+Étant donné une base $\bs{v}$ de $\R^n$, on appelle matrice de
+$\langle \cdot, \cdot \rangle$ dans la base $\bs{v}$ la matrice
+\[
+\bs{A} = \big(\langle v_i, v_j \rangle\big)_{i, j}.
+\]
+\begin{question}
+  Montrer que, dans la base $v$, on a pour tout $x$, $y \in \R^n$,
+  $\langle x, y \rangle = x^TAy$.
+\end{question}
+Si $\bs{v}$ est une base orthonormale dans ce cas $A = I$ et on a,
+pour tout $x$, $ y \in \R^n$ écrits dans cette base
+\[
+\langle x, y \rangle = x^Ty.
+\]
+Ce qui nous ramène à l'écriture usuelle du produit scalaire.
+\begin{hyp}
+  Quitte à se ramener à une base orthonormée
+  appropriée\footnote{\c{C}a existe toujours. Voir algorithme de
+    Gram-Schmidt.} on peut supposer que notre produit scalaire a la
+  forme usuelle.
+\end{hyp}
+Soit $M$ une matrice inversible dans une base orthonormée de
+$\R^n$. Dire que $M$ préserve le produit scalaire
+$\langle \cdot, \cdot \rangle$ signifie que pour tout $x$,
+$y \in \R^n$ on a
+\[
+(Mx)^T(My) = x^Ty.
+\]
+D'où l'on obtient, pour tout $x$, $y \in \R^n$
+\[
+x^T\left(M^TM - I_n\right)y = 0.
+\]
+En prenant $x$ et $y$ ayant des coefficients nuls sauf un on peut
+montrer que les coefficients de $M^TM - I_n$ sont tous nuls. Donc
+\[
+M^TM = I_n.
+\]
+\begin{prop}
+  Une isomorphisme de $\R^n$ préserve un produit scalaire si et
+  seulement sa matrice dans une base orthonormée satisfait
+  \[
+  M^TM = I_n.
+  \]
+  Une matrice qui satisfait la propriété précédente est dite
+  \emph{orthogonale}.
+\end{prop}
+\begin{question}
+  Quel peut être le déterminant d'une matrice orthogonale?
+\end{question}
+\begin{question}
+  Traduire la proposition précédente en fonction des vecteurs colonnes
+  de la matrice $M$.
+\end{question}
+\noindent On étudie un premier exemple de matrices orthogonales. On se
+fixe une base orthonormée de $\R^n$ dans laquelle on travaille. Soit
+$\theta \in \R$ on note $R(\theta)$ la matrice
+\[
+R(\theta) =
+\begin{pmatrix}
+  \cos(\theta) & - \sin(\theta) \\
+  \sin(\theta) & \cos(\theta)
+\end{pmatrix}.
+\]
+\begin{question}
+  Montrer que $R(\theta)$ est une matrice orthogonale pour tout
+  $\theta$. Quel est son déterminant?
+\end{question}
+\begin{question}
+  Dessiner l'image du carré de points extrémaux $(\pm 1, \pm 1)$ par
+  $R(\theta)$ pour $\theta = 0$, $\pi/4$.
+\end{question}
+Un exemple de matrice orthogonale qui n'est pas de déterminant $1$ est
+celui-ci
+\[
+s =
+\begin{pmatrix}
+1 & 0 \\
+0 & -1
+\end{pmatrix}.
+\]
+\begin{question}
+  Interpréter géométriquement cette matrice.
+\end{question}
+\begin{question}
+  Dessiner l'image du carré de points extrémaux
+  $\{(0, 0), (0, 1), (1, 0), (1, 1)\}$
+  par $R(\theta)$ pour $\theta = 0$, $\pi/4$.
+\end{question}
+\begin{question}
+  Déterminer toute les matrices orthogonales de $\R^2$ muni de son
+  produit scalaire usuel. Vous pourrez les étudier suivant leurs
+  spectres.
+\end{question}
+\begin{question}
+  Donner des exemples de matrices orthogonales en toute
+  dimension. Essayez d'être le plus général possible.
+\end{question}
+\begin{question}
+  Étendre la classification des matrices orthogonales au cas de
+  dimension $3$.
+\end{question}
+
+\subsubsection{Transformations affines}
+
+\emph{TODO}
+
+\section{Les formes bilinéaires symétriques}
+\label{sec:FBS}
+
+Les formes bilinéaires symétriques apparaissent sous différents
+aspects en mathématiques parmi ceux-ci, en réalité dès que l'on
+travaille avec une matrice symétrique. On peut par exemple évoquer le
+produit scalaire sur $\R^n$ qui nous permet de décrire un objet qui
+donne à la fois une information sur la norme d'un vecteur et l'angle
+que deux vecteurs forment. On peut encore évoquer le cas de la matrice
+de covariance, d'usage fréquent et symétrique. Ou enfin les polynôme
+de degré $2$ ayant un nombre quelconque de variables.
+
+\subsection{Définition}
+\label{defn:formequadratique}
+
+\begin{defn}
+  Soit $E$ un $\R$-espace vectoriel. Une \emph{forme bilinéaire} est
+  une application $\phi : E \times E \to \R$ pour laquelle les
+  applications partielles en tout point $x \in E$
+  \begin{itemize}
+  \item $t \mapsto \phi(x, t)$
+  \item $t \mapsto \phi(t, x)$
+  \end{itemize}
+  sont linéaires.
+\end{defn}
+\begin{exmp}
+  La multiplication matricielle
+  $\times : \mc{M}_n(\R) \times \mc{M}_n(\R) \to \R$ est une
+  application bilinéaire sur l'espace vectoriel des matrices carrées
+  de taille $n$.
+\end{exmp}
+\begin{defn}
+  Une forme bilinéaire $\phi$ sur un $\R$-espace vectoriel $E$ est dite
+  \begin{itemize}
+  \item \emph{symétrique} si $\forall x$, $y \in E$, $\phi(x, y) = \phi(y, x)$ ;
+  \item \emph{antysmétrique} si $\forall x$, $y \in E$,
+    $\phi(x, y) = - \phi(y, x)$ ;
+  \item \emph{positive} si $\forall x$, $\phi(x) \geq 0$ ;
+  \item \emph{négative} si $\forall x$, $phi(x) \leq 0$ ;
+  \item \emph{définie} si $\forall x$, $\phi(x) = 0 \Rightarrow x = 0$.
+  \end{itemize}
+\end{defn}
+\begin{question}
+  Justifier le fait que le produit scalaire usuel sur $\R^n$ est une
+  forme bilinéaire symétrique définie positive.
+\end{question}
+Dans la pratique, et quand on travaille sur $\R^n$, une forme
+bilinéaire symétrique est donnée par une matrice symétrique $P$ de
+taille $(n, n)$. L'application bilinéaire $\Phi$ associée s'écrit
+\[
+\forall x, y \in \R^n, \quad \Phi(x, y) = x^TPy.
+\]
+L'écriture à droite de l'égalité donne effectivement une forme
+bilinéaire symétrique. Si l'on s'est placés dans la base
+$b_1, \ldots, b_n$ pour écrire les vecteurs $x$ et $y$, la matrice $P$
+est la matrice de coefficients $P_{ij} = b_i^TPb_j$.
+
+\subsection{Les formes quadratiques}
+\label{sec:fromquadra}
+
+Les formes bilinéaires symétriques donnent naissance aux formes
+quadratiques. Celles-ci donnent des programmes d'optimisations qu'on
+résout assez bien par les méthodes introduites dans ce cours. On passe
+d'un contexte linéaire dans le cas des programmes linéaires à celui de
+degré $2$.
+\begin{defn}
+  Soit $E$ un espace vectoriel sur $\R$. On dit que $Q : E \to \R$ est une
+  forme quadratique sur $E$ s'il existe une forme bilinéaire
+  symétrique $\phi: E\times E \to \R$ telle que pour tout $x \in E$,
+  $Q(x) = \phi(x, x)$.
+\end{defn}
+\noindent Cette définition permet déjà de voir qu'étant donné un
+produit scalaire $\langle \cdot\, ,\cdot\rangle$ sur $E$,
+l'application $x \mapsto \langle x, x \rangle$ est une forme
+quadratique ; c'est la norme au carré (la norme associée au produit
+scalaire).  Une forme quadratique $Q$ sur $\R^n$ est donc la donnée
+d'une matrice symétrique $P$ telle que
+\[
+\forall x \in \R^n, \quad Q(x) = x^TPx.
+\]
+\begin{exmp}
+  La matrice carrée $P = \begin{pmatrix} 1 & 2 \\ 2 & 0 \end{pmatrix}$
+  donne lieu à la forme quadratique $Q$ l'expression
+  pour $(x, y) \in \R^2$ est
+  \[
+  Q\big((x, y)\big) = x^2 + 4xy.
+  \]
+\end{exmp}
+\noindent On remarque que l'expression obtenue est un polynôme de degré
+total\footnote{C'est le degré du polynôme obtenu en rempla\c{c}ant
+  toutes les variables par une unique variable $t$.} $2$. Ce fait est
+général : étant donné une forme quadratique non nulle $Q$ sur $\R^n$,
+l'expression $Q(x)$ est un polynôme de degré total $2$ en les
+coordonnées du vecteur $x \in \R^n$.
+\begin{rem}
+  Par abus, dans le cas de $\R^n$, ces adjectifs sont accolés à la
+  matrice symétrique $P$ telle que $Q(x) = x^TPx$.
+\end{rem}
+
+\begin{question}
+  Donner, quand possible, un exemple de forme quadratique sur $\R^2$ qui
+  soit (n'oubliez pas de justifier vos réponses):
+  \begin{itemize}
+  \item
+    positive, non définie ;
+  \item
+    définie positive;
+  \item
+    définie non positive ni négative.
+  \end{itemize}
+  Dessiner un croquis illustrant le graphe de la fonction quadratique
+  donnée dans chacun des cas\footnote{Vous êtes autorisés
+    (encouragés?) à utiliser \texttt{matplotlib}.}.
+\end{question}
+\begin{solution}
+  Voici quelques exemples de formes quadratiques répondant à la
+  question précédente :
+  \begin{itemize}
+  \item On cherche une forme quadratique positive, non
+    définie, par exemple la forme quadratique $Q$ sur $\R^2$ donnée
+    par $Q\big((x,y)\big) = x^2$. Elle est évidemment positive, pour
+    voir qu'elle est non définie il suffit de remarquer que
+    $Q\big((0,1)\big) = 0$. Il existe donc un vecteur non nul dont
+    l'image par $Q$ est nulle, l'implication
+    $Q(X) = 0 \Rightarrow X = \underline{0}$ n'est pas satisfaite.
+  \item Pour une forme quadratique positive définie tout
+    simplement la forme quadratique associée au produit scalaire
+    usuel.
+  \item Cette question est piège, il n'existe pas de forme
+    quadratique définie non positive et non négative. En effet, si une
+    telle forme quadratique $Q$ existe sur $\R^n$ alors il existe deux
+    vecteurs de $\R^n$, $X_0$ et $Y_0$ tels que $Q(X_0) < 0$ (définie
+    non positive) et $Q(Y_0) > 0$ (définie non négative). Voici deux
+    arguments qui montre l'impossibilité d'une telle
+    situation\footnote{Vous pouvez en trouver d'autres, certainement.}
+    :
+    \begin{itemize}
+    \item $Q$ est une application continue car polynomiale en les
+      coordonnées usuelles de $\R^n$. Le segment de la droite affine
+      $[X_0, Y_0]$ ne passe pas par l'origine\footnote{Y réfléchir
+        deux secondes ; l'image d'une droite vectorielle par une forme
+        quadratique ne change pas de signe.} son image est un connexe
+      par arcs de $\R$ car il en est de même de $[X_0, Y_0]$. C'est
+      donc un intervalle $I$ de $\R$. Cet intervalle contient une
+      valeur strictement négative et une autre strictement positive,
+      il contient donc $0$ et il existe donc un vecteur \emph{non nul}
+      envoyé par $Q$ sur $0$.
+    \item On note $\Phi$ la forme bilinéaire symétrique associée à
+      $Q$. Soit $\lambda$, $\mu$ deux scalaires dans $R$. On considère
+      l'expression en $\lambda$, $\mu$
+      \[
+      Q(\lambda X_0 + \mu Y_0) = \lambda^2Q(X_0) +
+      2\lambda\mu\Phi(X_0, Y_0) + \mu^22Q(Y_0).
+      \]
+      Pour chaque $\mu \in \R$ c'est une expression quadratique en
+      $\lambda$, le coefficient de $\lambda^2$ n'étant pas nul par
+      hypothèse. L'équation
+      \begin{equation}
+        \label{eq:quadra}
+        Q(\lambda X_0 + \mu Y_0) = 0
+      \end{equation}
+      est donné par
+      \[
+      \Delta = 4\mu^2\Phi(X_0, Y_0)^2 - 4\mu^2Q(X_0)Q(Y_0) \geq 0
+      \]
+      car le premier terme est positif et le second négatif. Pour
+      $\nu \neq 0$ on a donc nécessairement une solution non nulle car
+      le terme constant de l'équation \eqref{eq:quadra} en $\lambda$
+      ne l'est pas.
+    \end{itemize}
+  \end{itemize}
+\end{solution}
+On admet par la suite le résultat important suivant:
+\begin{thm}
+  \label{thm:reducsym}
+  Toute matrice symétrique $P \in M_n(\R)$ est diagonalisable sur
+  $\R$ dans une base orthonormée.
+\end{thm}
+\noindent Ce résultat, important, est valable sous des conditions beaucoup plus
+larges sur le corps de base ; on le  montre en partie à l'aide d'un
+algorithme dit de Gauss.
+\begin{question}
+  \label{qu:critereposdefn}
+  À l'aide du déterminant d'une matrice carrée, donner une condition
+  sur une forme quadratique $Q$ sur $\R^n$ afin que celle-ci soit:
+  \begin{itemize}
+  \item
+    définie ;
+  \item
+    non positive et non négative.
+  \end{itemize}
+  Pouvez-vous en dire plus dans le cas des formes quadratiques sur
+  $\R^2$? Sait-on, dans ce cas, quand une forme quadratique est
+  positive? Comment différencier le cas positif du cas négatif?
+  Formaliser le cas des formes quadratiques sur $\R^2$.
+\end{question}
+\begin{solution}
+  D'après le théorème \eqref{thm:reducsym} toute forme quadratique
+  dans une base orthonormée bien choisie de vecteurs propres
+  $(v_1, \ldots, v_n)$ prend la forme
+  \[
+  Q\Big(\sum_{i=1}^n x_i v_i\Big) = \sum_{i=1}^n \lambda_i x_i^2
+  \]
+  où $\lambda_i$ désigne la valeur propre associée à $v_i$. La matrice
+  de la forme bilinéaire associée à $Q$ dans cette base prend la forme
+  \[
+  \begin{pmatrix}
+    \lambda_1 & 0 & \hdots & 0 \\
+    0 & \lambda_2 & \ddots & \vdots \\
+    \vdots & \ddots & \ddots & 0 \\
+    0 & \hdots & 0 & \lambda_n.
+  \end{pmatrix}
+  \]
+  Il est clair désormais, qu'il faut et il suffit que la matrice
+  associée à $Q$ ait toutes ses valeurs propres de même signe et non
+  nulles pour que $Q$ soit définie\footnote{Si tel n'était pas le cas
+    on se retrouverait dans le cas de l'exercice précédent.}. Pour que
+  $Q$ ne soit ni positive, ni négative il faut et il suffit que cette
+  même matrice ait au moins deux valeurs propres de signes opposés.
+
+  Dans le cas des formes quadratiques sur $\R^2$ on n'a que deux
+  valeurs propres. Pour s'assurer de la définition il suffit d'avoir
+  un déterminant strictement positif. Dans ce cas les deux valeurs
+  propres ne sont pas nulles et, de plus, de même signe. Pour vérifier
+  la positivité sous une telle condition il suffit de regarder le
+  signe de la trace de la matrice associée. \\
+  Si le déterminant est strictement négatif les deux valeurs propres
+  sont de signes distincts et on tombe dans le cas d'une forme
+  quadratique ni positive, ni négative.
+\end{solution}
+
+\begin{question}
+  Suffit-il qu'une matrice symétrique ait des coefficients positifs
+  pour que la forme quadratique associée le soit?
+\end{question}
+
+\begin{solution}
+  Non. On considère la forme quadratique $Q$ donnée par
+  \[
+  Q\big((x,y)\big) = x^2 + xy + y^2.
+  \]
+  En complétant le carré\footnote{Cette démarche est la première étape
+    de l'algorithme de Gauss.} ne $x$ on obtient
+  \[
+  Q\big((x, y)\big) = \left(x + \frac{y}{2}\right)^2 - \frac{y^2}{4}
+  \]
+  En prenant $x = 1$ et $y = -2$ on obtient
+  \[
+  Q\big((1, -2)\big) = -1.
+  \]
+\end{solution}
+
+\begin{question}
+  \label{qu:convexiteP}
+  Donner des conditions suffisantes sur la positivité de la matrice
+  associée à une forme quadratique pour que celle-ci soit
+  \begin{itemize}
+  \item convexe ou concave ;
+  \item ni l'un ni l'autre.
+  \end{itemize}
+  Ces conditions sont-elles nécessaires?
+\end{question}
+
+\begin{solution}
+  La convexité de la fonction $Q$ donnée par $Q(x) = x^TPx$ correspond
+  à la négativité, pour tout $\theta \in [0,1]$ et tout
+  $x, y \in \R^n$, de l'expression
+  \[
+  E(x,y, \theta) = Q\big((1-\theta)x + \theta y\big) -
+  \big((1-\theta)Q(x) + \theta Q(y)\big).
+  \]
+  On va faire en sorte de tirer de cette expression une condition
+  utilisable.
+  \begin{align}
+    E(x, y, \theta) & = \big((1-\theta)x + \theta y\big)^TP\big((1-\theta)x + \theta y\big)
+                      - \big((1-\theta)x^TPx + \theta y^TPy\big) \\
+    \intertext{en développant le premier terme à gauche}
+    E(x, y, \theta) & = \big((1-\theta)x\big)^TP\big((1-\theta)x + \theta y\big) +
+      \big(\theta y)^TP\big((1-\theta)x + \theta y\big) \notag \\
+    & \phantom{=}\quad  - \big((1-\theta)x^TPx + \theta y^TPy\big)\\
+    \intertext{en regroupant intelligemment les termes\footnote{Yes, you can!}\footnote{Bug!}}
+    E(x, y, \theta) & = \big((1-\theta)x\big)^TP\big((1-\theta)x + \theta y\big) - (1-\theta)x^TPx \notag \\
+    & \phantom{=}\quad + \big(\theta y)^TP\big((1-\theta)x + \theta y\big) - \theta y^TPy\\
+\intertext{la suite est automatique}
+    E(x, y, \theta) & = \big((1-\theta)x\big)^TP\big((-\theta)x + \theta y\big) +
+      \big(\theta y)^TP\big((1-\theta)x + (\theta-1)y\big) \\
+    & = (1-\theta)\theta\left[x^TP(y-x) - y^TP(y-x)\right] \\
+    & = -(1-\theta)\theta(y-x)^TP(y-x)\\
+    & = -(1-\theta)\theta Q(y-x).
+  \end{align}
+  Ainsi $E(x, y, \theta)$ est négative si et seulement si $Q(y-x)$ est
+  positive. Donc $Q$ est convexe si et seulement si pour tout $x$, $y$,
+  $Q(y-x) \geq 0$. Il n'est pas difficile de voir que cette condition
+  correspond au fait que $Q$ soit positive.
+
+  J'ai voulu ici vous montrer qu'il est possible d'aller au bout de
+  calculs qui peuvent vous sembler un peu horrible. La dernière
+  condition qu'on obtient peut être obtenue autrement à l'aide de la
+  condition d'ordre $1$ sur la convexité. Le calcul dans ce cas là est
+  plus rapide.
+\end{solution}
+
+
+\subsection{Sous-ensembles des matrices symétriques}
+\label{sec:symmatrices}
+
+On note $S_n$ l'ensemble des matrices symétriques de
+$M_n(\R)$. L'ensemble des matrices symétriques positives
+(resp. définies positives) est noté $S_n^+$ (resp. $S_n^{++}$). Les
+notations dans le cas négatif sont $S_n^{-}$ et $S_n^{--}$.
+
+\begin{question}
+  On s'intéresse à la structure de $S_n$.
+  \begin{enumerate}
+  \item Montrer que $S_n$ est un sous-espace vectoriel de
+    $M_n(\R)$. Peut-on en dire plus? Calculer la dimension de $S_n$.
+  \item Montrer que $S_n^{+}$ est une partie convexe de
+    $S_n$. Peut-on en dire autant de $S_n^{++}$?
+  \item Est-ce que le résultat précédent est valable dans le cas de
+    $S_n^{-}$?
+  \end{enumerate}
+\end{question}
+
+\begin{solution}
+  \begin{enumerate}
+  \item On montrer que $S_n$ est un sous-espace vectoriel de
+    $M_n(\R)$. On rappelle que $M_n(\R)$ vient avec une base canonique
+    qu'on note $\{E_{ij}\mid 1 \leq i, j \leq n\}$ où $E_{ij}$ est la
+    matrice contenant que des coefficients nuls sauf en position
+    $(i,j)$ où on trouve $1$. Une matrice $A = (a_{i, j})$ se
+    décompose le long de la base précédente comme suit
+    \[
+    A = \sum_{i, j} a_{ij}E_{ij}.
+    \]
+    La matrice $A$ est symétrique si $A = A^T$. En utilisant le fait
+    $E_{ij}^T = E_{ji}$, on obtient de la décomposition précédente le
+    fait que $A$ est symétrique si et seulement si
+    \[
+    A = \sum_{j \geq i} a_{ij}\left(E_{ij} + E_{ji}\right).
+    \]
+    Ainsi $\{E_{ij}\mid 1 \leq i, j \leq n, j \geq i\}$ est une
+    famille génératrice de $S_n$. Il n'est pas difficile de voir
+    qu'elle est également libre, car toutes combinaisons linéaire
+    nulle de cette famille est une combinaison linéaire nulle de la
+    base de $M_n(\R)$ donnée par les $E_{ij}$. On a donc exhibé une
+    base de $S_n$, elle contient $n(n+1)/2$ éléments.
+
+    Vous pouvez, si le coeur vous en dit, montrer que $M_n(\R)$ est la
+    somme directe de $S_n$ et du sous-espace vectoriel des matrices
+    antisymétriques.
+  \item Soit $\theta \in [0, 1]$ et $A, B \in S_n^+$. On veut montrer
+    que $(1-\theta)A + \theta B \in S_n^+$, c'est-à-dire que pour tout
+    $x \in \R^n$
+    \[
+    x^T\big((1-\theta)A + \theta B\big)x \geq 0.
+    \]
+    Or le terme de gauche est donné par
+    \[
+    (1-\theta)\underbrace{x^TAx}_{\geq 0} + \theta\underbrace{x^TBx}_{\geq 0}
+    \]
+    d'où le résultat. Le cas de $S_n^{++}$ suit le même procédé.
+  \item Oui, il suffit d'adapter le raisonnement précédent.
+  \end{enumerate}
+\end{solution}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
