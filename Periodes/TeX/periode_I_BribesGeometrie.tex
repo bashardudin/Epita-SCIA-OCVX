@@ -677,8 +677,8 @@ non-linéaire.
   Dessiner la définition précédente.
 \end{question}
 \begin{defn}
-  Soit $A$ une partie de $\R^n$ et $x \in A$. Un \emph{hyperplan
-    d'appui} à $A$ en $x$ est un hyperplan $H$
+  Soit $A$ une partie de $\R^n$ et $x \in \partial A$. Un
+  \emph{hyperplan d'appui} à $A$ en $x$ est un hyperplan $H$
   \begin{itemize}
   \item passant par $x$
   \item defini par un vecteur normal $\nu$ tel que
@@ -744,13 +744,13 @@ convexes fermés par des hyperplans.
   \item que la somme pondérée, de poids positifs de fonctions convexes est convexe ;
   \item qu'une fonctoin sous-linéaire est convexe? en donner des exemples ;
   \item que le $\max$ de fonctions convexes est convexe ;
-  \item que la composition d'une fonction affine avec une fonction
-    convexe est convexe.
+  \item que la composition d'une fonction $f \circ g$ d'une fonction
+    $f$ convexe avec une fonction affine $g$ est convexe.
   \end{enumerate}
 \end{question}
 \begin{question}
   Généraliser l'étude du $\max$ au contexte qui suit: soit
-  $g : \R^n \times \R^p \times \R$ une fonction qui pour tout
+  $g : \R^n \times \R^p \to \R$ une fonction qui pour tout
   $x \in A \subset \R^n$ a une fonction partielle $y \mapsto g(x, y)$
   qui est convexe, montrer que $f(y) = \sup_{x \in A} g(x, y)$ est
   également convexe.
@@ -838,8 +838,8 @@ qu'on manipule.
       }{
         \systeme{
           x_1 - x_2 \leq 0,
-          4x_1 - x_2 \leq 1,
-          -x_1 - x_2 \leq -5
+          4x_1 - x_2 \geq 1,
+          -x_1 - x_2 \geq -5
         }
       }
     \end{linearProg}
