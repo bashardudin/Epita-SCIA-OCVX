@@ -1,0 +1,355 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[french]{babel}
+\usepackage{fancyhdr}
+\usepackage[margin=.8in]{geometry}
+
+\usepackage{Style/TeXingStyle}
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{1.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyhead[L]{EPITA\_ING2\_2020\_S8}
+\fancyhead[R]{Majeures SCIA \& IMAGE}
+\fancyhead[C]{OCVX}
+\fancyfoot[C]{\thepage}
+\fancyfoot[L]{2019}
+\fancyfoot[R]{\footnotesize{\textbf{Chargés de cours :} \textsc{B.~DUDIN} \& \textsc{G.~TOCHON}}}
+
+\pretitle{\vspace{-2.5\baselineskip} \begin{center}}
+\title{%
+  { \huge Un peu de calcul différentiel}%
+}
+\posttitle{
+\end{center}
+\rule{\textwidth}{1.5pt}
+\vspace{-3\baselineskip}
+}
+\author{}
+\date{}
+
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Calcul Différentiel - 2019)
+   /Subject (SCIA/IMAGE - Optimisation convexe)
+}
+
+\setlength\parindent{0pt}
+
+\begin{document}
+
+\maketitle\thispagestyle{fancy}
+
+\begin{abstract}
+  On souhaite généraliser la démarche adoptée pour résoudre
+  géométriquement certains programmes linéaires au cas des problèmes
+  d'optimsation non-linéaires. L'objectif est de trouver des
+  hyperplans d'appui aux sous-niveaux d'une fonction objectif ; ils
+  indiquent une direction de recherche pour minimiser celle-ci. La
+  définition de ces hyperplans d'appui s'effectue par une étude locale
+  des fonctions objectifs, une étude qui généralise l'apport de la
+  dérivée d'une fonction numérique à la compréhension du comportement
+  de celle-ci en un point.
+\end{abstract}
+
+\tableofcontents
+
+\section{Normes sur $\R^n$}
+\label{sec:nomesRn}
+
+Une norme sur un espace vectoriel apporte une manière de mesurer la
+\textit{longueur} d'un vecteur tout en respectant un minimum la
+structure vectorielle. Elle permet en particulier de définir une
+notion de distance entre deux point de $\R^n$ par la \textit{longueur}
+du vecteur qui les relie. Pouvoir changer de mesure de longueur
+suivant les problèmes qu'on attaque est crucial lorsque l'on s'attaque
+à des problèmes d'optimisation. À la fois pour pouvoir modéliser les
+problèmes en jeu ; comment mesure la différence entre deux mots? Ou
+pour accélérer la convergence de certains algorithmes
+d'apprentissages.
+
+\begin{defn}
+  Une norme sur $\R^n$ est une application $\|\cdot\| : \R^n \to \R_+$
+  telle que:
+  \begin{enumerate}
+  \item $\|x\| = 0 \Leftrightarrow x = 0$ ;
+  \item $\forall \lambda \in \R$, $\forall x \in \R^n$,
+    $\|\lambda x\| = |\lambda|\|x\|$ (relation d'\textit{homogéinité});
+  \item $\forall x \in \R^n$, $\forall y \in \R^n$,
+    $\|x + y\| \leq \|x\| + \|y\|$ (\textit{Inégalité triangulaire}).
+  \end{enumerate}
+\end{defn}
+\begin{question}
+  Interpréter chacune des propriétés suivantes avec vos propres mots.
+\end{question}
+L'inégalité triangulaire donne lieu à une autre inégalité, appelée
+\textit{inégalité triangulaire inversée} qui peut parfois être
+utile\footnote{Il est très probable qu'elle ne fasse que partie de
+  votre culture ...}:
+\[
+  \forall x, y \in \R^n, \qquad \big| \|x\| -\|y\| \big| \leq \|x -
+  y\|.
+\]
+\begin{question}
+  Représenter cette inégalité géométriquement. Essayer de la déduire
+  de l'inégalité triangulaire.
+\end{question}
+Les trois normes les plus fréquentes d'utilisation sont les trois
+suivantes, elles sont respectivement qualifiées de normes $1$, $2$ et
+infinie.
+\begin{enumerate}
+\item $\forall x \in \R^n$, $\| x \|_1 = \sum_{i=1}^n |x_i|$ ;
+\item $\forall x \in \R^n$,
+  $\| x \|_2 = \sqrt{\sum_{i=1}^n x_i^2} = \sqrt{x^Tx}$ ;
+\item $\forall x \in \R^n$, $\|x \|_{\infty}$,
+  $\max\{|x_i| 1 \leq i \leq n\}$.
+\end{enumerate}
+Les définitions des normes $1$ et $2$ vont pouvoir se généraliser pour
+tout $p \geq 1$\footnote{Il est tout à fait naturel de se poser la
+  question de savoir pourquoi $p \geq 1$! :)}, par
+\[
+  \forall x \in \R^n, \qquad \|x \|_p = \left(\sum |x_i|^p
+  \right)^{\frac{1}{p}}.
+\]
+La norme $\|\cdot\|_p$ est communément appelée la norme $p$. Montrer
+le fait que c'est une norme est uniquement délicat pour ce qui est de
+l'inégalité triangulaire, la preuve de ce fait se base sur des
+inégalités de convexités dites de \textsc{Hölder}, on n'abordera pas
+cette preuve dans ce cours.Les normes $p$ ne seront que très
+localement utilisées en dehors des cas standards des normes $1$, $2$
+et $+\infty$, il est cela dit usuel d'en connaître la définition.
+
+À partir d'une norme on va être en mesure de définir:
+\paragraph{Une notion de \textit{distance} entre deux points de
+  $\R^n$} par norme du vecteur de qui relie les deux points en
+question. Plus formellement étant donné une norme $\|\cdot\|$ on note
+\[
+  \forall x, y, \qquad d_{\|\cdot\|}(x, y) = \| x - y \|.
+\]
+Dans le cas des normes $p$ on se contente d'indiquer $p$ en indice.
+\begin{question}
+  Représenter graphiquement les distances $1$, $2$ et $+\infty$
+  entre deux vecteurs de $\R^2$.
+\end{question}
+\paragraph{Une notion de \textit{voisinage} d'un point de $\R^n$} au
+sens de la norme utilisée. Cette notion éminemment liée à la
+première, on l'isole ici parce qu'elle apporte un point de vue
+auquel vous n'avez pas encore été confrontés. Étant donné un nombre
+réel $\varepsilon > 0$ on va qualifier $\varepsilon$-voisinage d'un
+point $x \in \R^n$ tous les points à distance (au sens de la norme
+utilisée) au plus $\varepsilon$ de $x$. Dans le jargon, on appelle
+boule ouverte de rayon $\varepsilon$ et centrée en $x$ cette notion,
+pour une norme ambiante $\|\cdot\|$ on note
+\[
+  B_{\|\cdot\|}(x, \varepsilon) = \{y \in \R^n \mid d_{\|\cdot\|}(x, y) <
+  \varepsilon\}
+\]
+La boule fermée centrée en $x$ et de rayon $\varepsilon$ est la
+notion correspondante avec les points à distance $\varepsilon$
+incluses,
+\[
+  \overline{B}_{\|\cdot\|}(x, \varepsilon) = \{y \in \R^n \mid d_{\|\cdot\|}(x,
+  y) \leq \varepsilon\}.
+\]
+Dans le cas des normes $p$ on se contente d'indexer les boules par
+$p$.
+
+La notion de $\varepsilon$-voisinage permet d'exprimer des
+phénomènes de passage à la limite et d'études locales. Dire qu'une
+suite $(u_k)_{k \in \N}$ de points de $\R^n$ converge vers
+$\ell \in \R^n$, au sens d'une norme $\|\cdot\|$, correspond au fait
+de dire que pour tout $\varepsilon$-voisinage $B(\ell, \varepsilon)$
+de $\ell$, il existe un rang $N$ à partir duquel tous les éléments
+de la suite $u_k$ sont dans $B(\ell, \varepsilon)$.
+\begin{question}
+  \begin{itemize}
+  \item Dessiner les boules unités
+    $\overline{B}_p(\underline{0}, 1)$ pour
+    $p \in \{1, 2, \infty\}$.
+  \item Montrer que les $\varepsilon$-voisinages d'une norme
+    $\|\cdot\|$ sur $\R^n$ sont convexes.
+  \item La définition d'un équivalent à une norme $p$ pour $p < 1$
+    définit-il une norme?
+  \end{itemize}
+\end{question}
+On reprend plus en détails quelques extensions des notions liées aux
+études locales de fonctions en suites dans $\R$.
+\begin{exmp}[Convergence d'une suite.]
+  Une suite $(u_k)_{k\in \N}$ dans $\R^n$ converge vers un point
+  $\ell \in \R^n$, au sens d'une norme $\|\cdot\|$ si
+  \[
+    \forall \varepsilon > 0, \exists N \in \N, \quad k \geq N
+    \Rightarrow \|u_k - \ell \| < \varepsilon.
+  \]
+  Cette défintion se traduit telle quelle par:
+  \[
+    \forall \varepsilon > 0, \exists N \in N \quad k \geq N
+    \Rightarrow u_k \in B(\ell, \varepsilon).
+  \]
+  Ou encore: pour tout $\varepsilon > 0$ il existe un rang $N$ à
+  partir duquel tous les éléments de la suite $u_k$ sont dans le
+  $\varepsilon$-voisinage de $\ell$ pour la norme $\|\cdot\|$.
+
+  Dans le cas de la norme infinie, la définition précédente s'écrit
+  explicitement comme
+  \[
+    \forall \varepsilon > 0, \exists N \in \N, \quad k \geq N
+    \Rightarrow \max_{1 \leq i \leq n}\|u_{k, i} - \ell_i \| < \varepsilon.
+  \]
+  où $u_{k, i}$ (resp. $\ell$) est la composante le long de la
+  coordonnée $i$ du vecteur $u_k$ (resp. $\ell_i$). Cette définition
+  peut encore être réécrite
+  \[
+    \forall \varepsilon > 0, \exists N \in \N, \quad k \geq N
+    \Rightarrow \forall i \in \{1, \ldots, n\}, \|u_{k, i} - \ell_i \| <
+    \varepsilon.
+  \]
+  Un peu de réflexion permet de voir que cette dernière est
+  équivalente
+    \[
+      \forall i \in \{1, \ldots, n\}, \forall \varepsilon > 0, \exists
+      N \in \N, \quad k \geq N \Rightarrow \|u_{k, i} - \ell_i \| <
+      \varepsilon.
+  \]
+  Autrement dit, la suite $(u_k)$ converge vers $\ell$, au sens de la
+  norme infinie, si et seulement si, chacune des suites
+  \textbf{numériques} $(u_{k, i})$ converge vers $\ell_i$.
+\end{exmp}
+\begin{exmp}[Limite d'une fonction en un point.]
+  On considère deux normes $\|\cdot\|_\alpha$ et $\|\cdot\|_\beta$
+  respectivement sur $\R^n$ et $\R^m$. Une fonction
+  $f : (\R^n, \|\cdot\|_\alpha) \to (\R^m, \|\cdot\|_\beta)$ a une
+  limite $\ell \in \R^m$ en un point $a \in \R^n$ si
+  \[
+    \forall \varepsilon > 0, \exists \eta > 0, \quad x \neq a
+    \mathrm{ et } \|x - a\|_\alpha \eta \Rightarrow \|f(x) -
+    \ell\|_\beta < \varepsilon.
+  \]
+  Chose qu'on peut encore exprimer par
+  \[
+    \forall \varepsilon > 0, \exists \eta > 0, \quad x \in
+    B_{\|\cdot\|_\alpha}(a, \eta)\setminus \{a\} \Rightarrow f(x) \in
+    B_{\|\cdot\|_\beta}(\ell, \varepsilon),
+  \]
+  ou encore pour tout $\varepsilon$-voisinage $B$ de $\ell$ pour la
+  norme $\|\cdot\|_\alpha$ il existe un $\eta$-voisinage de $a$, a
+  étant exclu dont tout élément a une image dans $B$.
+\end{exmp}
+\begin{exmp}[Continuité d'une fonction en un point.]
+  La continuité d'une fonction
+  $f : (\R^n, \|\cdot\|_\alpha) \to (\R^m, \|\cdot\|_\beta)$ en un
+  point $a \in \R^n$ s'écrit
+  \[
+    \forall \varepsilon > 0, \exists \eta > 0, \quad \|x - a\|_\alpha
+    \eta \Rightarrow \|f(x) - f(a)\|_\beta < \varepsilon.
+  \]
+  Autrement dit pour tout $\varepsilon$-voisinage $B$ de $f(a)$ pour
+  la norme $\|\cdot\|_\alpha$ il existe un $\eta$-voisinage de $a$
+  dont tout élément a une image dans $B$.
+\end{exmp}
+\begin{question}
+  \begin{itemize}
+  \item Donner des exemples de fonctions continues (pour les normes de
+    votre choix) de $\R^2$ dans $\R$.
+  \item Comment peut-on en construire d'autres à partir de celles-ci?
+    Que dire de l'addition, la multiplication, le quotient ou la
+    composition de fonctions continues?
+  \item Comment tester la continuité de fonctions à plusieurs
+    variables en se ramenant au cas des fonctions numériques?
+  \item Est-ce que \c{c}a marche tous le temps?
+  \end{itemize}
+\end{question}
+\begin{exmp}[Comparaisons en un point.]
+  Une fonction
+  $f : (\R^n, \|\cdot\|_\alpha) \to (\R^m, \|\cdot\|_\beta)$ est un
+  $o$ en un point $a \in \R^n$ d'une fonction $g$, sur les mêmes
+  espaces et par rapport aux mêmes normes, s'il existe une fonction
+  $\epsilon : \R^n \to \R$ telle que $f = \epsilon g$ avec
+  $\lim_{t \to a }\epsilon(t) = 0$. Quand $g$ n'est pas nulle sur un
+  voisinage de $a$ la définition précédente est équivalente au fait que
+  \[
+    \lim_{t \to a} \frac{\|f(t)\|_\alpha}{\|g(t)\|_\beta}  = 0.
+  \]
+  On écrit dans ce cas que $f$ est un $o_a(g)$. On laisse tomber le
+  point $a$ quand celui-ci est clair du contexte.
+
+  Pour obtenir les notions d'équivalence et de $\mc{O}$ en un point
+  $a$, il suffit de remplacer les limites de $\epsilon$ ou de quotient
+  respectivement par $1$ et une constante positive quelconque.
+\end{exmp}
+\begin{question}
+  Justifier les affirmations suivantes:
+  \begin{enumerate}
+  \item $\langle h, h \rangle$ est un $o_{\underline{0}}(h)$;
+  \item
+    $\sin\big(\langle h, h \rangle\big) \sim_{\underline{0}} \langle
+    h, h \rangle$.
+  \end{enumerate}
+\end{question}
+À ce stade on est en droit de se demander si le choix des normes avec
+lesquels on travaille a une incidence sur les limites des suites qu'on
+étudie (une même suite convergerait pour une norme et pas pour une
+autre), les fonctions qu'on regarde (une même fonction serait continue
+pour une norme et pas pour une autre) etc. Le théorème suivant permet
+de se rassurer sur ce point (du moins en dimension finie).
+\begin{defn}
+  Deux normes $\|\cdot\|_\alpha$ et $\|\cdot\|_\beta$ sur $\R^n$ sont
+  dites \emph{équivalentes} s'il existe des constants $c$,
+  $C \in \R_+^*$ telles que
+  \[
+    \forall x \in \R^n, \qquad c\|x\|_\alpha \leq \|x\|_\beta \leq
+    C\|x\|_\alpha.
+  \]
+\end{defn}
+En reprenant les exemples précédents, il est relativement simple de se
+convaincre que deux normes équivalentes donnent des suites de mêmes
+natures, les mêmes fonctions continues et les mêmes comparaisons.
+\begin{question}
+  Montrer que les normes $1$, $2$ et $\infty$ sont équivalentes.
+\end{question}
+\begin{thm}
+  Toutes les normes sur $\R^n$ sont équivalentes.
+\end{thm}
+\begin{rem}
+  La preuve de ce théorème est en dehors du périmètre de ce
+  cours. Elle nécessite certaines notions de topologie qui vous
+  manquent ; notamment la notion de compacité. On se contentera du
+  résultat.
+\end{rem}
+Le fait que les normes soient équivalentes en terme de questionnement
+topologique (les études des phénomènes locaux) ne signifie pas
+qu'utiliser l'une ou l'autre en modélisation revient au même.
+\begin{question}
+  Quelles normes utiliseriez-vous pour modéliser les problématiques
+  suivantes:
+  \begin{enumerate}
+  \item Le calcul de la distance que doit parcourir un oiseau entre
+    deux coordonnées GPS pas trop éloignées.
+  \item Le calcul de la distance que parcours un touriste à Manhattan
+    entre deux musée.
+  \item Le calcul du nombre de modifications nécessaires (lettre à
+    lettre) pour changer un mot en un autre.
+  \end{enumerate}
+\end{question}
+
+\section{Différentiabilité et différentielle en un point}
+\label{sec:diffetdiff}
+
+\section{Gradient en un point}
+\label{sec:gradient}
+
+\section{Caractérisation du premier ordre de la convexité}
+\label{sec:caract1convexite}
+
+\section{Hessienne en un point}
+\label{sec:hessienne}
+
+\section{Caractérisation du second ordre de la convexité}
+\label{sec:caract2convexite}
+
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
