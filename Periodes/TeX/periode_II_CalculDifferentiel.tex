@@ -335,18 +335,159 @@ qu'utiliser l'une ou l'autre en modélisation revient au même.
 \section{Différentiabilité et différentielle en un point}
 \label{sec:diffetdiff}
 
-\section{Gradient en un point}
-\label{sec:gradient}
+Cette série de questions est calculatoire. Savoir calculer la
+différentielle, le gradient (plus généralement la jacobienne) ou la
+dérivée directionnelle d'une fonction à plusieurs variables en tout
+point (ou du moins là où cela fait sens) est nécessaire.
 
-\section{Caractérisation du premier ordre de la convexité}
-\label{sec:caract1convexite}
+\begin{question}
+  Calculer la différentielle de l'application sur $\R$,
+  $f(x) = \frac{\sin(x)}{x^2+1}$ en tout point $x$. Quelle est la
+  différence avec la dérivée de $f$.
+\end{question}
 
-\section{Hessienne en un point}
-\label{sec:hessienne}
+\begin{question}
+  Calculer la différentielle des fonctions suivantes:
+  \begin{enumerate}
+  \item $f :\R^n \rightarrow \R$ donnée par l'expressoin
+    $X \mapsto X^TAX$ ; , où $A$ est une matrice carrée de taille
+    $(n, n)$ ;
+  \item $g : \R^n \rightarrow \R$ donnée par l'expression
+    $X \mapsto 1/(X^TX + 1)$.
+  \item $f : \R^n \rightarrow \R$ donnée par l'expressoin
+    $X \mapsto \cos^2(X^TAX)$, où $A$ est une matrice carrée de taille
+    $(n, n)$ ;
+  \item $g : M_n(\R) \rightarrow \R$ donnée par
+    $A \mapsto \mathrm{tr}(A)^2$ ;
+  \item $h : \mc{M}_n(\R) \rightarrow \mc{M}_n(\R)$ donnée par
+    l'expression $B \mapsto \mathrm{tr}(AB)B$ où $A$ est une matrice
+    carrée de taille $(n, n)$.
+  \end{enumerate}
+\end{question}
 
-\section{Caractérisation du second ordre de la convexité}
-\label{sec:caract2convexite}
+\begin{question}
+  On considère la fonction définie sur $\R^2$ par
+  $f(x, y) = \frac{x^2\cos(y)}{y + \sin^2(x) + 1}$. Pour tout
+  $\vartheta \in \R$ on désigne par $w_\vartheta$ le vecteur
+  $(\vartheta, \vartheta^2)$.
+  \begin{enumerate}
+  \item Calculer la dérivée directionnelle $\pa_{w_\vartheta}f(0, 0)$
+    en fonction de $\vartheta$ ;
+  \item Étudier cette fonction de $\vartheta$.
+  \item Pouvez-vous interpréter vos résultats géométriquement?
+  \end{enumerate}
+\end{question}
 
+\begin{question}
+  Expliciter le gradient, en tout point ou cela fait sens, des
+  expressions différentiables suivantes :
+  \begin{enumerate}
+  \item $f(x, y) = e^{xy}(x+y)$ ;
+  \item $g(x, y, z) = (x + y\ln(z), xyz)$ ;
+  \item $h(x, y, z) = \left(\dfrac{x^2\sin(xy)}{z^2 + 2}, \tan(xyz)\right)$ ;
+  \item $f(x, y, z) = \dfrac{x + y + z}{x+y^2+1}$ ;
+  \item $g(x, y) = \dfrac{\cos(xy)}{\sqrt{x^2 + y^2}}$ ;
+  \item $h(x, y, z) = \exp(xy - z)$.
+  \end{enumerate}
+\end{question}
+
+\begin{question}
+  Soit $f : \R^3 \to \R$ une fonction différentiable en tout point de
+  $\R^3$. On considère la fonction $g : \R^3 \to \R$ donnée pour tout
+  $(x, y, z) \in \R^3$ par
+  \[
+  g(x, y, z) = f(x-y, y-z, z-x).
+  \]
+  La fonction $g$ est différentiable en tout point car composée de
+  fonction différentiables. Montrer qu'on a la relation
+  \[
+  \frac{\pa g}{\pa x}(a,b, c) + \frac{\pa g}{\pa y}(a, b, c) + \frac{\pa
+    g}{\pa z}(a, b, c) = 0
+  \]
+  pour tout point $(a, b, c) \in \R^3$.
+\end{question}
+
+\subsection{Interprétations géométriques}
+\label{sec:interprétationsgeoms}
+
+\begin{question}
+  Trouver les points sur le paraboloïde $z = 4x^2 + y^2$ où le plan
+  tangent est parallèle au plan $x + 2y + z = 6$. Faire de même avec le plan
+  $3x + 5y -2z = 5$.
+\end{question}
+
+\begin{question}
+  Un étudiant malheureux trouve pour plan tangent à la surface donnée
+  par $z = x^4-y^2$ au point $(2, 3, 7)$ la réponse
+  \[
+  z = 4x^3(x-2) - 2y(y-3) + 7.
+  \]
+  \begin{enumerate}
+  \item Sans calcul, pourquoi est-ce faux?
+  \item Donner la réponse correcte.
+  \item D'où venait la confusion de l'étudiant?
+  \end{enumerate}
+\end{question}
+
+\subsection{Optimiser, toujours}
+
+On revient sur les problèmes d'optimisation qu'on est désormais en
+mesure d'optimiser à l'aide des outils de calcul différentiel abordés.
+\begin{question}
+On considère la fonction différentiable $f : \R^2 \to \R$ donnée par
+\[
+f(x, y) = 3x^2 + y^2.
+\]
+\begin{enumerate}
+\item Représenter les courbes de niveaux $2$ et $4$ de $f$ dans le
+  plan euclidien.
+\item À quel lieu correspond la condition $f(x, y) \leq 4$ ?
+\item On s'intéresse au problème d'optimisation (\emph{P4})
+  \[
+  \begin{PbOptim}{
+      minimiser
+    }{
+      $2x + y$
+    }{
+      $3x^2 + y^2 \leq 4$
+    }
+  \end{PbOptim}
+  \]
+  Représenter la courbe de niveau de la fonction objectif qui
+  correspond à la valeur optimale de (\emph{P4}).
+\item Comment trouver le point optimale correspondant à (\emph{P4})?
+  Faire le calcul.
+\end{enumerate}
+\end{question}
+
+\begin{question}
+  On considère le problème d'optimisation (\emph{P5}) suivant
+  \[
+    \begin{PbOptim}{
+        minimiser
+      }{
+        $x + y$
+      }{
+        $\begin{matrix}
+          x+2y \leq 3 \\
+          x \in B
+        \end{matrix}$
+      }
+    \end{PbOptim}
+  \]
+  où $B$ est la partie de $\R^2$ intersection de l'épigraphe de la
+  fonction $x \mapsto -\sqrt{x}$ sur $\R_+$ et de la partie
+  \[
+    \left\{(x, y) \mid y \leq \sqrt{x}\right\}.
+  \]
+  \begin{enumerate}
+  \item Dessiner le lieu admissible du problème de (\emph{P5}).
+  \item Représenter la courbe de niveau de la fonction objective qui
+    réalise le minimum de (\emph{P5}).
+  \item Calculer le point optimal ainsi que la valeur optimale de
+    (\emph{P5}).
+  \end{enumerate}
+\end{question}
 
 \end{document}
 %%% Local Variables:
