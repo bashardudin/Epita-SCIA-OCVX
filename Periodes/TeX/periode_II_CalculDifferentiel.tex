@@ -489,6 +489,210 @@ f(x, y) = 3x^2 + y^2.
   \end{enumerate}
 \end{question}
 
+\section{Lagrangien et conditions KKT}
+\label{sec:lagrangien}
+
+On applique dans la suite la démarche KKT pour résoudre des problèmes
+d'optimisation plus délicat à résoudre géométriquement.
+
+\subsection{Des problèmes simples}
+
+\begin{question}
+  Résoudre le problème d'optimisation
+  \[
+  \begin{linearProg}{
+      minimiser
+    }{
+      $x^2 -14x + y^2 - 6y - 7$
+    }{
+      \systeme{
+        x + y \leq 2,
+        x + 2y \leq 3
+      }
+    }
+  \end{linearProg}
+  \]
+\end{question}
+
+\begin{question}
+  Une ressource disponible en quantité d doit être affectée à trois
+  activités en quantités $x_1$ , $x_2$ et $x_3$
+  respectivement. L’allocation de $x_k$ unités de ressource à
+  l’activité $k$ procure une recette évaluée par
+  $f_k(x_k) = 8x_k - k{x_k}^2$. Calculer l'allocation qui procure la
+  plus grande recette dans les deux éventualités suivantes:
+  \begin{enumerate}
+  \item la quantité $d$ est complètement utilisée ;
+  \item l'excédant quand $d$ n'est pas épuisé est revendu au prix $p$.
+  \end{enumerate}
+  A-t-on intérêt à utiliser toutes les ressources disponibles?
+\end{question}
+
+\subsection{Un problème débile}
+
+Une entreprise fabrique deux modèles de clés USB, les modèles $X$ et
+$Y$. Le modèle $X$ se vend à $1$\euro{} pièce, le modèle $Y$ se vend pour
+sa part à $3$\euro{} pièce. Le coût de fabrication en \euro{} est donné par
+l'expression :
+\[
+C(x, y) = 5x^2 + 5y^2 - 2xy - 2x - 1000.
+\]
+où $x$ est le nombre de clés USB de type $X$ et $y$ celui de type
+$Y$. On suppose que toutes les clés USB ont été toutes écoulées sur le
+marché.
+
+\begin{question}{6}
+  \begin{enumerate}
+  \item Soit $(x, y) \in (\R_+^*)^2$. Déterminer le profit $P(x, y)$
+    réalisé par l’entreprise lorsqu’elle a vendu $x$ clés de modèle $X$
+    et $y$ clés de modèle $Y$.
+  \item Étudier la convexité de la fonction de profit $P$ sur
+    $(\R_+^*)^2$. Vous pouvez vous aider de la hessienne de $P$ en
+    tout point.
+  \item La capacité de production de l’entreprise est au total de $20$
+    clés par jour\footnote{C'est des clés fait main!}. Décrire le
+    problème de maximisation du profit de l'entreprise comme un
+    problème d'optimisation convexe.
+  \item En supposant que l’entreprise tourne à plein régime, trouver
+    la répartition optimale entre les modèles de type $X$ et $Y$
+    permettant de maximiser le profit quotidien. Calculer dans ce cas
+    le profit réalisé. \textit{Vous êtes invités, en un premier temps,
+      à ne pas tenir compte des contraintes de positivité de $x$ et
+      $y$.}
+  \item Pourquoi peut-on se dispenser des contraintes de positivité ?
+  \end{enumerate}
+\end{question}
+
+\subsection{Un problème géométrique}
+
+\begin{question}
+  \begin{enumerate}
+  \item
+    Déterminer le rectangle de plus grande surface inscrit dans
+    l'ellipse d'équation
+    \[
+    \frac{x^2}{a} + \frac{y^2}{b} = 1.
+    \]
+  \item
+    Faire de même avec le parallélépipède de plus grand volume inscrit
+    dans l'ellipsoïde d'équation
+    \[
+    \frac{x^2}{a} + \frac{y^2}{b} + \frac{z^2}{c} = 1.
+    \]
+  \end{enumerate}
+\end{question}
+
+\section{Hessienne d'une fonction}
+\label{sec:hessienne}
+
+Dans cette section, on revient sur un point laissé de côté lors du
+cours: vous avez su lors de vos études secondaires étudier les types
+de point critiques que vous obteniez par l'annulation de la dérivée
+d'une fonction numérique à l'aide de la dérivée seconde. Cette
+démarche s'étend au cas des dimensions supérieures. Pour cela il nous
+faut généraliser la notion de dérivée seconde.
+\begin{defn}
+  Soit $f : \R^n \to \R$ une fonction différentiable en tout point de
+  son domaine de différentielle continue. On dit que $f$ est $2$-fois
+  différentiable en un point $a$ du domaine de $f$ si le $\nabla f$
+  est différentiable. Dans cas on appelle \emph{hessienne} de $f$ en
+  $a$ la jacobienne de $\nabla f$. Elle est notée $\nabla^2 f(a)$.
+\end{defn}
+On regroupe les notations des coefficients de la matrice hessienne ;
+on écrira
+\[
+  \frac{\partial^2 f}{\partial x^2} = \frac{\partial}{\partial
+    x}\left(\frac{\partial f}{\partial x}\right)
+\]
+et
+\[
+  \frac{\partial^2 f}{\partial x\partial y} = \frac{\partial}{\partial
+    x}\left(\frac{\partial f}{\partial y}\right).
+\]
+Quand elle existe et \textit{quand ses composantes sont continues}, la
+hessienne d'une fonction $f$ en un point $(a, b)$ définit une forme
+quadratique\footnote{Théorème de Schwarz} qu'on appelle
+\emph{différentielle seconde} de $f$ en $(a, b)$. Elle donne une
+approximation du second ordre de $f$ au voisinage de $(a, b)$.  La
+hessienne permet une étude plus fine des points critiques de la
+fonction $f$ ainsi qu'une caractérisation pratique des conditions de
+convexité de celle-ci.
+\begin{prop}
+  Soit $f : U \to \R^m$ une application $2$ fois différentiable en un
+  point $a$ de l'ouvert $U$. Alors pour $h$ assez petit
+  \begin{equation}
+    \label{eq:DL2}
+    f(a+h) = f(a) + \nabla f(a) h + \dfrac{1}{2} h^T\nabla^2f(a)h  + o_{\underline{0}}(\|h\|^2).
+  \end{equation}.
+\end{prop}
+\begin{question}
+  Soient $f : \R \to \R$ une fonction $2$-fois dérivable et $P$ une
+  matrice symétrique.  Quelle est la différentielle seconde, en tout
+  point, de l'application $f_P$ définie sur $\R^n$ par
+  $x \mapsto f(x^TPx)$ ?
+\end{question}
+\begin{question}
+  \label{eq:hessienne}
+  Calculer les hessiennes en tout point des fonctions à valeurs
+  réelles suivantes:
+  \begin{enumerate}
+  \item $f(x, y) = x^2 + xy + y^2 + \displaystyle{\frac{x^3}{4}}$;
+  \item $f(x, y) = x^3 + y^3$;
+  \item $f(x, y) = x^2y - \displaystyle{\frac{x^2}{2}} - y^2$;
+  \item $f(x, y, z) = x^2 + 3y^2 - z^2 + 2xy - 5yz$;
+  \item $f(x, y, z) = \ln\big(e^x + e^y +e^z\big)$.
+  \end{enumerate}
+\end{question}
+
+\subsection{Convexité}
+
+Soit $f : U \to \R$ une fonction définie et différentiable sur un ouvert convexe
+$U \subset \R^n$. Alors $f$ est convexe si et seulement si
+\begin{equation}
+  \label{eq:convexeOrdUn}
+  \forall x, y \in U, \quad f(x) - f(y) \geq \nabla{f}(x)(x-y).
+\end{equation}
+On rappelle que ce critère \eqref{eq:convexeOrdUn} a une
+interprétation géométrique simple: l'hyperplan tangent au graphe de
+$f$ en un point $(x, f(x))$ est un hyperplan d'appui. En effet, cette
+dernière condition se traduit en un point $x \in U$ par
+\[
+(\nabla{f}(x), -1)  \begin{pmatrix}  y - x \\ f(y) - f(x) \end{pmatrix} \leq 0
+\]
+qui donne, une fois la multiplication matricielle explicitée, la
+relation \eqref{eq:convexeOrdUn}. On rappelle que le vecteur
+$(\nabla{f}(x), -1)$ est un vecteur normal définissant l'hyperplan
+tangent au graphe de $f$ au point $(x, f(x))$. Notez au passage le fait
+que $\nabla{f}(x)$, $x$ et $y$ sont des vecteurs dans $\R^n$ ;
+l'écriture ci-dessus est donc une écriture par blocs.
+
+Ce critère d'ordre $1$ est pratique mais pas toujours facile à
+manier. Quand $f$ est une fonction $2$ fois différentiable, tout comme
+dans le cas d'une fonction de $\R$ dans $\R$, la positivité de la
+différentielle seconde nous apporte une information sur la convexité
+de $f$. Plus précisément:
+\begin{prop}
+  Soit $f : U \to \R$ une fonction $2$ fois différentiable définie sur
+  un ouvert convexe $U \subset \R^n$. Alors $f$ est convexe si et
+  seulement si
+  \begin{equation}
+    \label{eq:convexeOrdDeux}
+    \forall x \in U, \quad \nabla^2{f}(x) \geq 0.
+  \end{equation}
+\end{prop}
+
+Ainsi, un point critique d'une fonction convexe ne peut être qu'un
+minimum local, donc global. Les autres cas de figures sont ceux d'un
+maximum local (si la hessienne est négative) ou d'un \emph{point
+  selle} quand la hessienne n'est négative ni positive.
+
+\begin{question}
+  Les fonction de la question \eqref{eq:hessienne} sont-elles convexes ?
+  Justifier.
+\end{question}
+
+
+
 \end{document}
 %%% Local Variables:
 %%% mode: latex
