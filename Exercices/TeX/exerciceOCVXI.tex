@@ -12,8 +12,8 @@
 \fancyhead[L]{EPITA\_ING2\_2018\_S8}
 \fancyhead[R]{Majeure SCIA}
 \fancyhead[C]{OCVX1}
-\fancyfoot[C]{\thepage} 
-\fancyfoot[L]{2017} 
+\fancyfoot[C]{\thepage}
+\fancyfoot[L]{2017}
 \fancyfoot[R]{\textbf{Chargé de cours :} \textsc{Bashar~DUDIN}}
 
 \pretitle{\vspace{-2.5\baselineskip} \begin{center}}
@@ -60,7 +60,7 @@ problème d'optimisation.
   \begin{enumerate}
   \item $f$ est différentiable en tout point de $\R^2$ car elle est
     somme, produit et composée de fonctions différentiable sur tout
-    $\R^2$. On a 
+    $\R^2$. On a
     \[
     \mathrm{J}_f(x, y) = \Big(e^{xy}\big(y^2+ xy + 1\big), e^{xy}\big(x^2+ yx + 1\big)\Big).
     \]
@@ -68,18 +68,18 @@ problème d'optimisation.
     c'est-à-dire $\R\times \R\times \R_+^*$, chacune de ses
     composantes est la somme et produit de fonctions
     différentiables. On a
-    \[ 
+    \[
     \mathrm{J}_g(x, y, z) = \begin{pmatrix} 1 & \ln(z) & y/z \\ yz & xz & yx \end{pmatrix}.
     \]
   \item $h$ est différentiable sur tout $\R^3$, car chaque composante
-    est somme produit et composée de fonctions différentiables. On a 
+    est somme produit et composée de fonctions différentiables. On a
     \[
-    \mathrm{J}_h(x, y, z) = 
-    \begin{pmatrix} 
-      \frac{x}{z^2 + 2}\big(2\sin(xy) + xy(\cos(xy)\big) 
-      & \frac{x^3}{z^2+2}\cos(xy) 
+    \mathrm{J}_h(x, y, z) =
+    \begin{pmatrix}
+      \frac{x}{z^2 + 2}\big(2\sin(xy) + xy(\cos(xy)\big)
+      & \frac{x^3}{z^2+2}\cos(xy)
       & \frac{-2zx^2}{(z^2+2)^2}\sin(xy) \\
-      \big(1+\tan^2(xyz)\big)yz 
+      \big(1+\tan^2(xyz)\big)yz
       & \big(1+\tan^2(xyz)\big)xz
       & \big(1+\tan^2(xyz)\big)xy
     \end{pmatrix}
@@ -121,11 +121,11 @@ problème d'optimisation.
     fonctions. En rappelant que $\mathrm{tr}$ est linéaire en $A$
     (donc se différentielle c'est elle même) on a
     \[
-    \Di{g}(A) = 2\mathrm{tr}(A)\mathrm{tr}. 
+    \Di{g}(A) = 2\mathrm{tr}(A)\mathrm{tr}.
     \]
     En $H\in M_n(\R)$, cette différentielle prend la valeur
     \[
-    \Di{g}(A)(H) = 2\mathrm{tr}(A)\mathrm{tr}(H). 
+    \Di{g}(A)(H) = 2\mathrm{tr}(A)\mathrm{tr}(H).
     \]
   \item On va procéder à la main dans ce dernier cas. Sans raison
     particulière à part le changement.
@@ -137,7 +137,7 @@ problème d'optimisation.
     \[
     \Di{h}(A)(H) = A^TAH + A^THA + H^TA^2.
     \]
-    Attention au fait que la mulitplication matricielle n'est pas commutative. 
+    Attention au fait que la mulitplication matricielle n'est pas commutative.
   \end{enumerate}
 \end{solution}
 
@@ -154,11 +154,11 @@ problème d'optimisation.
   \frac{\pa g}{\pa x}(a,b, c) + \frac{\pa g}{\pa y}(a, b, c) + \frac{\pa
     g}{\pa z}(a, b, c) = 0
   \]
-  pour tout point $(a, b, c) \in \R^3$. 
+  pour tout point $(a, b, c) \in \R^3$.
 \end{question}
 
 \begin{solution}
-  Il y a deux manières d'aborder cette question : 
+  Il y a deux manières d'aborder cette question :
   \begin{itemize}
   \item[\textbullet]
     utiliser les formules des dérivées partielles de composées, qu'on
@@ -174,31 +174,31 @@ problème d'optimisation.
   $(x, y, z)$ est donc donnée par
   \begin{align}
     \mathrm{J}_g(x, y, z) & = J_{f}(x, y, z)\times J_\phi(x, y, z)\\
-                          & = 
+                          & =
                             \begin{pmatrix}
-                              \frac{\pa f}{\pa x}v & 
-                              \frac{\pa f}{\pa y}v & 
-                              \frac{\pa f}{\pa z}v 
+                              \frac{\pa f}{\pa x}v &
+                              \frac{\pa f}{\pa y}v &
+                              \frac{\pa f}{\pa z}v
                             \end{pmatrix}
                             \begin{pmatrix}
                               1 & 0 & -1 \\
                               -1 & 1 & 0 \\
                               0 & -1 & 1
                             \end{pmatrix}\\
-                          & = 
-                            \begin{pmatrix} 
-                              \frac{\pa f}{\pa x}v 
+                          & =
+                            \begin{pmatrix}
+                              \frac{\pa f}{\pa x}v
                               - \frac{\pa f}{\pa y}v &
                               \frac{\pa f}{\pa y}v
                               - \frac{\pa f}{\pa z}v &
                               \frac{\pa f}{\pa z}v
                               -\frac{\pa f}{\pa x}v
                             \end{pmatrix}\\
-                          & = 
+                          & =
                             \begin{pmatrix}
-                              \frac{\pa g}{\pa x}(x, y, z) & 
-                              \frac{\pa g}{\pa y}(x, y, z) & 
-                              \frac{\pa g}{\pa z}(x, y, z) 
+                              \frac{\pa g}{\pa x}(x, y, z) &
+                              \frac{\pa g}{\pa y}(x, y, z) &
+                              \frac{\pa g}{\pa z}(x, y, z)
                             \end{pmatrix}
   \end{align}
   La relation qu'on attend correspond au fait que la somme des
@@ -210,7 +210,7 @@ problème d'optimisation.
   On considère la fonction définie sur $\R^2$ par
   $f(x, y) = \frac{x^2\cos(y)}{y + \sin^2(x) + 1}$. Pour tout
   $\vartheta \in \R$ on désigne par $w_\vartheta$ le vecteur
-  $(\vartheta, \vartheta^2)$. 
+  $(\vartheta, \vartheta^2)$.
   \begin{enumerate}
   \item Calculer la dérivée directionnelle $\pa_{w_\vartheta}f(0, 0)$
     en fonction de $\vartheta$ ;
@@ -221,9 +221,9 @@ problème d'optimisation.
 \begin{solution}
   \begin{enumerate}
   \item
-    On cherche dont la dérivée en $0$ de la fonction numérique 
+    On cherche dont la dérivée en $0$ de la fonction numérique
     \[
-    t \xrightarrow{f_{W_\theta}} f\big((0,0) + tw_\theta\big) 
+    t \xrightarrow{f_{W_\theta}} f\big((0,0) + tw_\theta\big)
     \]
     On a
     \[
@@ -233,12 +233,12 @@ problème d'optimisation.
     en suivant la règle de dérivation d'un produit (ou d'un quotient,
     comme vous voulez) vous pouvez remarquer que le dénominateur de la
     dérivée ne s'annule pas et qu'on a, par contre, un $t$ en facteur au
-    numérateur. La dérivée en $0$ est donc nulle. 
-  \item 
+    numérateur. La dérivée en $0$ est donc nulle.
+  \item
     Pour l'étude de fonction, c'est un fail. Je ne pensais pas que
     j'aurais quelque chose d'aussi simple en bidouillant mes
     coefficients. C'est \c{c}a de devenir vieux, on ne réfléchit plus.
-  \item 
+  \item
     Cela signifie que la fonction $f$ a des dérivées directionnelles
     constantes dans toutes les directions définies par l'origine et
     les points de la parabole $y = x^2$.
@@ -269,12 +269,11 @@ différentielle élémentaire.
   \[
   x = -\frac{1}{8}, \quad y = -1, \quad z = \frac{-15}{16}.
   \]
-  Dans le second cas on trouve : 
+  Dans le second cas on trouve :
   \[
   x = \frac{3}{4}, \quad y = 5, \quad z = 27\frac{1}{4}.
   \]
 \end{solution}
-
 
 \begin{question}
   Un étudiant malheureux trouve pour plan tangent à la surface donnée
@@ -295,7 +294,7 @@ Les programmes linéaires en dimension $2$ et parfois $3$ peuvent être
 résolus par une démarche géométrique qui suit les grandes lignes de
 l'optimisation convexe : on initialise en un point, on y calcule le
 gradient puis on met à jour l'estimation à l'aide de cette
-information. 
+information.
 
 \begin{question}
   Donner un exemple d'un programme linéaire:
@@ -307,7 +306,7 @@ information.
   \end{enumerate}
 \end{question}
 
-\noindent On considère le programme linéaire (\emph{PL}) suivant : 
+\noindent On considère le programme linéaire (\emph{PL}) suivant :
 \begin{displaymath}
   \begin{linearProg} {
       minimiser
@@ -319,22 +318,22 @@ information.
         4x_1 - x_2 \leq 1,
         -x_1 - x_2 \leq -5
       }
-    }    
+    }
   \end{linearProg}
 \end{displaymath}
 \begin{question}
   \begin{enumerate}
   \item Représenter le lieu admissible de (\emph{PL}) dans le plan
     euclidien.
-  \item 
+  \item
     \begin{enumerate}
     \item[a.]  Tracer la courbe de niveau $6$ de la fonction objectif
       de (\emph{PL}). Elle sera notée $C_6$.
     \item[b.]  Indiquer les demi-espaces positif et négatif défini par
       $C_6$. Dans quelle direction doit-on translater $C_6$ afin de
-      minimiser $f_0$. 
+      minimiser $f_0$.
     \end{enumerate}
-  \item     
+  \item
     Tracer la courbe de niveau qui réalise le minimum de (\emph{PL})
     et calculer l'unique point optimal de (\emph{PL}). Quelle est la
     valeur optimale de (\emph{PL})?
@@ -356,7 +355,7 @@ On considère désormais le programme linéaire (\emph{PL'}) donné par
         -x_2 \leq 1,
         -x_1 \leq 1
       }
-    }    
+    }
   \end{linearProg}
 \]
 \begin{question}
@@ -441,7 +440,7 @@ d'optimisation non convexe.
       \systeme{
         x + y \leq 2,
         x + 2y \leq 3
-      }  
+      }
     }
   \end{linearProg}
   \]
@@ -451,15 +450,15 @@ d'optimisation non convexe.
 
 \begin{question}
   \begin{enumerate}
-  \item 
+  \item
     Déterminer le rectangle de plus grande surface inscrit dans
-    l'ellipse d'équation 
-    \[ 
+    l'ellipse d'équation
+    \[
     \frac{x^2}{a} + \frac{y^2}{b} = 1.
     \]
-  \item 
+  \item
     Faire de même avec le parallélépipède de plus grand volume inscrit
-    dans l'ellipsoïde d'équation 
+    dans l'ellipsoïde d'équation
     \[
     \frac{x^2}{a} + \frac{y^2}{b} + \frac{z^2}{c} = 1.
     \]
@@ -506,7 +505,7 @@ d'optimisation non convexe.
 \noindent Vous trouverez dans la suite solutions et indications d'une
 partie des exercices de la feuille. Ceci étant majoritairement
 accessibles il vous est suffisant de comparer votre travail au
-résultats que vous retrouverez dans la suite. 
+résultats que vous retrouverez dans la suite.
 
 \printsolutions
 
