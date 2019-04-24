@@ -1,0 +1,540 @@
+\documentclass[aspectratio = 169]{beamer}
+
+\usepackage[utf8]{inputenc} % Character encoding.
+
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Descentes de gradient)
+   /Subject (OCVX)
+}
+
+
+\usepackage{./Style/linearProgramsBeamer} % This is extra styling for Beamer environments.
+\usepackage{./Style/linearProgramsStyle} % This is a set of commands for maths content.
+
+%-------------------------------------------------------------------------------
+%   TITLE PAGE
+%-------------------------------------------------------------------------------
+
+\author[BD]{Bashar Dudin}
+
+\institute[]{EPITA}
+
+\title{Optimisation convexe -- Méthodes itératives} %
+\subtitle{Descentes de gradient}
+
+%-------------------------------------------------------------------------------
+%   DOCUMENT BODY
+%-------------------------------------------------------------------------------
+
+\begin{document}
+
+\begin{frame}[plain]
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+\section{Quand on vous dit la vérité.}
+
+\begin{frame}{Les limites de la démarche analytique}
+  On s'intéresse dans ces slides à la résolution par des techniques
+  itératives des problèmes d'optimisation\footnote{En premier lieu
+    convexes.}. \pause
+
+  La résolution analytique d'équations réelles est rarement
+  aisée. Dans le cas où de telles expressions analytiques existent,
+  elles peuvent être coûteuses à calculer, comme c'est déjà le cas
+  pour la résolution de l'équation normale dans le cas de la
+  régression linéaire. \pause Les solutions sont parfois même
+  impossibles à expliciter à l'aide des fonctions usuelles et des
+  données du problème. \pause
+
+  \begin{question}
+    On se place dans le cadre de la régression
+    logistique. Pourriez-vous calculer analytiquement une expression
+    d'un point optimal?
+  \end{question}
+\end{frame}
+
+\section{Principe des méthodes de descente}
+
+\subsection{Prinicpe général}
+
+\begin{frame}{Cadre}
+  \begin{alertblock}{Hypothèse}
+    Dans la suite, et à moins de faire explicitement mention du
+    contraire, toutes nos fonctions sont supposées $2$-fois
+    différentiables de hessienne continue.
+  \end{alertblock}
+  \pause On s'intéresse à un problème d'optimisation de la forme
+  \begin{halfshyblock}{Le problème (P)}
+    \begin{equation}
+      \label{equation:P}
+      \tag{P}
+      \min_{x\in \R^n}\; f(x)
+    \end{equation}
+    où sera supposée convexe et vérifiant l'hypothèse de régularité
+    ci-dessus.
+  \end{halfshyblock}
+\end{frame}
+
+\begin{frame}{Principe des descentes de gradient}
+  \begin{algorithm}[H]
+    \caption{Principe des descentes de gradient}
+    \small{
+      \begin{algorithmic}[1]
+        \Statex
+        \Require $f$ : a function,  $x_0$ : an initial point in the domain of $f$
+        \Ensure $x^*$ : an optimal solution of $(P)$ if bounded from below
+        \Statex
+        \Function{\texttt{gradient\_descent}}{$f$, $x_0$}
+        \State $x \leftarrow x_0$
+        \While{\texttt{not} stopping condition}
+        \State compute a direction $\Delta x$ to update $x$
+        \State compute step $t > 0$ of descent
+        \State $x \leftarrow x + t\Delta x$
+        \EndWhile
+        \State \Return $x$
+        \EndFunction
+        \Statex
+      \end{algorithmic}
+    }
+  \end{algorithm}
+\end{frame}
+
+\begin{frame}{Principe des descentes de gradient}
+  Le principe général précédent nécessite quelques remarques, qu'ils
+  nous faudra garder en mémoire par la suite.
+  \begin{paremph}
+    \begin{itemize}
+    \item<2-> Chaque choix dans un algorithme de descente impacte la
+      convergence de celui-ci ; l'initialisation, le choix de la
+      direction ou celle du pas.
+    \item<3-> En pratique la boucle \texttt{while} apparaît à
+      l'intérieur d'une boucle finie.
+    \item<4-> Le pas est souvent (du moins dans un premier
+      temps) pris constant. Cela peut poser des problèmes de
+      convergence.
+    \item<5-> La condition d'arrêt s'exprime souvent par le fait que la
+      mise à jour n'est plus significative.
+    \end{itemize}
+  \end{paremph}
+\end{frame}
+
+\subsection{Calcule du pas de la descente}
+
+\begin{frame}{Calculer le pas}
+  Il arrive parfois qu'on ne se préoccupe que peu du pas de la
+  descente. Notamment quand on lui garde une valeur constante. C'est
+  un choix qui comporte des dangers, un pas constant peut donner lieu
+  à une descente divergente. \pause
+
+  Pour éviter cet écueil les matheux s'arment de deux approches:
+  \begin{itemize}
+  \item<3-> Le calcul du pas optimal : pour une direction choisie on
+    calcule $t$ minimisant $f(x + t\Delta x)$.
+  \item<4-> Le \emph{backtracking} : une heuristique qui mime le
+    précédent point tout en étant moins coûteuse.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Calculer le pas | \emph{Backtracking}}
+    \begin{algorithm}[H]
+    \caption{Backtracking}
+    \small{
+      \begin{algorithmic}[1]
+        \Statex
+        \Require $f$ : a function,  $x$ : a point in the domain of $f$
+        \Require $\Delta x$ a descent direction
+        \Require $\alpha \in ]0, 0.5[$, $\beta \in ]0, 1[$
+        \Ensure $t^*$ : an optimal point minimizimg $f(x + t\Delta x)$ if bounded from below
+        \Statex
+        \Function{\texttt{backtracking}}{$f$, $x$, $\alpha=0.1$, $\beta=0.8$}
+        \State $t \leftarrow 1$
+        \While{$f(x + t\Delta x) > f(x) + \alpha t\nabla f(x)^T\Delta x$}
+        \State $t \leftarrow \beta t$
+        \EndWhile
+        \State \Return $t$
+        \EndFunction
+        \Statex
+      \end{algorithmic}
+    }
+  \end{algorithm}
+\end{frame}
+
+\begin{frame}{Calculer le pas | \emph{Backtracking}}
+  À la fin de l'execution de \texttt{backtracking} on se retrouve dans
+  l'une des deux situations suivantes:
+  \begin{itemize}
+  \item<2-> $t = 1$
+  \item<3-> $t \in ]\beta t_0, t_0]$ où $t_0$ est le plus grand réel
+    satisfaisant la condtion de boucle.
+  \end{itemize}
+\end{frame}
+
+\subsection{Convexité forte et conditionnement de la hessienne}
+
+\begin{frame}{Analyse de convergence}
+  On désgine par $S$ l'ensemble
+  $\left\{ x \in \mathrm{Dom}(f) \mid f(x) \leq f(x_0) \right\}$ où
+  $x_0$ est sous-entendu être un point initial de descente de
+  gradient. C'est un fermé de $\R^n$ ; toute suite de $S$ convergente
+  dans $\R^n$ a une limite dans $S$. \pause
+
+  L'analyse de convergence, sous-entendu de la vitesse de
+  convergence, des méthodes de descentes s'effectue, outre l'hypothèse
+  de régularité $\mc{C}^2$, sous l'une des deux conditions suivantes:
+  \begin{enumerate}
+  \item<2-> La hessienne de $f$ est majorée sur $S$.
+  \item<3-> $f$ est \emph{strictement convexe} sur $S$ ; c'est-à-dire
+    qu'il existe $m > 0$ tel que pour tout $x \in S$,
+    $\nabla^2f(x) \geq m I$. C'est une inégalité
+        fonctionnelle entre formes quadratiques!
+  \end{enumerate}
+  \pause[4] La seconde condition est la plus forte des deux ; elle
+  implique la première.
+\end{frame}
+
+\begin{frame}{Nombre de conditionnement de la hessienne}
+  \begin{defn}
+    Si $f : \R^n \to \R$ est une fonction convexe $\mc{C}^2$, le
+    nombre de conditionnement de $\nabla^2f(x)$ est le rapport de sa
+    plus grande valeur propre à sa plus petite.
+  \end{defn}
+  \begin{itemize}
+  \item<2-> La hessienne de $f$ étant symétrique positive et à
+    valeurs réelles, elle est diagonalisable sur $\R$ à valeurs
+    propres positives.
+  \item<3-> Le nombre de conditionnement est $\geq 1$.
+  \item<4-> Le rapport des bornes qui encadrent $f$ dans le cas
+    strictement convexe est un majorant des nombres de
+    conditionnement.
+  \end{itemize}
+  \pause[5]
+  \begin{alertblock}{Convergence}
+    Les nombres de conditionnements de $f$ sont corrélés à la vitesse
+    de convergence de la descente de gradient.
+  \end{alertblock}
+\end{frame}
+
+\section{La classique}
+
+\begin{frame}{La descente de gradient à l'ancienne}
+  \begin{algorithm}[H]
+    \caption{Descente de gradient}
+    \small{
+      \begin{algorithmic}[1]
+        \Statex
+        \Require $f$ : a function,  $x_0$ : an initial point in the domain of $f$, $\varepsilon$ : tolerance
+        \Ensure $x^*$ : an optimal solution of $(P)$ if bounded from below
+        \Statex
+        \Function{\texttt{gradient\_descent}}{$f$, $x_0$, $\varepsilon$}
+        \State $x \leftarrow x_0$
+        \While{$\|\nabla f(x) \| > \varepsilon$}
+        \State $\Delta x \leftarrow - \nabla f(x)$
+        \State compute step $t > 0$ of descent
+        \State $x \leftarrow x + t\Delta x$
+        \EndWhile
+        \State \Return $x$
+        \EndFunction
+        \Statex
+      \end{algorithmic}
+    }
+  \end{algorithm}
+\end{frame}
+
+\begin{frame}{Analyse de convergence | Hessienne majorée}
+  \begin{prop}
+    Supposons $f$ $\mc{C}^2$ ayant une hessienne majorée ; il existe
+    $M \in \R_+$ tel que pour tout $x \in S$, $\nabla^2f(x)$. La
+    descente de gradient avec un pas constant $t \leq \frac{1}{M}$ ou
+    via \textit{backtracking} garantit
+    \[
+      \left| f(x_k) - f(x^*)\right| \leq \frac{\|x_0 - x^*\|_2^2}{2ck}
+    \]
+    où
+    \begin{itemize}
+    \item $x_0$ est le point initial de la descente
+    \item $x_k$ le $k$-ème itéré de la descente
+    \item $c$ est égal à $t$ dans le cas du pas constant et à
+      $\min\{1, \frac{\beta}{M}\}$ dans le cas du
+      \textit{backtracking}.
+    \end{itemize}
+  \end{prop}
+\end{frame}
+
+
+\begin{frame}{Analyse de convergence | Hessienne majorée}
+  \[
+    \tikz[baseline, rectangle, minimum width=.75\textwidth, rounded corners=1mm]{
+      \node[fill=mLightBrown!50] (t2) {
+        $
+        \displaystyle{
+          \left| f(x_k) - f(x^*)\right| \leq \frac{\|x_0 - x^*\|_2^2}{2ck}
+        }
+        $
+      };
+    }
+  \]
+  \begin{itemize}
+  \item<1-> La valeur absolue du membre de gauche est superflue.
+  \item<2-> La vitesse de convergence dépend du point initial (étonnant ... ).
+  \item<3-> Pour un point sous-optimal à $\varepsilon$ près on est sur une
+    complexité en $\bigO\left(\frac{1}{\varepsilon}\right)$.
+  \item<4-> L'intérêt du \textit{backtracking} réside dans le fait
+    qu'on n'a pas à calculer le pas à la main. Si $\beta$ est proche
+    de $1$ on ne perd pas grand chose par rapport au pas constant.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Analyse de convergence | Cas fortement convexe}
+  \begin{prop}
+    Supposons $f$ $\mc{C}^2$ fortement convexe ; il existe $m$,
+    $M \in \R_+$ encadrant la hessienne en tout point de $S$. La
+    descente de gradient à pas constant $t \leq \frac{2}{M}$ ou via
+    \textit{backtracking} garantit
+    \[
+      \left| f(x_k) - f(x^*)\right| \leq c^k\|x_0 - x^*\|_2
+    \]
+    avec $c \in ]0, 1[$.
+    \begin{itemize}
+    \item $x_0$ est le point initial de la descente
+    \item $x_k$ le $k$-ème itéré de la descente
+    \item $c$ est égal à $(1 - \frac{m}{M})$ dans le cas du pas
+      constant et à $1 - \min\{2m\alpha, 2\beta\alpha\frac{m}{M}\}$
+      dans le cas du \textit{backtracking}.
+    \end{itemize}
+  \end{prop}
+\end{frame}
+
+\begin{frame}{Analyse de convergence | Cas fortement convexe}
+    \[
+    \tikz[baseline, rectangle, minimum width=.75\textwidth, rounded corners=1mm]{
+      \node[fill=mLightBrown!50] (t2) {
+        $
+        \displaystyle{
+          \left| f(x_k) - f(x^*)\right| \leq c^k\|x_0 - x^*\|_2
+        }
+        $
+      };
+    }
+  \]
+  \begin{itemize}
+  \item<1-> La vitesse de convergence qu'on obtient ainsi est dite
+    linéaire ; elle l'est si graphée contre une échelle logarithmique.
+  \item<2-> Pour un point sous-optimal à $\varepsilon$ près on est sur
+    une complexité en
+    $\bigO{\left(\ln\big(\frac{1}{\varepsilon}\big)\right)}$.
+  \item<3-> La constante $c$ dépend très fortement de $\frac{M}{m}$.
+  \end{itemize}
+\end{frame}
+
+\section{Les descentes de plus fortes pentes}
+
+\begin{frame}{Généraliser la descente classique}
+  L'intuition qui mène à la descente de gradient classique répond en
+  réalité à un problème de minimisation. \pause Étant donné un point
+  $x \in S$ et un vecteur $v$ de norme assez petite, on peut écrire
+  \[
+    f(x+v) = f(x) + \nabla f(x)^T v + o(v).
+  \]
+  La \textit{direction} de descente qui minimise au plus la valeur
+  objective est donnée par
+
+  \[
+    \Delta x_{nsd}= \argmin\left\{\nabla f(x)^Tv \mid \|v\|_2 = 1\right\}.
+  \]
+  C'est une conséquence de l'inégalité de Cauchy-Shwarz.
+\end{frame}
+
+\begin{frame}{La descente de plus forte pente}
+  La démarche précédente nous permet de définir différentes variantes
+  des descentes de gradients ; en réalité l'essentielle des descentes
+  de gradients. \pause
+
+  \begin{defn}
+    Soient $x \in S$ et $\|\cdot\|$ une norme sur $\R^n$. On désigne
+    par $\Delta x_{nsd}$ (nsd pour \textit{nomralized steepest
+      descent}) la quantité
+    \[
+      \Delta x_{nsd} = \argmin\left\{\Delta f(x)^Tv \mid \|v\| = 1\right\}
+    \]
+    La direction de descente de plus forte pente (sous-entendu pour la
+    norme $\|\cdot\|$) est donnée par
+    \[
+      \Delta_{sd} = \|\nabla f(x)\|\Delta x_{sd}.
+    \]
+  \end{defn}
+\end{frame}
+
+\begin{frame}{La descente de plus forte pente | Géométrie}
+  La descente de plus forte pente pour une norme $ \| \cdot \| $
+  s'interprète comme
+  \[
+    \tikz[baseline, rectangle, minimum width=.75\textwidth, rounded corners=1mm]{
+      \node[fill=mLightBrown!50] (t2) {
+        le vecteur de plus grande projection sur $-\nabla f(x)$.
+      };
+    }
+  \]
+  \pause
+  Pour tout vecteur $v$ dans la sphère unité pour la norme
+  $\|\cdot\|$, $\nabla f(x)^T v$ a pour valeur absolue la norme de la
+  projection orthogonale de $v$ sur $\nabla f(x)$. Dans la mesure où
+  l'on cherche un minimisant c'est la plus grande projection contre
+  $-\nabla f(x)$.
+\end{frame}
+
+\begin{frame}{La descente de gradient de plus forte pente}
+  \begin{algorithm}[H]
+    \caption{Descente de gradient de plus forte pente}
+    \small{
+      \begin{algorithmic}[1]
+        \Statex
+        \Require $f$ : a function,  $x_0$ : an initial point in the domain of $f$, $\varepsilon$ : tolerance, $\| \cdot \|$ une norme sur $\R^n$.
+        \Ensure $x^*$ : an optimal solution of $(P)$ if bounded from below
+        \Statex
+        \Function{\texttt{steepest\_gradient\_descent}}{$f$, $x_0$, $\varepsilon$, $\|\cdot\|$}
+        \State $x \leftarrow x_0$
+        \While{$\|\nabla f(x) \| > \varepsilon$}
+        \State Compute steepest descent direction $\Delta x_{sd}$ for $\|\cdot\|$.
+        \State compute step $t > 0$ of descent
+        \State $x \leftarrow x + t\Delta x_{sd}$
+        \EndWhile
+        \State \Return $x$
+        \EndFunction
+        \Statex
+      \end{algorithmic}
+    }
+  \end{algorithm}
+\end{frame}
+
+\begin{frame}{La descente de plus forte pente | Analyse}
+  \begin{itemize}
+  \item<1-> La stratégie de descente de plus forte pente permet de
+    varier les types de descentes de gradients. Les géométries
+    sous-jacentes sont parfois plus adaptées à certains problèmes qu'à
+    d'autres.
+  \item<2-> L'analyse de la convergence dans le cas de descente
+    classique s'étend au cas de plus forte pente. La raison en est
+    l'équivalence des différentes normes sur $\R^n$. L'essentiel des
+    propriétés utilisés lors des encadrements étant partagées par
+    celles-ci.
+  \end{itemize}
+\end{frame}
+
+\section{La méthode de Newton}
+
+\begin{frame}{Une méthode de second ordre}
+  Les descentes de gradient qu'on a pu voir jusqu'à présent sont des
+  méthodes de descentes dites de premier ordre ; elle minimise sur la
+  boule unité pour une norme donnée l'approximation au premier ordre
+  de la fonction objectif. \pause
+
+  La méthode de Newton est une méthode de second ordre ; on cherche à
+  mininiser l'approximation de second ordre de la fonction objectif en
+  un itéré.
+\end{frame}
+
+
+\begin{frame}{Une méthode de second ordre}
+  Soit $f$ une fonction objectif convexe et $x$ un point du domaine de
+  $f$. Le DL de $f$ au second ordre en $x$ s'écrit
+  \[
+    \tikz[baseline, rectangle, minimum width=.75\textwidth, rounded corners=1mm]{
+      \node[fill=mLightBrown!50] (t2) {
+        $
+        \displaystyle{
+          f(x + v) = f(x) + \nabla f(x)^Tv + \frac{1}{2}v^T\nabla^2f(x) v + \|v\|^2\varepsilon(v)
+        }
+        $
+      };
+    }
+  \]
+  \pause
+  On choisit d'approcher $f(x + v)$ par l'expression de second ordre
+  \[
+    \tikz[baseline, rectangle, minimum width=.75\textwidth, rounded corners=1mm]{
+      \node[fill=mLightBrown!50] (t2) {
+        $
+        \displaystyle{
+          f(x) + \nabla f(x)^Tv + \frac{1}{2}v^T\nabla^2f(x) v
+        }
+        $
+      };
+    }
+  \]
+  C'est une fonction convexe en $v$ qu'on sait minimiser. On obtient
+  ici un minimisant donné par
+  \[
+    \tikz[baseline, rectangle, minimum width=.75\textwidth, rounded corners=1mm]{
+      \node[fill=mLightBrown!50] (t2) {
+        $
+        \displaystyle{
+          \Delta x_N = -\left(\nabla f(x) \right)^{-1}\nabla f(x).
+        }
+        $
+      };
+    }
+  \]
+\end{frame}
+
+\begin{frame}{Méthode de Newton -- Condition d'arrêt}
+  Traditionnellement, la condition d'arrêt de la méthode de Newton est
+  décrite par le fait que le carré du coefficient de décroissance
+  suivant tombe sous un certain seuil de tolérance.
+  \[
+    \tikz[baseline, rectangle, minimum width=.75\textwidth, rounded corners=1mm]{
+      \node[fill=mLightBrown!50] (t2) {
+        $
+        \displaystyle{
+         \lambda(x) = \left(\nabla f(x)^T \nabla^2f(x)^{-1}\nabla f(x)\right)^{1/2}.
+        }
+        $
+      };
+    }
+  \]
+  \pause
+  Celui-ci estime l'écart entre le minimisant de l'approximation du
+  second ordre de $f$ en un point et la valeur de $f$ en ce même
+  point.
+\end{frame}
+
+\begin{frame}{Algorithme de Newton}
+    \begin{algorithm}[H]
+    \caption{Méthode de Newton}
+    \small{
+      \begin{algorithmic}[1]
+        \Statex
+        \Require $f$ : a function,  $x_0$ : an initial point in the domain of $f$, $\varepsilon$ : tolerance, $\| \cdot \|$ une norme sur $\R^n$.
+        \Ensure $x^*$ : an optimal solution of $(P)$ if bounded from below
+        \Statex
+        \Function{\texttt{Newton\_Method}}{$f$, $x_0$, $\varepsilon$, $\|\cdot\|$}
+        \State $x \leftarrow x_0$
+        \State $\Delta x_N \leftarrow -\left(\nabla^2 f(x)\right)^{-1}\nabla f(x)$
+        \State $\lambda^2(x) = -\nabla f(x)^T\Delta x_N$
+        \While{$\frac{\lambda^2(x)}{2} > \varepsilon$}
+        \State $\Delta x_N \leftarrow -\left(\nabla^2 f(x)\right)^{-1}\nabla f(x)$
+        \State $\lambda^2(x) = -\nabla f(x)^T\Delta x_N$
+        \State compute step $t > 0$ of descent
+        \State $x \leftarrow x + t\Delta x_N$
+        \EndWhile
+        \State \Return $x$
+        \EndFunction
+        \Statex
+      \end{algorithmic}
+    }
+  \end{algorithm}
+\end{frame}
+
+\begin{frame}{Méthode de Newton -- Quelques remarques}
+
+\end{frame}
+
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
