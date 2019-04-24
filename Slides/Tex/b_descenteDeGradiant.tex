@@ -146,7 +146,7 @@
         \Require $f$ : a function,  $x$ : a point in the domain of $f$
         \Require $\Delta x$ a descent direction
         \Require $\alpha \in ]0, 0.5[$, $\beta \in ]0, 1[$
-        \Ensure $t^*$ : an optimal point minimizimg $f(x + t\Delta x)$ if bounded from below
+        \Ensure $t^*$ : a sub-optimal point minimizimg $f(x + t\Delta x)$ if bounded from below
         \Statex
         \Function{\texttt{backtracking}}{$f$, $x$, $\alpha=0.1$, $\beta=0.8$}
         \State $t \leftarrow 1$
@@ -356,7 +356,7 @@
     par $\Delta x_{nsd}$ (nsd pour \textit{nomralized steepest
       descent}) la quantité
     \[
-      \Delta x_{nsd} = \argmin\left\{\Delta f(x)^Tv \mid \|v\| = 1\right\}
+      \Delta x_{nsd} = \argmin\left\{\nabla f(x)^Tv \mid \|v\| = 1\right\}
     \]
     La direction de descente de plus forte pente (sous-entendu pour la
     norme $\|\cdot\|$) est donnée par
@@ -505,10 +505,10 @@
     \small{
       \begin{algorithmic}[1]
         \Statex
-        \Require $f$ : a function,  $x_0$ : an initial point in the domain of $f$, $\varepsilon$ : tolerance, $\| \cdot \|$ une norme sur $\R^n$.
+        \Require $f$ : a function,  $x_0$ : an initial point in the domain of $f$, $\varepsilon$ : tolerance.
         \Ensure $x^*$ : an optimal solution of $(P)$ if bounded from below
-        \Statex
-        \Function{\texttt{Newton\_Method}}{$f$, $x_0$, $\varepsilon$, $\|\cdot\|$}
+
+        \Function{\texttt{Newton\_Method}}{$f$, $x_0$, $\varepsilon$}
         \State $x \leftarrow x_0$
         \State $\Delta x_N \leftarrow -\left(\nabla^2 f(x)\right)^{-1}\nabla f(x)$
         \State $\lambda^2(x) = -\nabla f(x)^T\Delta x_N$
