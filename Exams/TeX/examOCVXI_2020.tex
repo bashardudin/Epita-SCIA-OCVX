@@ -1,0 +1,310 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[french]{babel}
+\usepackage{fancyhdr}
+\usepackage[margin=.8in]{geometry}
+
+\usepackage{Style/TeXingStyle}
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{1.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyhead[L]{EPITA\_ING2\_2020\_S8}
+\fancyhead[R]{Majeures SCIA \&IMAGE}
+\fancyhead[C]{OCVX1}
+\fancyfoot[C]{\thepage}
+\fancyfoot[L]{Avril 2019}
+\fancyfoot[R]{\footnotesize{\textbf{Chargés de cours :} \textsc{B.~Dudin} \& \textsc{G.~Tochon}}}
+
+\pretitle{\vspace{-.5\baselineskip} \begin{center}}
+\title{%
+  { \huge Examen d'optimisation convexe}%
+}
+\posttitle{
+\end{center}
+  \begin{flushleft}
+    \vspace{3\baselineskip} \textit{
+      \!\!\emph{Durée de l'épreuve 3h.}\\
+      \! \emph{Les documents du cours ainsi que les calculettes ne
+        sont pas
+        autorisées.}  \\
+      Le barême est indicatif et peut évoluer de manière marginale. Il
+      contient un maximum de $37$ points, les notes seront rapportées
+      à une note inférieure, très probablement $\geq 20$.  }
+  \end{flushleft}
+  \rule{\textwidth}{1.5pt}
+  \vspace{-5\baselineskip}
+}
+\author{}
+\date{}
+
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Examen optimisation convexe - 2020)
+   /Subject (Optimisation convexe)
+}
+
+\begin{document}
+
+\maketitle\thispagestyle{fancy}
+
+\section{Géométrie élémentaire dans $\R^2$}
+\label{sec:geom}
+
+\noindent On cherche dans cette section à vous faire représenter
+quelques lieux géométrique de $\R^2$.
+
+\noindent On désigne par $A$ la partie de $\R^2$ donnée par
+\[
+  A = \left\{ (x, y) \in \R^2 \; \left| \;
+      \begin{matrix}
+        x + 2y & \leq 4 \\
+        2x - 3y & \leq 2 \\
+        -x + 5y & \leq 6
+    \end{matrix}\right.\right\}.
+\]
+\begin{question}{3}
+  \begin{enumerate}
+  \item
+    Représenter $A$ graphiquement en indiquant les éléments qui
+    permettent de décomposer votre représentation.
+  \item Quelle contrainte (d'inégalité) linéaire faut-il rajouter aux
+    contraintes de $A$ pour avoir un lieu borné de $\R^2$ délimité par
+    une droite parallèle à $x + 2y = 4$ et passant par $(-1,-2)$? On
+    note $B$ la partie ainsi obtenue.
+  \item Donner l'équation d'un hyperplan d'appui à $B$ au point
+    $(\frac{16}{7}, \frac{6}{7})$.
+  \end{enumerate}
+\end{question}
+On note $C$ l'intersection de $A$ avec l'épigraphe de la fonction
+$\varphi: x \mapsto -\ln(x+5)$ sur son domaine de définition.
+\begin{question}{3}
+  \begin{enumerate}
+  \item Représenter $C$ graphiquement (schématiquement).
+  \item Comment représenter le graphe de $\varphi$ comme un courbe de
+    niveau?
+  \item En quoi est-ce que $C$ est convexe\footnote{Autrement que par
+      le fait que convexe \c{c}a commence par un $C$!}?
+  \end{enumerate}
+\end{question}
+On considère les fonctions suivantes notées $g$ et $h$ respectivement
+données par les expressions
+\[
+  g(x, y) = x^3- y, \quad h(x, y) = x^2-y^2.
+\]
+\begin{question}{2}
+  \begin{enumerate}
+  \item Représenter les courbes de niveaux
+    $\mc{C}_0(g)$ et $\mc{C}_1(h)$.
+  \item Justifier le fait que $g$ ne soit pas convexe.
+  \end{enumerate}
+\end{question}
+\begin{question}{1}
+  Justifier soigneusement le fait que toute norme de $\R^n$ définit
+  une fonction convexe.
+\end{question}
+\begin{question}{1}
+  En quoi est-ce que la condition de convexité a un intérêt dans les
+  problèmes d'optimisation?
+\end{question}
+
+\section{Calcul différentiel élémentaire}
+
+\noindent À moins qu'on y fasse explicitement référence, il n'est pas
+nécessaire de justifier la différentiabilité des fonctions que vous
+manipulez.
+\begin{question}{2}
+  Expliciter le gradient des expressions suivantes en tout point où
+  cela fait sens:
+  \begin{enumerate}
+  \item $f(x, y, z) = xy^2 + \cos(xz) -\tan(x^2)$;
+  \item $g(x, y, z) = \ln(1 + x^2 + y^2)$.
+  \end{enumerate}
+  Quelle est la jacobienne de la fonction définie par $h = (g, f^2)$.
+\end{question}
+\begin{question}{2}
+  Quelle est la dérivée directionnelle en $(0, 0)$ de la fonction
+  \[
+    f(x, y) = \left\{
+      \begin{array}{cc}
+        \frac{xy}{x+ y} & \textrm{si $(x, y) \neq (0, 0)$} \\
+        0 & \textrm{sinon}
+      \end{array}\right.
+  \]
+  le long de $(1, \alpha)$ pour
+  $\alpha \in \R$. Est-ce que $f$ est différentiable en $(0, 0)$?
+\end{question}
+
+\noindent On se donne une matrice $A \in \mc{M}_n(\R)$.
+\begin{question}{2}
+  Calculer, là où cela fait sens, la différentielle des fonctions
+  suivantes:
+  \begin{enumerate}
+  \item $f :\R^n \rightarrow \R$ donnée par l'expressoin
+    $X \mapsto X^T$.
+  \item $g : \R^n \rightarrow \R$ donnée par l'expression
+    $X \mapsto \tan(X^TAX)$.
+  \end{enumerate}
+\end{question}
+
+\section{Problèmes d'optimisation simples}
+
+\subsection{De l'existence de points optimaux}
+
+\noindent On considère les contraintes linéares sur $\R^2$
+\[
+\systeme{
+  x + 2y \leq 3,
+  x - y  \geq 2
+}
+\]
+définissant le lieu $D$ de $\R^2$.
+\begin{question}{2}
+  Donner pour chacune des propriétés suivantes un programme linéaire
+  ayant $D$ pour lieu admissible\footnote{Lieu décrit par les
+    contraintes du programme linéare.} et satisfaisant cette propriété
+  \begin{enumerate}
+  \item le programme linéaire n'a qu'un seul point optimal ;
+  \item le programme linéaire en a une infinité;
+  \item le programme linéaire n'est pas borné.
+  \end{enumerate}
+\end{question}
+
+\subsection{Un programme linéaire en petite dimension}
+
+\noindent On considère le programme linéaire (\emph{PL}) suivant :
+\begin{displaymath}
+  \begin{linearProg} {
+      minimiser
+    }{
+      $x + y$
+    }{
+      sujet à $(x, y) \in B$
+    }
+  \end{linearProg}
+\end{displaymath}
+On cherche dans la suite à étudier (\emph{PL}).
+\begin{question}{4}
+  \begin{enumerate}
+  \item En reprenant éventuellement la représentation graphique que
+    vous avez utilisée section \ref{sec:geom}:
+    \begin{enumerate}
+    \item[a.]  Tracer la courbe de niveau $0$ de la fonction objectif
+      de (\emph{PL}). Elle sera notée $\mc{C}_0$.
+    \item[b.]  Indiquer les demi-espaces positif et négatif définis
+      par $\mc{C}_0$.
+    \item[c.]  Indiquer dans quelle direction on doit translater
+      $\mc{C}_0$ afin de minimiser la fonction objectif
+    \end{enumerate}
+  \item
+    Tracer la courbe de niveau qui réalise le minimum de (\emph{PL})
+    et calculer l'unique point optimal de (\emph{PL}). Quelle est la
+    valeur optimale de (\emph{PL})?
+  \end{enumerate}
+\end{question}
+
+\subsection{\emph{Baby examples}}
+
+\noindent L'approche géométrique dans le cas des programmes linéaires
+de petites dimensions s'étend à certains problèmes d'optimisations
+simples. On considère le probème d'optimisation (\emph{P1}) suivant
+\[
+\begin{PbOptim}{
+    minimiser
+  }{
+    $2x + y$
+  }{
+    $(x, y) \in C$
+  }
+\end{PbOptim}
+\]
+où $C$ est la partie de $\R^2$ qu'on a décrite section \ref{sec:geom}.
+
+\begin{question}{3}
+  \begin{enumerate}
+  \item Représenter la courbe de niveau de la fonction objectif qui
+    réalise le minimum de (\emph{P1})\footnote{croquis de son
+      positionnement.}.
+  \item Calculer le point optimal ainsi que la valeur optimale de
+    (\emph{P1}).
+  \end{enumerate}
+\end{question}
+On inverse nos habitudes dans la suite pour étudier un problème
+d'optimisation (\emph{P2}) où les contraintes sont plus simples que la
+fonction objectif.
+\[
+\begin{PbOptim}{
+    minimiser
+  }{
+    $x^2 + y^2$
+  }{
+    $2x + 3y \geq 6$
+  }
+\end{PbOptim}
+\]
+\begin{question}{3}
+  Trouver le point minimal de ce problème d'optimisation. Expliquer
+  votre démarche.
+\end{question}
+
+\section{Problèmes d'optimisation plus construits}
+\label{sec:plusdur}
+
+\noindent On considère le problème d'optimisation (\emph{P3}) suivant
+\[
+\begin{PbOptim}{
+    minimiser
+  }{
+    $xy + x^2 + y^2 + z^2$
+  }{
+    $y + z \leq -1$
+    }
+\end{PbOptim}
+\]
+\begin{question}{5}
+  \begin{enumerate}
+  \item Écrire (\emph{P3}) sous forme standard.
+  \item Justifier le fait que (\emph{P3}) soit un problème
+    d'optimisation convexe.
+  \item Donner le Lagrangien de (\emph{P3}) puis son problème dual
+    (\emph{D3}).
+  \item Résoudre (\emph{D3}).
+  \item En déduire une solution du problème primal (\emph{P3}).
+  \end{enumerate}
+\end{question}
+
+\noindent On considère le problème d'optimisation (\emph{P4})
+\[
+\begin{PbOptim}{
+    minimiser
+  }{
+    $\alpha x + \beta y$
+  }{
+    \systeme{
+      x^2 + y^2 \leq 5,
+      x^2 + 5y^2 \geq 9
+    }
+  }
+\end{PbOptim}
+\]
+On s'intéresse aux solutions des problèmes d'optimisation pour
+$(\alpha, \beta)$ qui varient.
+\begin{question}{4}
+  \begin{enumerate}
+  \item Calculer un point optimal quand $(\alpha, \beta) = (1, 0)$
+    puis $(0, 1)$.
+  \item Où se trouve le point optimal quand
+    $(\alpha, \beta) = (4, 10)$?
+  \item Donner le point d'intersection des bords des sous-niveaux
+    définissant les contraintes de notre problème d'optimisation.
+  \item Caractériser tous les paramètres $(\alpha, \beta)$ qui ont le
+    point d'intersection dans le troisième cadran comme point optimal.
+  \end{enumerate}
+\end{question}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
