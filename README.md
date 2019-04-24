@@ -1,2 +1,3 @@
 # OCVX
-Convex optimisation @Epita
+
+Convex optimisation @Epita taught through AI major (SCIA).
