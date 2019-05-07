@@ -361,8 +361,10 @@
     La direction de descente de plus forte pente (sous-entendu pour la
     norme $\|\cdot\|$) est donnée par
     \[
-      \Delta_{sd} = \|\nabla f(x)\|\Delta x_{sd}.
+      \Delta_{sd} = \|\nabla f(x)\|_*\Delta x_{nsd}
     \]
+    où $\|\cdots\|_*$ désigne la norme d'opérateur associée à
+    $\|\cdot\|$.
   \end{defn}
 \end{frame}
 
@@ -527,7 +529,22 @@
 \end{frame}
 
 \begin{frame}{Méthode de Newton -- Quelques remarques}
-
+  \begin{itemize}
+  \item<1-> Si $T$ est une transformation affine satisfaisant
+    $y = Tx$, les itérés de la méthode de Newton dans ces coordonées
+    satisfont $x + \Delta x_N = T(y + \Delta y_N$. Dans ce sens une
+    transformation affine n'affecte pas les résultats de convergence
+    de la méthode.
+  \item<2-> La méthode de Newton a $2$ phases de convergence : une
+    relativement lente (linéaire) lors de l'approche du point optimal
+    puis une très rapide (quadratique) une fois suffisamment près de
+    celui-ci.
+  \item<3-> Le principal \emph{bottle neck} de la méthode de Newton
+    est celui relatif au calcul des inverses des hessiennes aux itérés
+    de la méthode, les méthodes de quasi-Newton cherchent à optimiser
+    les méthodes de Newton en approchant les inverses des hessiennes
+    en ces points.
+  \end{itemize}
 \end{frame}
 
 
