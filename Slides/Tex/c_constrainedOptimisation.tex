@@ -1,0 +1,462 @@
+\documentclass[aspectratio = 169]{beamer}
+
+\usepackage[utf8]{inputenc} % Character encoding.
+
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Descentes de gradient)
+   /Subject (OCVX)
+}
+
+
+\usepackage{./Style/linearProgramsBeamer} % This is extra styling for Beamer environments.
+\usepackage{./Style/linearProgramsStyle} % This is a set of commands for maths content.
+
+%-------------------------------------------------------------------------------
+%   TITLE PAGE
+%-------------------------------------------------------------------------------
+
+\author[BD]{Bashar Dudin}
+
+\institute[]{EPITA}
+
+\title{Optimisation convexe -- Méthodes itératives} %
+\subtitle{Descentes de gradient}
+
+%-------------------------------------------------------------------------------
+%   DOCUMENT BODY
+%-------------------------------------------------------------------------------
+
+\begin{document}
+
+\begin{frame}[plain]
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+\section{Optimisation sous contraintes d'égalités}
+
+\begin{frame}{Contraintes d'égalités | Cadre}
+  On s'intéresse aux problèmes d'optimisation $(P)$ de la forme
+  \begin{equation}
+    \label{P}
+    \tag{$P$}
+    \begin{PbOptim}{
+        minimiser
+      }{
+        $f(x)$
+      }{
+        $Ax = b$
+      }
+    \end{PbOptim}
+  \end{equation}
+où $f :\R^n \to \R$ est convexe $\mc{C}^2$ et
+  $A \in \mc{M}_{p, n}(R)$. \pause
+  \begin{halfshyblock}{Hypothèses}
+    \begin{itemize}
+    \item<2-> On suppose dans la suite que $\rg(A) < n$\footnote{Quel
+        est le sens de cette hypothèse?} ; chose qu'on peut en
+      particulier garantir quand $ p < n$. \only<3->{\emph{Dans ce cas
+          la condition de Slater est satisfaite}}.
+    \item<2-> On suppose que notre point $x_0$ de départ est
+      admissible\footnote{Qu'est-ce que cela implique?}.
+    \end{itemize}
+  \end{halfshyblock}
+\end{frame}
+
+\begin{frame}{Contraintes d'égalités | Dualité}
+  Sous les hypothèses précédentes la résolution de $(P)$ est
+  équivalente à la résolution du système
+  \begin{equation}
+    \label{KKT-P}
+    \tag{KKT-$P$}
+    \left\{
+      \begin{array}{ccc}
+        Ax & = & b \\
+        \nabla f(x) + A^T\nu = 0
+      \end{array}
+    \right.
+  \end{equation}
+  Cette formulation est au coeur d'une résolution de $(P)$ basée sur
+  l'algorithme de Newton qu'on abordera plus loin dans le cours.
+\end{frame}
+
+\begin{frame}{Contraintes d'égalités | Attaque élémentaire}
+  Sous les conditions de rang de $A$ et d'existence d'un point
+  admissible le système linéaire $Ax = b$ a des solutions qu'on peut
+  écrire paramétriquement.
+  \pause
+
+  L'algorithme de Gauss donne une matrice
+  $F \in \mc{M}_{n - \rg(A), n}$ de rang maximal qui paramètre le lieu
+  admissible de $(P)$ par
+  \[
+    x_0 + Fz
+  \]
+  pour $z \in \R^{n - \rg(A)}$.
+\end{frame}
+
+\begin{frame}{Contraintes d'égalités | Attaque élémentaire}
+  Le problème $(P)$ est dans ce cas équivalent à $(P_z)$ donné par
+  \begin{equation}
+    \label{Pz}
+    \tag{$P_z$}
+      \min_{z} f(x_0 + Fz) ;
+  \end{equation}
+  si $z^*$ est un point optimal de $(P_z)$ alors $x^* = x_0 + Fz^*$
+  est un point optimal de $(P)$. \pause
+
+  Le problème $(P_z)$ est un problème sans contraintes qu'on peut
+  désormais résoudre par une descente de gradient.
+\end{frame}
+
+\begin{frame}{Contraintes d'égalités | Attaque élémentaire}
+  \begin{itemize}
+  \item<1-> L'avantage de la démarche précédente réside dans la
+    facilité théorique de mise en place.
+  \item<2-> Son désavantage réside dans le fait qu'elle peut détruire
+    une partie des propriétés du problème $(P)$ de départ (comme le
+    fait d'avoir une matrice $A$ creuse.
+  \end{itemize}
+  \pause[3]
+
+  La méthode de Newton s'étend naturellement au cas des contraintes
+  d'égalités. Elle a l'avantage d'éviter l'écueuil qu'on vient de
+  mettre en lumière.
+\end{frame}
+
+\begin{frame}{Méthode de Newton | Principe}
+  Le principe de cette extension prend racine dans le problème
+  (quadratique) suivant
+  \begin{equation}
+    \label{PQ}
+    \tag{$P_Q$}
+    \begin{PbOptim}{
+        minimiser
+      }{
+        $\frac{1}{2}x^TPx + q^Tx + r$
+      }{
+        $Ax = b$
+      }
+    \end{PbOptim}
+  \end{equation}
+  On rappelle que dans ce contexte $P$ est une matrice symétrique
+  positive. Les hypothèses imposées à nos problèmes sous contraintes
+  étant toujours conservées.
+\end{frame}
+
+\begin{frame}{Méthode de Newton | Principe}
+  Le problème $(P_Q)$ vérifie la condition de Slater, sa résolution
+  est équivalente à
+  \begin{equation}
+    \label{KKT-PQ}
+    \tag{KKT-$P_Q$}
+    \left\{
+      \begin{array}{ccc}
+        Ax & = & b \\
+        Px + A^T\nu = -q
+      \end{array}
+    \right.
+  \end{equation}
+\end{frame}
+
+\begin{frame}{Méthode de Newton | Principe}
+  Équations qu'on écrit encore
+  \begin{equation}
+    \label{KKT-PQb}
+    \tag{KKT-$P_Q$}
+    \begin{pmatrix}
+      P & A^T \\
+      A & 0
+    \end{pmatrix}
+    \begin{pmatrix}
+      x \\ \nu
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+      -q \\ b
+    \end{pmatrix}.
+  \end{equation}
+  Les hypothèses faites sur $(P_Q)$ garantissent l'existence de
+  solutions primal-dual. \pause La méthode de Newton sous contraintes
+  d'égalités est une méthode itérative qui applique la démarche
+  précédente à l'approximation d'ordre $2$ de $(P)$ au voisinage de
+  l'itéré courant.
+\end{frame}
+
+\begin{frame}{Méthode de Newton}
+  Soit $x$ le point courant d'une méthode de Newton sous contraintes
+  d'égalités. Il s'agit de définir le prochain itéré. \pause On note
+  $(P_x)$ le problème d'optimisation quadratique donné par
+  \begin{equation}
+    \label{Px}
+    \tag{$P_x$}
+    \begin{PbOptim}{
+        minimiser
+      }{
+        $f(x) + \nabla f(x)^Tv + \frac{1}{2} v^T \nabla^2f(x)v$
+      }{
+        $A(x + v) = b$
+      }
+    \end{PbOptim}
+  \end{equation}
+  \pause Tout comme dans le cas sans contrainte, un point optimal
+  $\Delta x_N$ de $(P_x)$ décrit une direction de descente en $x$.
+\end{frame}
+
+\begin{frame}{Méthode de Newton}
+  En dualisant, la direction $\Delta x_N$ s'obtient comme première
+  composante d'une solution de l'équation matricielle
+    \begin{equation}
+    \label{KKT-PQb}
+    \tag{KKT-$P_Q$}
+    \begin{pmatrix}
+      \nabla^2f(x) & A^T \\
+      A & 0
+    \end{pmatrix}
+    \begin{pmatrix}
+      x \\ \nu
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+      -\nabla f(x) \\ 0
+    \end{pmatrix}.
+  \end{equation}
+\end{frame}
+
+\begin{frame}{Algorithme de Newton}
+    \begin{algorithm}[H]
+    \caption{Méthode de Newton}
+    \small{
+      \begin{algorithmic}[1]
+        \Statex
+        \Require $f$ : a function,  $x_0$ : an initial point in the domain of $f$, $\varepsilon$ : tolerance.
+        \Ensure $x^*$ : an optimal solution of $(P)$ if bounded from below
+
+        \Function{\texttt{Newton\_Method}}{$f$, $x_0$, $\varepsilon$}
+        \State $x \leftarrow x_0$
+        \State $\Delta x_N \leftarrow -\left(\nabla^2 f(x)\right)^{-1}\nabla f(x)$
+        \State $\lambda^2(x) = -\nabla f(x)^T\Delta x_N$
+        \While{$\frac{\lambda^2(x)}{2} > \varepsilon$}
+        \State $\Delta x_N \leftarrow -\left(\nabla^2 f(x)\right)^{-1}\nabla f(x)$
+        \State $\lambda^2(x) = -\nabla f(x)^T\Delta x_N$
+        \State compute step $t > 0$ of descent
+        \State $x \leftarrow x + t\Delta x_N$
+        \EndWhile
+        \State \Return $x$
+        \EndFunction
+        \Statex
+      \end{algorithmic}
+    }
+  \end{algorithm}
+\end{frame}
+
+\section{Optimisation dans le cas général}
+
+\begin{frame}{Cas général | Cadre}
+  On s'intéresse désormais aux problèmes d'optimisation $(Q)$ de la
+  forme
+  \begin{equation}
+    \label{Q}
+    \tag{$Q$}
+    \begin{PbOptim}{
+        minimiser
+      }{
+        $f_0(x)$
+      }{
+        $f_i(x) \leq 0, \quad \forall i \in \{1, \ldots, m\}$
+        $Ax = b$
+      }
+    \end{PbOptim}
+  \end{equation}
+  où $f_0 :\R^n \to \R$ et les $f_i: \R^n \to \R$ sont convexes
+  $\mc{C}^2$ et $A \in \mc{M}_{p, n}(R)$. \pause
+  \begin{halfshyblock}{Hypothèses}
+    On suppose dans la suite que la condition de \emph{Slater} est
+    vérifiée. En particulier on peut supposer $\rg(A) < n$. On a
+    dualité forte pour $(Q)$ dans ce cas.
+  \end{halfshyblock}
+\end{frame}
+
+\begin{frame}{Cas général | Cadre}
+  On rappelle dans ce cas que les conditions KKT pour $(Q)$ s'écrivent
+  \begin{equation}
+    \label{KKT-Q}
+    \tag{KKT-Q}
+    \begin{array}{rcl}
+      Ax & = & b \\
+      f_i(x) & \leq & 0 \quad \forall i \in \{1, \ldots, n\} \\
+      \lambda_if_i(x) & = & 0 \quad \forall i \in \{1, \ldots, n\} \\
+      \nabla f_0(x) + \sum_{i=1}^m \lambda_i \nabla_i f_i(x) + A^T\nu & = & 0 \\
+      \lambda  & = & 0
+    \end{array}
+  \end{equation}
+  où $\lambda \in \R^m$ et $\nu \in \R^p$.
+
+  \begin{rem}
+    On se limite à la méthode de la barrière logarithmique. Vous serez
+    invités par la suite à vous attaquer par ce biais à une méthode de
+    point intérieur.
+  \end{rem}
+\end{frame}
+
+\begin{frame}{Barrière logarithmique | Principe}
+  On note $I_-$ la fonction définie par
+  \[
+    I_-(x) = \left\{
+      \begin{array}{cr}
+        0 & \textrm{si $x \leq 0$} \\
+        +\infty  & \textrm{si $x > 0$}
+      \end{array}
+    \right.
+  \]
+  Le problème $(Q)$ est désormais équivalent
+  \begin{equation}
+    \label{QSansContrainteI}
+    \tag{$Q$}
+    \begin{PbOptim}{
+        minimiser
+      }{
+        $f_0(x) + \sum_{i=1}^m I_-\big(f_i(x)\big)$
+      }{
+        $Ax = b$
+      }
+    \end{PbOptim}
+  \end{equation}
+  Problème d'optimisation sans contraintes d'inégalités ; cas étudié
+  précédemment. \pause
+  \begin{alertblock}{Problème!}
+    La fonction objectif n'est pas différentiable en général.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Barrière Logarithmique | Une famille de problèmes}
+  Pour contourner le problème précédent on va approcher $I_-$ par une
+  famille de fonctions $\mc{C}^\infty$.
+  \begin{defn}
+    Pour tout $t > 0$ on note $I_t$ la fonction $\mc{C}^\infty$ sur
+    $\R_-^*$ définie par
+    \[
+      I_t(x) = - \frac{1}{t}\ln(-x).
+    \]
+  \end{defn}
+  \pause La famille $I_t$ converge uniformément quand $t \to +\infty$
+  vers $I_-$. \pause On remplace désormais l'étude de $(Q)$ par celles
+  des problèmes $(Q_t)$
+  \begin{equation}
+    \label{Qt}
+    \tag{$Q_t$}
+    \begin{PbOptim}{
+        minimiser
+      }{
+        $f_0(x) + \sum_{i=1}^m -\frac{1}{t}\ln\big(f_i(x)\big)$
+      }{
+        $Ax = b$
+      }
+    \end{PbOptim}
+  \end{equation}
+\end{frame}
+
+\begin{frame}{Barrière Logarithmique | Premières remarques}
+  \begin{equation}
+    \label{Qtb}
+    \tag{$Q_t$}
+    \begin{PbOptim}{
+        minimiser
+      }{
+        $f_0(x) + \sum_{i=1}^m -\frac{1}{t}\ln\big(-f_i(x)\big)$
+      }{
+        $Ax = b$
+      }
+    \end{PbOptim}
+  \end{equation}
+  \begin{itemize}
+  \item<1-> Si l'on prend $t$ assez grand on devrait avoir une bonne
+    approximation d'un point optimal de $(Q)$.
+  \item<2-> Pour $t$ grand le calcul de la hessienne de la fonction
+    objectif devrait introduire des difficultés numériques
+    importantes.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Barrière Logarithmique | Comment itérer?}
+  La difficulté liée au calcul de la hessienne à chaque itération nous
+  impose de réféchir avec un peu de finesse à la manière de
+  procédér. On note $\phi$ la fonction donnée par
+  \[
+    \phi(x) = - \sum_{i=1}^m \ln\big(-f_i(x)\big)
+  \]
+  fonction qu'on qualifie de \emph{barrière logarithmique}. \pause Le
+  problème $(Q_t)$ est équivalent à
+  \begin{equation}
+    \label{Qtrf}
+    \tag{$Q_t$}
+    \begin{PbOptim}{
+        minimiser
+      }{
+        $tf_0(x) + \phi(x)$
+      }{
+        $Ax = b$
+      }
+    \end{PbOptim}
+  \end{equation}
+  \pause Au lieu d'attaquer le problème avec $t$ grand, on procède
+  séquentiellement.
+  \begin{itemize}
+  \item<1-> On se donne une suite $(t_n)$ qui tend vers $+\infty$.
+  \item<2-> Un point initial $t_{0, 0}$ (strictement admissible) pour
+    résoudre $(Q_{t_0})$.
+  \item<3-> Le point initial servant à résoudre $(P_{t_{n+1}})$ est le
+    point optimal de $(P_{t_{n}})$.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \centering
+  \begin{center}
+    {\Huge Pour l'instant on a rien montré!}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Méthode de la barrière logarithmique}
+    \begin{algorithm}[H]
+    \caption{Méthode de la barrière logarithmique}
+    \small{
+      \begin{algorithmic}[1]
+        \Statex
+        \Require $f$ : a function, $x_0$ : a strictly feasible point,
+        $t_0 > 0$, $\mu > 1$, $\varepsilon$ : tolerance.
+        \Ensure $x^*$ : an optimal solution of $(Q)$ if bounded from below
+
+        \Function{\texttt{Log\_Barrier\_Method}}{$f$, $x_0$, $t_0$, $\mu$, $\varepsilon$}
+        \State $x \leftarrow x_0$
+        \State $t \leftarrow t_0$
+        \While{$\frac{m}{t} > \varepsilon$}
+        \State $x \leftarrow$ optimal point of $(Q_t)$ with starting point $x$
+        \State $t \leftarrow \mu t$
+        \EndWhile
+        \State \Return $x$
+        \EndFunction
+        \Statex
+      \end{algorithmic}
+    }
+  \end{algorithm}
+\end{frame}
+
+\begin{frame}{Méthode de la barrière logarithmique}
+  \begin{itemize}
+  \item<1-> L'étape d'optimisation interne ligne $4$ est appelée
+    \emph{étape de centrage}. La liste des points optimaux des
+    problèmes intermédiaire est appelée \emph{chemin central}.
+  \item<2-> On a \textit{tradeoff} dans le choix de $\mu$ entre $\mu$
+    proche de $1$ pour beaucoup d'itérations externes mais petit
+    nombre d'itération interne et un comportement inverse pour petit
+    $\mu$.
+  \end{itemize}
+\end{frame}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
