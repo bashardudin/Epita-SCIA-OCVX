@@ -50,13 +50,13 @@
     \end{PbOptim}
   \end{equation}
 où $f :\R^n \to \R$ est convexe $\mc{C}^2$ et
-  $A \in \mc{M}_{p, n}(R)$. \pause
+  $A \in \mc{M}_{p, n}(\R)$. \pause
   \begin{halfshyblock}{Hypothèses}
     \begin{itemize}
     \item<2-> On suppose dans la suite que $\rg(A) < n$\footnote{Quel
         est le sens de cette hypothèse?} ; chose qu'on peut en
       particulier garantir quand $ p < n$. \only<3->{\emph{Dans ce cas
-          la condition de Slater est satisfaite}}.
+          la condition de Slater est satisfaite.}}
     \item<2-> On suppose que notre point $x_0$ de départ est
       admissible\footnote{Qu'est-ce que cela implique?}.
     \end{itemize}
@@ -72,7 +72,7 @@ où $f :\R^n \to \R$ est convexe $\mc{C}^2$ et
     \left\{
       \begin{array}{ccc}
         Ax & = & b \\
-        \nabla f(x) + A^T\nu = 0
+        \nabla f(x) + A^T\nu & = & 0
       \end{array}
     \right.
   \end{equation}
@@ -81,13 +81,13 @@ où $f :\R^n \to \R$ est convexe $\mc{C}^2$ et
 \end{frame}
 
 \begin{frame}{Contraintes d'égalités | Attaque élémentaire}
-  Sous les conditions de rang de $A$ et d'existence d'un point
+  Sous les conditions de rang sur $A$ et d'existence d'un point
   admissible le système linéaire $Ax = b$ a des solutions qu'on peut
   écrire paramétriquement.
   \pause
 
   L'algorithme de Gauss donne une matrice
-  $F \in \mc{M}_{n - \rg(A), n}$ de rang maximal qui paramètre le lieu
+  $F \in \mc{M}_{n, n - \rg(A)}(\R)$ de rang maximal qui paramètre le lieu
   admissible de $(P)$ par
   \[
     x_0 + Fz
@@ -115,13 +115,12 @@ où $f :\R^n \to \R$ est convexe $\mc{C}^2$ et
     facilité théorique de mise en place.
   \item<2-> Son désavantage réside dans le fait qu'elle peut détruire
     une partie des propriétés du problème $(P)$ de départ (comme le
-    fait d'avoir une matrice $A$ creuse.
+    fait d'avoir une matrice $A$ creuse).
   \end{itemize}
   \pause[3]
 
   La méthode de Newton s'étend naturellement au cas des contraintes
-  d'égalités. Elle a l'avantage d'éviter l'écueuil qu'on vient de
-  mettre en lumière.
+  d'égalités. C'est le point qu'on étudie dans la suite.
 \end{frame}
 
 \begin{frame}{Méthode de Newton | Principe}
@@ -153,7 +152,7 @@ où $f :\R^n \to \R$ est convexe $\mc{C}^2$ et
     \left\{
       \begin{array}{ccc}
         Ax & = & b \\
-        Px + A^T\nu = -q
+        Px + A^T\nu & = & -q
       \end{array}
     \right.
   \end{equation}
@@ -263,13 +262,15 @@ où $f :\R^n \to \R$ est convexe $\mc{C}^2$ et
       }{
         $f_0(x)$
       }{
-        $f_i(x) \leq 0, \quad \forall i \in \{1, \ldots, m\}$
-        $Ax = b$
-      }
+          \begin{matrix}
+            f_i(x) & \leq & 0 & \forall i \in \{1, \ldots, m\} \\
+            A x & =  & b & ~
+          \end{matrix}
+        }
     \end{PbOptim}
   \end{equation}
   où $f_0 :\R^n \to \R$ et les $f_i: \R^n \to \R$ sont convexes
-  $\mc{C}^2$ et $A \in \mc{M}_{p, n}(R)$. \pause
+  $\mc{C}^2$ et $A \in \mc{M}_{p, n}(\R)$. \pause
   \begin{halfshyblock}{Hypothèses}
     On suppose dans la suite que la condition de \emph{Slater} est
     vérifiée. En particulier on peut supposer $\rg(A) < n$. On a
