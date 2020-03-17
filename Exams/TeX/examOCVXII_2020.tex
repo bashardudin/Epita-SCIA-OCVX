@@ -1,0 +1,268 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[french]{babel}
+\usepackage{fancyhdr}
+\usepackage[margin=.8in]{geometry}
+
+\usepackage{Style/TeXingStyle}
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{1.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyhead[L]{EPITA\_ING2\_2020\_S8}
+\fancyhead[R]{Majeures SCIA \& Image}
+\fancyhead[C]{OCVX2}
+\fancyfoot[C]{\thepage}
+\fancyfoot[L]{Août 2019}
+\fancyfoot[R]{\textsc{B.~DUDIN} \& \textsc{G.~Tochon}}
+
+\pretitle{\vspace{-.5\baselineskip} \begin{center}}
+\title{%
+  { \huge Évaluation optimisation convexe II}%
+}
+\posttitle{
+\end{center}
+  \begin{flushleft}
+    \vspace{3\baselineskip} \textit{ L'évaluation est un travail
+      d'analyse, à faire en groupe d'un \emph{maximum de
+        $\bs{\mathit{3}}$ personnes et d'un minimum de
+        $\bs{\mathit{2}}$}. Ce travail doit donner lieu à un rapport,
+      dans le format de votre choix, ainsi qu'à une soutenance. Les
+      dates de soutenances seront communiquées ultérieurement après
+      discussion avec les délégués et l'ADM ; elles auront lieux
+      courant octobre 2019.
+      La première section de cette évaluation n'est pas
+      optionnelle. Pour les sections suivantes il vous faut faire au
+      moins une section. Plus vous attaquez de problèmes meilleure est
+      votre note\footnote{Quand c'est bien fait ...}.
+    }
+  \end{flushleft}
+  \rule{\textwidth}{1.5pt}
+  \vspace{-5\baselineskip}
+}
+\author{}
+\date{}
+
+\pdfinfo{
+   /Author (Bashar Dudin)
+   /Title  (Évaluation optimisation convexe II - 2020)
+   /Subject (Optimisation convexe)
+}
+
+\begin{document}
+
+\maketitle\thispagestyle{fancy}
+
+\subsubsection*{Rendu}
+
+Le rendu doit contenir:
+\begin{itemize}
+\item un rapport;
+\item l'ensemble des implémentations;
+\item les datasets utilisés et les problèmes d'optimisations générés, si applicable;
+\item les slides de la soutenance.
+\end{itemize}
+Les dates de soutenances seront fixés le $09$ septembre. Les contenus
+hors slides seront à rendre $48$ heures avant l'heure de
+soutenance. Vous êtes libres en ce qui concerne le format de
+rendu. Votre choix sera jugé quant à son adéquation avec les
+contraintes de \emph{clarté}, de \emph{compréhensibilité} et
+d'\emph{éxhaustivité}.
+
+\subsubsection*{Contraintes techniques}
+
+Les implémentations seront à faire en \texttt{python}. L'environement
+\texttt{python} permet un prototypage agréable et les bibliothèques de
+ML qui y sont disponibles vous seront utiles pour faire des
+comparatifs.
+
+Vous pouvez utiliser les fonctions de \texttt{numpy}, \texttt{scipy}
+et de \texttt{pandas} liées au calcul différentiel, à l'algèbre
+linéaire et au pré-traitement et traitement des datasets que vous
+seriez amenés à manipuler. Tout ce qui n'est pas explicitement
+mentionné est à proscrire\footnote{Seul les chargés de cours ont droit
+  de vous libérer de cette contrainte. Il vous revient de nous tenir
+  informé de toute contravention à cette règle. Une argumentation sera
+  attendue}.
+
+\subsubsection*{Attendus}
+
+Des \emph{dessins} pour résumer les études de performances. On attend
+de vous des tests fiables, donc en nombre suffisamment important et de
+préférence avec une estimation du risque. Aucun comparatif ou analyse
+de performance d'un algo n'a de sens sinon. À vous de vous mettre dans
+la peau de quelqu'un qui participe par son expertise à une decision
+importante sur un choix de techno.
+
+\vspace{\baselineskip}
+\noindent \emph{Quand on parle de comparaison, on entend batch de
+  tests et résumé des résultats en sortie.}
+
+\section{Méthode de Newton}
+
+Cette section \emph{n'est pas optionnelle}, ce qui n'est pas en bonus
+doit être traité par chaque groupe.
+
+\subsection{Méthode de Newton}
+
+Dans les implémentations que vous abordez il n'est pas nécessaire de
+traiter le cas d'un point initial non-admissible. Son traitement sera
+comptabilisé s'il est fait\footnote{Tout travail mérite
+  salaire.}. Sans contraintes cette remarque est bien entendu sans
+intérêt.
+
+Il vous est autorisé d'utiliser les méthodes de calcul numérique ou
+symbolique des gradients, hessiennes et les solveurs de systèmes
+linéaires disponibles dans les bibliothèques \texttt{numpy} et
+\texttt{scipy}, si vous en éprouvez le besoin.
+
+\subsubsection{Cas sans contraintes}
+
+\begin{question}
+  Générer des problèmes d'optimisations sans contraintes.
+\end{question}
+
+\begin{question}
+  Implémenter et tester une méthode de Newton contre le test set que
+  vous avez généré.
+\end{question}
+
+\begin{question}
+  Comparer votre méthode de Newton aux implémentation de descente de
+  gradient vu en TP.
+\end{question}
+
+\subsubsection{Cas avec contraintes d'égalités}
+
+\begin{question}
+  Étendre le test set du cas sans contraintes pour générer des
+  problèmes d'optimisation convexes sous contraintes d'égalités.
+\end{question}
+
+\begin{question}
+  Implémenter une méthode de résolution des problèmes générés basées
+  sur une descente de gradient après élémination des contraintes
+  d'égalités et la tester.
+\end{question}
+
+\begin{question}
+  Implémenter la méthode de Newton sous contraintes d'égalités et la
+  tester sur le test set généré.
+\end{question}
+
+\begin{question}
+  Comparer les deux méthodes précédentes.
+\end{question}
+
+\subsubsection{Bibliographie}
+
+\begin{question}{+}
+  Qu'est-ce qu'une méthode de Quasi-Newton?
+\end{question}
+
+
+\section{Régularisation de problèmes mal posés}
+
+Dans cette thématique, on s'intéresse aux méthodes classiques de régularisation de problèmes mal posés (par exemple lorsqu'un problème admet une infinité de solutions). Les problèmes mal posés sont fréquents en \textit{machine learning} (sur-apprentissage) et en traitement du signal/des images (déconvolution, débruitage, in-painting).
+
+Dans le cas d'un problème mal posé, il convient de faire des hypothèses supplémentaires pour \textit{régulariser} la solution (imposer que la solution à un problème de débruitage soit continue par morceaux par exemple)
+
+Le but de cette section est de vous faire manipuler les deux méthodes de régularisation les plus classiques :
+\begin{itemize}
+\item la régularisation de Tikhonov (aussi appelée régularisation ridge en \textit{machine learning}).
+\item la régularisation LASSO (pour Least Absolute Shrinkage and Selection Operator)
+\end{itemize}
+
+\begin{question}
+Rappelez la méthode de résolution analytique des moindres carrés.
+\end{question}
+
+\begin{question}
+  Effectuez une recherche bibliographique sur les méthodes de régularisation de Tikhonov et LASSO. Vous trouverez une multitude de références sur le net. À vous de les synthétiser pour faire ressortir l'idée générale de ces méthodes de régularisation et leurs principales différences.\\
+  En particulier, expliquez :
+  \begin{itemize}
+  \item comment l'ajout des pénalités de Tikhonov et du LASSO modifient la résolution analytique des moindres carrés. Déroulez (et commentez) cette résolution analytique.
+  \item l'influence du choix de la norme et l'interprétation géométrique qui en découle lorsque le problème de régularisation est vu comme un problème de minimisation sous contrainte.
+  \end{itemize}
+\end{question}
+
+\begin{question}
+Implémenter ces deux méthodes de régularisation sur un problème de moindre carrés mal posé de votre choix (originaire du \textit{machine learning} ou du traitement du signal/d'images). Comparer leurs performances et évaluer l'impact du paramètre de régularisation sur la régularité de la solution.
+\end{question}
+
+
+\section{Thématiques plus avancées}
+
+Les thématiques de cette section sont aux choix, il vous revient de
+choisir lesquelles et combien d'entre elles vous souhaitez traiter.
+
+\subsection{SVM et SMO}
+
+Dans cette thématique on cherche à implémenter la \emph{Sequential
+  Minimal Optimisation} concernant le traitement des SVMs.
+
+\begin{question}
+  Expliqer le problème d'optimisation sous-jacent à un \emph{Support
+    Vector Classifier}?
+\end{question}
+
+\begin{question}
+  Implémenter la SMO. Laisser la possibilité de passer le noyau
+  souhaité en argument.
+\end{question}
+
+\begin{question}
+  Tester l'implémentation précédente sur le problème de classification
+  proposé par le dataset \emph{MNIST}. Dans le but de traiter un
+  problème de classification binaire on se limite au repérage d'un
+  chiffre.
+
+  \noindent Garder le noyau qui vous donne les meilleurs résultats
+  suivant la métrique de votre choix.
+\end{question}
+
+\begin{question}{+}
+  Implémenter une méthode de résolution par barrière logarithmique
+  d'un \emph{SVM}. Comparer cette démarche à la SMO.
+\end{question}
+
+\subsection{Méthode du point intérieur}
+
+Cette thématique est plus théorique que les précédentes. La méthode du
+point intérieur n'a pas été abordée en cours ; elle est évaluée en
+conséquence.
+
+Le but est de comparer la performance de la méthode du point intérieur
+à celle du simplexe.
+
+\begin{question}
+  Expliquer la méthode primal-dual du point intérieur exposée
+  dans \cite[11.7]{Boyd:2004:CO:993483}.
+\end{question}
+
+\begin{question}
+  En donner une implémentation en présupposant que l'origine est
+  toujours un point admissible\footnote{Il y a des méthodes standards
+    pour se ramener à ce cas.}.
+\end{question}
+
+\begin{question}
+  Comparer la performance de la méthode précédente à une méthode du
+  simplexe de votre cru. \footnote{Bien entendu, dans le cas des
+    programmes linéaires.}.
+\end{question}
+
+\begin{question}
+  Appliquer les méthodes de résolution précédentes au cas des flots
+  maximaux sur les graphes.
+\end{question}
+
+\bibliographystyle{alpha}
+\bibliography{./Ref/bibOCVX}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
