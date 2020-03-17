@@ -103,6 +103,13 @@ ENV/
 # TeX temp files
 *_minted*
 *auto*
+*.aux
+*.bbl
+*.blg
+*.out
+*.nav
+*.snm
+*.toc
 
 # MacOs Backup Folders
 .DS_Store
